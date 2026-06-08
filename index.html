@@ -286,7 +286,7 @@
         .progress-bar-fill {
             background: var(--secondary);
             height: 100%;
-            width: 6.66%; 
+            width: 5%; /* Disesuaikan untuk 20 pertanyaan (100/20) */
             transition: width 0.3s ease;
         }
 
@@ -469,7 +469,7 @@
             border-top: 1px solid #1E293B;
         }
 
-        /* --- REKAYASA OPTIMALISASI RESPONSif (HP & TABLET) --- */
+        /* --- LAYOUT RESPONSif (OPTIMASI MOBILE HP) --- */
         @media (max-width: 992px) {
             .navbar { flex-direction: column; gap: 12px; padding: 15px 20px; }
             .nav-links { gap: 18px; }
@@ -482,14 +482,13 @@
                 min-height: auto;
                 gap: 20px;
             }
-            .hero-text h2 { font-size: 2.2rem; margin-bottom: 16px; } /* Diperkecil agar proporsional */
+            .hero-text h2 { font-size: 2.2rem; margin-bottom: 16px; } 
             .hero-text p { font-size: 1rem; margin-bottom: 25px; }
             .btn-start { padding: 14px 30px; font-size: 0.95rem; }
             
             .hero-image { order: -1; }
             .hero-image img { max-width: 50%; } 
 
-            /* Mengecilkan padding luar box kuesioner di HP */
             .consultation-outer-box { 
                 margin: 20px 12px; 
                 padding: 30px 16px; 
@@ -500,7 +499,6 @@
             .consultation-header-label h2 { font-size: 1.6rem; }
             .consultation-header-label p { font-size: 0.88rem; }
 
-            /* Menyesuaikan kartu kuesioner bagian dalam */
             .interactive-card { padding: 24px 16px; border-radius: 16px; }
             .progress-container { margin-bottom: 25px; padding-bottom: 15px; }
             .progress-text { font-size: 0.85rem; }
@@ -509,9 +507,8 @@
             .question-wrapper { min-height: auto; }
             .question-card h3 { font-size: 1.05rem; margin-bottom: 20px; text-align: left; }
             .choice-btn { padding: 14px 16px; font-size: 0.9rem; border-radius: 12px; }
-            .choice-btn:hover { transform: none; } /* Matikan translate X di HP agar tidak canggung */
+            .choice-btn:hover { transform: none; } 
 
-            /* Area Hasil di HP */
             .res-title { font-size: 1.05rem; }
             .res-desc { font-size: 0.88rem; text-align: left; }
             .rank-number { font-size: 1.2rem; top: 10px; right: 15px; }
@@ -522,10 +519,9 @@
             .step-card { padding: 20px 16px; }
         }
 
-        /* Optimasi Ekstrem Khusus Layar HP Sangat Kecil (Lebar < 400px) */
         @media (max-width: 400px) {
             .logo-title h1 { font-size: 1.2rem; }
-            .logo-title p { display: none; } /* Sembunyikan sub-slogan di HP ultra-kecil */
+            .logo-title p { display: none; } 
             .hero-text h2 { font-size: 1.8rem; }
             .consultation-header-label h2 { font-size: 1.35rem; }
             .question-card h3 { font-size: 0.98rem; }
@@ -546,8 +542,8 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#" id="nav-home" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'});">Beranda</a></li>
-                <li><a href="#consultation-box-area" id="nav-consult" onclick="event.preventDefault(); document.getElementById('consultation-box-area').scrollIntoView({behavior: 'smooth'});">Konsultasi</a></li>
-                <li><a href="#how-it-works-area" id="nav-about" onclick="event.preventDefault(); document.getElementById('how-it-works-area').scrollIntoView({behavior: 'smooth'});">Tentang</a></li>
+                <li><a href="#consultation-box-area" id="nav-consult" onclick="event.preventDefault(); document.getElementById('consultation-box-area').scrollIntoView({behavior: 'smooth'});">Consultasi</a></li>
+                <li><a href="#how-it-works-area" id="nav-about" onclick="event.preventDefault(); document.getElementById('how-it-works-area').scrollIntoView({smooth: 'smooth'});">Tentang</a></li>
             </ul>
         </div>
     </header>
@@ -573,7 +569,7 @@
         <main class="interactive-card">
             
             <div class="progress-container" id="tracker-box">
-                <div class="progress-text" id="progress-indicator">Pertanyaan 1 dari 15</div>
+                <div class="progress-text" id="progress-indicator">Pertanyaan 1 dari 20</div>
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="bar-fill"></div>
                 </div>
@@ -701,6 +697,46 @@
                     </div>
                 </div>
 
+                <div class="question-card" id="card-16">
+                    <h3>16. Apakah Anda tertarik mempelajari struktur anatomi hewan, kesehatan ternak, atau teknik budidaya perikanan modern?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R9', 3)"><span>A. Ya, dunia fauna dan peternakan/perikanan menarik bagi saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R9', 0)"><span>B. Tidak, saya kurang berminat pada sektor tersebut</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-17">
+                    <h3>17. Apakah Anda suka menulis artikel opini, menganalisis fenomena sosial di masyarakat, atau tertarik pada dunia jurnalistik/media berita?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R2', 3)"><span>A. Ya, saya suka mengamati isu sosial dan komunikasi publik</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R2', 0)"><span>B. Tidak, saya lebih suka bidang eksakta/teknis</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-18">
+                    <h3>18. Apakah Anda tertarik mendalami konsep kecerdasan buatan (*Artificial Intelligence*), machine learning, atau pengolahan data berskala besar (*Big Data*)?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R1', 3)"><span>A. Ya, teknologi masa depan AI sangat memikat saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R1', 0)"><span>B. Tidak, itu terlalu rumit untuk saya bayangkan</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-19">
+                    <h3>19. Apakah Anda senang merencanakan tata letak ruang interior sebuah gedung, kenyamanan pencahayaan ruangan, atau estetika furnitur?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R3', 3)"><span>A. Ya, saya menyukai desain ruang dan arsitektur interior</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R3', 0)"><span>B. Tidak, saya tidak terlalu memikirkan estetika ruangan</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-20">
+                    <h3>20. Apakah Anda tertarik mempelajari bagaimana sebuah kebijakan ekonomi negara dibuat, mengatasi inflasi, atau memahami perdagangan internasional?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R7', 3)"><span>A. Ya, analisis ekonomi makro dan kebijakan pasar sangat seru</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R7', 0)"><span>B. Tidak, saya menghindari teori ekonomi yang berat</span> ➔</button>
+                    </div>
+                </div>
+
             </div>
 
             <div class="result-card" id="result-box">
@@ -729,7 +765,7 @@
             <div class="step-card">
                 <div class="step-icon">🏆</div>
                 <h4>3. Filter Top 3</h4>
-                <p>Sistem memilah bobot kesesuaian tertinggi dan menyajikan 3 hasil terbaik secara komparatif.</p>
+                <p>Sistem memilah bobot kesesuaian tertinggi dari total 10 klaster jurusan pilihan, lalu menyajikan 3 hasil terbaik secara komparatif.</p>
             </div>
         </div>
     </section>
@@ -740,7 +776,7 @@
 
     <script>
         let currentStep = 1;
-        const totalPertanyaan = 15;
+        const totalPertanyaan = 20;
         
         let jScores = [
             { id: 1, name: "Teknik Informatika / Sistem Informasi", score: 0, desc: "Sangat cocok untuk Anda yang menyukai ketajaman logika berpikir, pemrograman komputer, basis data, dan pengembangan infrastruktur teknologi modern." },
@@ -801,7 +837,6 @@
                     </div>
                 `;
             } else {
-                // Modifikasi saran tambahan: Judul ringkasan deskriptif sebelum list
                 container.innerHTML = `<p style="color: #94A3B8; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Berdasarkan kalkulasi algoritma Forward Chaining terhadap jawaban instrumen Anda, berikut adalah 3 klaster program studi yang paling relevan dengan potensi minat Anda:</p>`;
                 
                 top3.forEach((jurusan, index) => {
