@@ -9,26 +9,43 @@
             --primary: #0A3663;      
             --secondary: #00B4B4;    
             --accent: #F2A900;       
-            --bg-light: #F8FAFC;
-            --bg-hero: linear-gradient(135deg, #E2E8F0 0%, #F1F5F9 100%);
-            --bg-consult: #0F172A; /* Latar belakang gelap khusus untuk area konsultasi */
+            --bg-light: #F1F5F9;
+            --bg-gradient: linear-gradient(135deg, #E2E8F0 0%, #F1F5F9 50%, #DEE2E6 100%);
+            --bg-boxed: #0F172A;        
+            --card-inner: #1E293B;      
             --text-dark: #1E293B;
             --text-light: #F8FAFC;
             --border-line: rgba(226, 232, 240, 0.8);
             --danger: #EF4444;
+            --danger-hover: #DC2626;
             --success: #10B981;
+            --success-hover: #059669;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         html { scroll-behavior: smooth; }
         body { 
-            background: var(--bg-light); 
+            background: var(--bg-gradient); 
             color: var(--text-dark); 
             line-height: 1.6; 
-            padding-top: 80px;
+            padding-top: 90px;
+            position: relative;
+            overflow-x: hidden;
         } 
 
-        /* FIXED HEADER & NAVBAR */
+        /* ORNAMEN LATAR BELAKANG */
+        body::before {
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: linear-gradient(135deg, rgba(0, 180, 180, 0.15), rgba(10, 54, 99, 0.1));
+            border-radius: 50%; top: 15%; right: -100px; filter: blur(80px); z-index: -1;
+        }
+        body::after {
+            content: ''; position: absolute; width: 500px; height: 500px;
+            background: linear-gradient(135deg, rgba(242, 169, 0, 0.1), rgba(0, 180, 180, 0.08));
+            border-radius: 50%; bottom: 20%; left: -150px; filter: blur(100px); z-index: -1;
+        }
+
+        /* HEADER & NAVBAR */
         header {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
@@ -36,14 +53,17 @@
             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 4px 30px rgba(15, 23, 42, 0.03);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
             max-width: 1200px; margin: 0 auto; padding: 18px 20px; 
+            transition: all 0.3s ease;
         }
+
         .logo-area { display: flex; align-items: center; gap: 12px; }
-        .logo-area img { height: 44px; width: auto; transition: all 0.3s ease; }
+        .logo-area img { height: 44px; width: auto; transition: all 0.3s ease; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
         .logo-title h1 { font-size: 1.3rem; color: var(--primary); font-weight: 800; letter-spacing: -0.5px; }
         .logo-title p { font-size: 0.65rem; color: var(--secondary); font-weight: 700; letter-spacing: 0.8px; }
 
@@ -60,90 +80,124 @@
             font-size: 0.95rem; padding: 8px 16px; cursor: pointer; 
             transition: all 0.2s ease; border-radius: 8px;
         }
-        .nav-links a:hover { color: var(--primary); background: rgba(10, 54, 99, 0.05); }
-        .nav-links a.active-link { color: white; background: var(--primary); }
+        .nav-links a:hover {
+            color: var(--primary); background: rgba(10, 54, 99, 0.05);
+        }
+        .nav-links a.active-link { 
+            color: white; background: var(--primary); box-shadow: 0 4px 12px rgba(10, 54, 99, 0.2);
+        }
 
-        /* STRUKTUR PEMISAH SEKSI (WAVE LENGKUNGAN) */
-        .section-container { position: relative; width: 100%; padding: 80px 0; overflow: hidden; }
-        .wave-divider { position: absolute; left: 0; width: 100%; height: 60px; fill: currentColor; pointer-events: none; }
-        .wave-top { top: 0; transform: translateY(-98%); }
-        .wave-bottom { bottom: 0; transform: translateY(98%) scaleY(-1); }
+        /* STRUKTUR HALAMAN */
+        .page-section { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
 
-        /* SEKSI 1: BERANDA */
-        #section-home { background: var(--bg-hero); padding-top: 40px; padding-bottom: 120px; }
-        .hero-section { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; padding: 0 20px; align-items: center; }
-        .hero-text h2 { font-size: 3rem; color: var(--primary); font-weight: 800; margin-bottom: 20px; line-height: 1.15; }
-        .hero-text h2 span { color: var(--secondary); }
+        /* BERANDA / HERO */
+        .hero-section { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; min-height: 50vh; align-items: center; }
+        .hero-text h2 { font-size: 3rem; color: var(--primary); font-weight: 800; margin-bottom: 20px; line-height: 1.15; letter-spacing: -1px; }
+        .hero-text h2 span { color: var(--secondary); position: relative; }
         .hero-text p { font-size: 1.1rem; color: #475569; margin-bottom: 30px; font-weight: 500; }
         
         .btn-general {
             display: inline-block; padding: 14px 36px; border-radius: 50px; font-weight: 700;
-            text-decoration: none; border: none; cursor: pointer; transition: all 0.3s ease; text-align: center;
+            text-decoration: none; border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-align: center;
         }
         .btn-primary-style { background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); color: white; box-shadow: 0 10px 25px rgba(0, 180, 180, 0.25); }
         .btn-primary-style:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 180, 180, 0.4); }
 
-        .hero-image { display: flex; justify-content: center; }
+        .hero-image { display: flex; justify-content: center; align-items: center; }
         .hero-image img { max-width: 75%; filter: drop-shadow(0 25px 35px rgba(10,54,99,0.15)); animation: float 4s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* SEKSI 2: KONSULTASI (DARK THEME - LUXURY INTERACTIVE) */
-        #section-consult { background: var(--bg-consult); color: white; padding: 100px 0; color-scheme: dark; }
-        .consultation-outer-box { max-width: 720px; margin: 0 auto; padding: 0 20px; scroll-margin-top: 140px; }
-        .consultation-header-label { text-align: center; margin-bottom: 35px; }
-        .consultation-header-label h2 { font-size: 2.2rem; font-weight: 800; color: white; letter-spacing: -0.5px; }
-        .consultation-header-label p { color: #94A3B8; margin-top: 6px; font-size: 0.95rem; }
+        /* ORNAMEN GELOMBANG (WAVE DIVIDER) */
+        .wave-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            background: transparent;
+        }
+        .wave-container svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+        .wave-flipped {
+            transform: rotate(180deg);
+        }
 
-        /* Glassmorphism Card */
+        /* KARTU KUESIONER INTERAKTIF */
+        .consultation-outer-box { max-width: 720px; margin: 0 auto; scroll-margin-top: 140px; }
+        .consultation-header-label { text-align: center; margin-bottom: 30px; }
+        .consultation-header-label h2 { font-size: 2.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .consultation-header-label p { color: #64748B; margin-top: 6px; font-size: 0.95rem; font-weight: 500; }
+
         .interactive-card { 
-            background: rgba(30, 41, 59, 0.7); 
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-radius: 24px; padding: 40px; 
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            position: relative; min-height: 320px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); 
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative; overflow: hidden; min-height: 320px;
+            transition: all 0.3s ease;
         }
         
-        .progress-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; background: rgba(15, 23, 42, 0.6); padding: 12px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); }
-        .progress-text { font-weight: 700; color: var(--secondary); font-size: 0.85rem; }
-        .progress-bar-bg { background: #334155; height: 8px; width: 65%; border-radius: 10px; overflow: hidden; }
-        .progress-bar-fill { background: linear-gradient(to right, var(--secondary), #38BDF8); height: 100%; width: 0%; transition: width 0.4s ease; }
+        /* PROGRESS BAR */
+        .progress-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; background: rgba(241, 245, 249, 0.9); padding: 12px 20px; border-radius: 14px; border: 1px solid rgba(226, 232, 240, 0.5); }
+        .progress-text { font-weight: 700; color: var(--primary); font-size: 0.85rem; letter-spacing: 0.5px; }
+        .progress-bar-bg { background: #E2E8F0; height: 8px; width: 65%; border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { background: linear-gradient(to right, var(--secondary), var(--primary)); height: 100%; width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        .question-card h3 { font-size: 1.35rem; color: white; margin-bottom: 30px; line-height: 1.5; text-align: center; }
+        /* ANIMASI TRANSISI KARTU PERTANYAAN */
+        .question-card { transition: all 0.25s ease; opacity: 1; transform: translateX(0); }
+        .question-card.slide-out { opacity: 0; transform: translateX(-30px); }
+        .question-card.slide-in { opacity: 0; transform: translateX(30px); }
+
+        .question-card h3 { font-size: 1.35rem; color: var(--primary); margin-bottom: 30px; line-height: 1.5; font-weight: 700; text-align: center; padding: 0 10px; }
         .options-vertical { display: flex; flex-direction: column; gap: 14px; }
         
+        /* TOMBOL PILIHAN JAWABAN */
         .choice-btn { 
             width: 100%; padding: 18px 24px; text-align: left; 
-            background: #1E293B; border: 2px solid #334155; border-radius: 16px; 
-            cursor: pointer; color: white; font-size: 1rem; font-weight: 700; 
+            background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 16px; 
+            cursor: pointer; color: var(--text-dark); font-size: 1rem; font-weight: 700; 
             display: flex; justify-content: space-between; align-items: center; 
-            transition: all 0.25s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
         }
-        .choice-btn-yes:hover { border-color: var(--success); background: rgba(16, 185, 129, 0.1); color: var(--success); transform: translateY(-2px); }
-        .choice-btn-no:hover { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); color: var(--danger); transform: translateY(-2px); }
-        .choice-btn .icon-indicator { font-size: 1.2rem; color: #475569; }
+        
+        .choice-btn-yes:hover { 
+            border-color: var(--success); background: rgba(16, 185, 129, 0.04); 
+            color: var(--success); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.1);
+        }
         .choice-btn-yes:hover .icon-indicator { color: var(--success); }
+
+        .choice-btn-no:hover { 
+            border-color: var(--danger); background: rgba(239, 68, 68, 0.04); 
+            color: var(--danger); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.1);
+        }
         .choice-btn-no:hover .icon-indicator { color: var(--danger); }
 
-        /* RESULT CARD */
-        .result-card { display: none; }
-        .res-badge { display: inline-block; background: rgba(242, 169, 0, 0.15); color: #F59E0B; padding: 6px 18px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; border: 1px solid rgba(242,169,0,0.3); }
-        .result-item { background: #1E293B; border: 1px solid rgba(255,255,255,0.05); padding: 22px; border-radius: 16px; position: relative; border-left: 6px solid var(--secondary); margin-bottom: 14px; }
-        .rank-number { position: absolute; right: 24px; top: 14px; font-size: 1.6rem; font-weight: 900; color: #334155; }
-        .res-title { font-size: 1.15rem; color: white; font-weight: 700; margin-bottom: 6px; }
-        .res-desc { font-size: 0.95rem; color: #94A3B8; text-align: justify; }
+        .choice-btn .icon-indicator { font-size: 1.2rem; color: #CBD5E1; transition: color 0.2s; }
 
-        .spinner { border: 4px solid #334155; width: 45px; height: 45px; border-radius: 50%; border-left-color: var(--secondary); animation: spin 1s linear infinite; margin: 15px auto; }
-        #loading-view, #loading-kb { text-align: center; padding: 40px 0; }
-        #loading-view { display: none; }
+        /* LOADING SPINNER GLOBAL */
+        .spinner { border: 4px solid #E2E8F0; width: 45px; height: 45px; border-radius: 50%; border-left-color: var(--secondary); animation: spin 1s linear infinite; margin: 15px auto; }
+        #loading-view { text-align: center; padding: 40px 0; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* SEKSI 3: TENTANG (LIGHT MODERN THEME) */
-        #section-about { background: #FFFFFF; padding: 120px 0 80px 0; }
-        .about-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
+        /* CARD HASIL KONSULTASI */
+        .result-card { display: none; }
+        .res-badge { display: inline-block; background: rgba(242, 169, 0, 0.12); color: #C27803; padding: 6px 18px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; border: 1px solid rgba(242,169,0,0.2); }
+        .result-item { background: #FFFFFF; border: 1px solid var(--border-line); padding: 22px; border-radius: 16px; position: relative; border-left: 6px solid var(--secondary); margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .rank-number { position: absolute; right: 24px; top: 14px; font-size: 1.6rem; font-weight: 900; color: #E2E8F0; }
+        .res-title { font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 6px; }
+        .res-desc { font-size: 0.95rem; color: #475569; text-align: justify; }
+
+        /* TENTANG INFO GRID */
+        .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 15px; }
         .about-card { 
-            background: #F8FAFC; border: 1px solid var(--border-line); border-radius: 20px; padding: 30px; 
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-line); border-radius: 20px; padding: 30px; 
             position: relative; overflow: hidden; transition: 0.3s;
         }
         .about-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--primary); }
@@ -151,29 +205,7 @@
         .about-card p { text-align: justify; font-size: 0.95rem; color: #475569; }
         .about-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(10, 54, 99, 0.06); background: white; }
 
-        /* DASHBOARD ADMIN PANEL */
-        #section-admin-dashboard { display: none; background: #F1F5F9; min-height: 85vh; padding: 40px 0; }
-        .admin-box { background: white; border: 1px solid var(--border-line); border-radius: 20px; padding: 30px; max-width: 1200px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
-        .admin-tabs { display: flex; gap: 8px; margin-bottom: 25px; border-bottom: 2px solid #F1F5F9; padding-bottom: 12px; }
-        .tab-btn { padding: 10px 18px; border: none; background: #F1F5F9; border-radius: 8px; cursor: pointer; font-weight: 700; color: #475569; transition: 0.2s; }
-        .tab-btn.active-tab { background: var(--primary); color: white; }
-        .crud-view { display: none; }
-        .crud-view.active-crud { display: block; }
-        
-        .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto; gap: 14px; align-items: end; background: #F8FAFC; padding: 20px; border-radius: 14px; margin-bottom: 25px; border: 1px solid var(--border-line); }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
-        .form-group input, .form-group textarea, .form-group select { padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 0.9rem; }
-        
-        .table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 12px; border: 1px solid var(--border-line); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
-        th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-line); }
-        th { background: #F8FAFC; color: var(--primary); font-weight: 700; }
-        .btn-action { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.8rem; }
-        .btn-add { background: var(--secondary); color: white; padding: 11px 22px; border-radius: 8px; font-weight: 700; }
-        .btn-delete { background: var(--danger); color: white; }
-
-        /* POP-UP MODAL LOGIN */
+        /* POP-UP MODAL BOX ADMIN */
         .admin-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px);
@@ -181,29 +213,80 @@
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 20px;
         }
         .admin-modal-overlay.open-modal { opacity: 1; pointer-events: auto; }
-        .login-card { background: #0F172A; color: white; border-radius: 24px; padding: 40px 30px; width: 100%; max-width: 400px; text-align: center; }
+        .login-card { 
+            background: var(--bg-boxed); color: white; border-radius: 24px; padding: 40px 30px; 
+            width: 100%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); text-align: center;
+            transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .admin-modal-overlay.open-modal .login-card { transform: scale(1); }
+        .login-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+        .login-card p { color: #94A3B8; font-size: 0.9rem; margin-bottom: 25px; }
         .login-form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-bottom: 25px; }
-        .login-form-group label { font-size: 0.8rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; }
-        .login-form-group input { background: #1E293B; border: 2px solid #334155; padding: 14px 16px; border-radius: 12px; color: white; width: 100%; }
+        .login-form-group label { font-size: 0.8rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .login-form-group input { background: #1E293B; border: 2px solid #334155; padding: 14px 16px; border-radius: 12px; color: white; font-size: 1rem; width: 100%; transition: 0.2s; }
+        .login-form-group input:focus { border-color: var(--secondary); outline: none; }
+        
+        /* DASHBOARD CONTROL PANEL */
+        #section-admin-dashboard { display: none; }
+        .admin-box { background: white; border: 1px solid var(--border-line); border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .admin-tabs { display: flex; gap: 8px; margin-bottom: 25px; border-bottom: 2px solid #F1F5F9; padding-bottom: 12px; overflow-x: auto; }
+        .tab-btn { padding: 10px 18px; border: none; background: #F1F5F9; border-radius: 8px; cursor: pointer; font-weight: 700; color: #475569; font-size: 0.9rem; white-space: nowrap; transition: 0.2s; }
+        .tab-btn.active-tab { background: var(--primary); color: white; }
 
-        /* RESPONSIVE SMARTPHONE MEDIA QUERY */
+        .crud-view { display: none; }
+        .crud-view.active-crud { display: block; }
+        .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto; gap: 14px; align-items: end; background: #F8FAFC; padding: 20px; border-radius: 14px; margin-bottom: 25px; border: 1px solid var(--border-line); }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
+        .form-group input, .form-group textarea, .form-group select { padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--secondary); outline: none; }
+        
+        .table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 12px; border: 1px solid var(--border-line); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+        th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-line); }
+        th { background: #F8FAFC; color: var(--primary); font-weight: 700; }
+        .btn-action { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.8rem; }
+        .btn-add { background: var(--secondary); color: white; padding: 11px 22px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; }
+        .btn-delete { background: var(--danger); color: white; }
+
+        /* QUERY RESPONSIVE KHUSUS HP */
+        @media (max-width: 992px) {
+            .about-grid { grid-template-columns: 1fr; gap: 16px; }
+        }
+
         @media (max-width: 768px) {
-            body { padding-top: 130px; }
+            body { padding-top: 135px; } 
+            
             .navbar { flex-direction: column; gap: 12px; padding: 12px 15px; }
-            .nav-links { width: 100%; justify-content: center; }
+            .logo-area { flex-direction: row; gap: 10px; text-align: left; }
+            .logo-area img { height: 36px; }
+            .logo-title h1 { font-size: 1.15rem; }
+            .logo-title p { font-size: 0.6rem; }
+            .nav-links { width: 100%; justify-content: center; gap: 4px; }
             .nav-links a { font-size: 0.85rem; padding: 6px 10px; }
-            .hero-section { grid-template-columns: 1fr; text-align: center; }
-            .hero-text h2 { font-size: 2.2rem; }
-            .hero-image { order: -1; } .hero-image img { max-width: 55%; }
-            .about-grid { grid-template-columns: 1fr; }
-            .form-inline { grid-template-columns: 1fr; }
-            .btn-add { width: 100%; }
+
+            .hero-section { grid-template-columns: 1fr; text-align: center; gap: 20px; min-height: auto; padding: 20px 0; }
+            .hero-text h2 { font-size: 2.2rem; margin-bottom: 12px; }
+            .hero-text p { font-size: 1rem; margin-bottom: 24px; }
+            .btn-general { width: 100%; padding: 12px 24px; font-size: 0.95rem; }
+            .hero-image { order: -1; margin-bottom: 10px; } 
+            .hero-image img { max-width: 50%; }
+
+            .consultation-header-label h2 { font-size: 1.6rem; }
+            .consultation-header-label p { font-size: 0.85rem; }
+            .interactive-card { padding: 25px 20px; min-height: auto; border-radius: 20px; }
+            .progress-container { flex-direction: column; gap: 8px; align-items: flex-start; padding: 10px; margin-bottom: 20px; }
+            .progress-bar-bg { width: 100%; height: 6px; }
+            .question-card h3 { font-size: 1.1rem; margin-bottom: 24px; text-align: center; padding: 0; }
+            .choice-btn { padding: 14px 18px; font-size: 0.9rem; border-radius: 12px; }
+            
+            .form-inline { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
+            .btn-add { width: 100%; margin-top: 5px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR FIXED -->
     <header id="main-header">
         <div class="navbar">
             <div class="logo-area">
@@ -221,11 +304,8 @@
         </div>
     </header>
 
-    <!-- KONTEN UTAMA LANDING PAGE -->
     <div id="main-landing-content">
-        
-        <!-- SEKSI 1: BERANDA -->
-        <section id="section-home" class="section-container">
+        <section id="section-home" class="page-section" style="padding-bottom: 0;">
             <div class="hero-section">
                 <div class="hero-text">
                     <h2>Temukan Masa Depanmu dengan <span>SIPARJUR</span></h2>
@@ -236,25 +316,25 @@
                     <img src="siparjur.png" alt="Visual">
                 </div>
             </div>
-            
-            <!-- LENGKUNGAN BAWAH BERANDA MENUJU KONSULTASI -->
-            <svg class="wave-divider wave-bottom" viewBox="0 0 1440 74" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,74L1320,74C1200,74,960,74,720,74C480,74,240,74,120,74L0,74Z"></path>
-            </svg>
         </section>
 
-        <!-- SEKSI 2: KONSULTASI (LATAR BELAKANG GELAP MAKSIMAL) -->
-        <section id="section-consult" class="section-container">
+        <div class="wave-container">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#E2E8F0" opacity="0.5"></path>
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z" fill="#F1F5F9"></path>
+            </svg>
+        </div>
+
+        <section id="section-consult" class="page-section" style="background-color: #F1F5F9; padding-top: 10px; padding-bottom: 20px;">
             <div class="consultation-outer-box" id="consultation-target-box">
                 <div class="consultation-header-label">
-                    <h2>KONSULTASI INDIKATOR MINAT</h2>
-                    <p>Silakan jawab indikator gejala minat di bawah ini dengan sejujurnya</p>
+                    <h2>KONSULTASI</h2>
+                    <p>Silakan jawab pertanyaan dibawah ini sesuai dengan minat anda</p>
                 </div>
                 
                 <div class="interactive-card">
-                    <div id="loading-kb">
+                    <div id="loading-kb" style="text-align: center; padding: 30px 0;">
                         <div class="spinner"></div>
-                        <p style="color: #94A3B8; font-size: 0.9rem;">Sinkronisasi Basis Pengetahuan Cloud Sheets...</p>
                     </div>
 
                     <div id="quiz-area-box" style="display:none;">
@@ -267,49 +347,46 @@
 
                     <div id="loading-view">
                         <div class="spinner"></div>
-                        <p style="color: var(--secondary); font-weight: 700;">Mesin Inferensi Forward Chaining Sedang Melakukan Penalaran...</p>
+                        <p style="color: var(--primary); font-weight: 700; font-size: 0.95rem;">Mesin Inferensi Forward Chaining Sedang Melakukan Penalaran...</p>
                     </div>
 
                     <div class="result-card" id="result-box">
                         <span class="res-badge">🏆 Hasil Analisis Rekomendasi Jurusan</span>
                         <div id="result-list-container"></div>
-                        <button class="btn-general" style="background: var(--primary); color:white; width:100%; margin-top:25px; border-radius: 14px;" onclick="restartQuiz()">Ulangi Tes Konsultasi ↺</button>
+                        <button class="btn-general" style="background: var(--primary); color:white; width:100%; margin-top:25px; border-radius: 14px; box-shadow: 0 4px 12px rgba(10,54,99,0.15);" onclick="restartQuiz()">Ulangi Tes Konsultasi ↺</button>
                     </div>
                 </div>
             </div>
-
-            <!-- LENGKUNGAN BAWAH KONSULTASI MENUJU TENTANG -->
-            <svg class="wave-divider wave-bottom" style="color: #FFFFFF;" viewBox="0 0 1440 74" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,74L1320,74C1200,74,960,74,720,74C480,74,240,74,120,74L0,74Z"></path>
-            </svg>
         </section>
 
-        <!-- SEKSI 3: TENTANG -->
-        <section id="section-about" class="section-container">
-            <div class="about-content">
-                <h2 style="color: var(--primary); text-align: center; font-weight: 800; margin-bottom: 5px;">Informasi Sistem</h2>
-                <p style="text-align: center; color: #64748B; font-size: 0.9rem;">Arsitektur penalaran kecerdasan buatan SIPARJUR</p>
-                
-                <div class="about-grid">
-                    <div class="about-card">
-                        <h3>Tentang Aplikasi</h3>
-                        <p><strong>SIPARJUR</strong> dirancang untuk membantu calon mahasiswa menentukan pilihan program studi kuliah terbaik berdasarkan indikator minat dan kecenderungan kompetensi akademik mereka.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>Metode Inferensi</h3>
-                        <p>Sistem ini menerapkan penalaran <strong>Forward Chaining</strong>, di mana fakta jawaban pengguna atas indikator minat dicocokkan ke dalam basis aturan untuk melahirkan kesimpulan prodi.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>Keunggulan Cloud</h3>
-                        <p>Mengadopsi teknologi <em>Serverless Dynamic Database</em> terintegrasi dengan Google Sheets API, mempermudah pakar mengubah parameter bobot nilai kapan saja.</p>
-                    </div>
+        <div class="wave-container wave-flipped">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z" fill="#F1F5F9"></path>
+            </svg>
+        </div>
+
+        <section id="section-about" class="page-section" style="padding-top: 40px;">
+            <h2 style="color: var(--primary); text-align: center; font-weight: 800; margin-bottom: 5px;">Informasi Sistem</h2>
+            <p style="text-align: center; color: #64748B; margin-bottom: 30px; font-size: 0.9rem;">Arsitektur penalaran kecerdasan buatan SIPARJUR</p>
+            
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>Tentang Aplikasi</h3>
+                    <p><strong>SIPARJUR</strong> dirancang untuk membantu calon mahasiswa menentukan pilihan program studi kuliah terbaik berdasarkan indikator minat dan kecenderungan kompetensi akademik mereka.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Metode Inferensi</h3>
+                    <p>Sistem ini menerapkan penalaran <strong>Forward Chaining</strong>, di mana fakta jawaban pengguna atas indikator minat dicocokkan ke dalam basis aturan (*rule base*) untuk melahirkan kesimpulan rumpun prodi.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Keunggulan Cloud</h3>
+                    <p>Mengadopsi teknologi <em>Serverless Dynamic Database</em> terintegrasi dengan Google Sheets API, mempermudah pakar mengubah parameter bobot nilai kapan saja tanpa menyentuh susunan kode web.</p>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- SEKSI ADMIN DASHBOARD PANEL -->
-    <section id="section-admin-dashboard">
+    <section id="section-admin-dashboard" class="page-section">
         <div class="admin-box">
             <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 15px;">
                 <h2 style="color: var(--primary); font-size: 1.4rem;">⚙️ Panel Kontrol Administrasi (Pakar)</h2>
@@ -322,12 +399,12 @@
                 <button id="btn-tab-rule" class="tab-btn" onclick="switchCrudTab('rule')">Matriks Rule</button>
             </div>
 
-            <!-- CRUD GEJALA -->
             <div id="crud-gejala" class="crud-view active-crud">
+                <h4 style="margin-bottom: 10px; color: var(--primary); font-size: 1rem;">Tambah Data Indikator Gejala Baru</h4>
                 <div class="form-inline">
                     <div class="form-group"><label>Kode Gejala</label><input type="text" id="in-g-kode" placeholder="Contoh: G21"></div>
-                    <div class="form-group"><label>Deskripsi Kalimat Indikator Minat</label><input type="text" id="in-g-teks" placeholder="Masukkan kalimat..."></div>
-                    <button class="btn-general btn-add" onclick="submitCrud('addGejala')">Simpan</button>
+                    <div class="form-group"><label>Deskripsi Kalimat Indikator Minat</label><input type="text" id="in-g-teks" placeholder="Masukkan kalimat pertanyaan..."></div>
+                    <button class="btn-general btn-add" onclick="submitCrud('addGejala')">Simpan ke Sheet</button>
                 </div>
                 <div class="table-responsive">
                     <table>
@@ -337,13 +414,13 @@
                 </div>
             </div>
 
-            <!-- CRUD JURUSAN -->
             <div id="crud-jurusan" class="crud-view">
+                <h4 style="margin-bottom: 10px; color: var(--primary); font-size: 1rem;">Tambah Klaster Rumpun Jurusan Baru</h4>
                 <div class="form-inline">
                     <div class="form-group"><label>Kode Jurusan</label><input type="text" id="in-j-kode" placeholder="Contoh: J11"></div>
-                    <div class="form-group"><label>Nama Rumpun Jurusan</label><input type="text" id="in-j-nama" placeholder="Nama Prodi..."></div>
-                    <div class="form-group"><label>Deskripsi / Solusi Pakar</label><textarea id="in-j-desc" placeholder="Tulis deskripsi..."></textarea></div>
-                    <button class="btn-general btn-add" onclick="submitCrud('addJurusan')">Simpan</button>
+                    <div class="form-group"><label>Nama Rumpun Jurusan</label><input type="text" id="in-j-nama" placeholder="Nama Program Studi..."></div>
+                    <div class="form-group"><label>Deskripsi / Solusi Pakar</label><textarea id="in-j-desc" placeholder="Tulis uraian deskripsi ilmu..."></textarea></div>
+                    <button class="btn-general btn-add" onclick="submitCrud('addJurusan')">Simpan ke Sheet</button>
                 </div>
                 <div class="table-responsive">
                     <table>
@@ -353,12 +430,12 @@
                 </div>
             </div>
 
-            <!-- CRUD RULE -->
             <div id="crud-rule" class="crud-view">
+                <h4 style="margin-bottom: 10px; color: var(--primary); font-size: 1rem;">Petakan Aturan Keterkaitan (*Rule Base*)</h4>
                 <div class="form-inline">
                     <div class="form-group"><label>Pilih Gejala</label><select id="sel-r-gejala"></select></div>
                     <div class="form-group"><label>Memicu Jurusan</label><select id="sel-r-jurusan"></select></div>
-                    <div class="form-group"><label>Bobot Poin</label><select id="sel-r-bobot"><option value="3">3 (Sangat Berpengaruh)</option><option value="1">1 (Pendukung)</option></select></div>
+                    <div class="form-group"><label>Bobot Poin Aturan</label><select id="sel-r-bobot"><option value="3">3 (Sangat Berpengaruh)</option><option value="1">1 (Pendukung Ringan)</option></select></div>
                     <button class="btn-general btn-add" onclick="submitCrud('addRule')">Hubungkan Aturan</button>
                 </div>
                 <div class="table-responsive">
@@ -371,29 +448,25 @@
         </div>
     </section>
 
-    <!-- POP-UP MODAL DIALOG LOGIN ADMIN -->
     <div class="admin-modal-overlay" id="adminModalOverlay">
         <div class="login-card">
-            <h3>Otentikasi Admin</h3>
-            <p>Masukkan kunci sandi untuk masuk dokumen kontrol</p>
+            <h3>ADMIN PANEL</h3>
+            <p>Masukkan kata sandi dengan benar</p>
             <div class="login-form-group">
-                <label>Sandi Administrator</label>
                 <input type="password" id="admin-pass-input" placeholder="••••••••" onkeypress="handleLoginKeyPress(event)">
             </div>
             <div id="login-error-msg" style="color: var(--danger); font-size: 0.85rem; font-weight: 600; margin-bottom: 15px; display: none;">❌ Sandi salah, akses ditolak!</div>
             <div style="display: flex; gap: 10px;">
-                <button class="btn-general" style="background: #334155; color: white; flex: 1;" onclick="toggleAdminModal(false)">Batal</button>
-                <button class="btn-general btn-primary-style" style="flex: 2;" onclick="verifikasiLoginAdmin()">Buka</button>
+                <button class="btn-general" style="background: #334155; color: white; flex: 1; border-radius: 12px; padding: 12px 0;" onclick="toggleAdminModal(false)">Batal</button>
+                <button class="btn-general btn-primary-style" style="flex: 2; border-radius: 12px; padding: 12px 0;" onclick="verifikasiLoginAdmin()">Masuk</button>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER LENGKAP -->
     <footer style="background: #0F172A; color: #64748B; text-align: center; padding: 25px 20px; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.02);">
         <p>&copy; 2026 SIPARJUR - Sistem Pakar Rekomendasi Jurusan.</p>
         <p style="margin-top: 10px;">
-            <!-- PERBAIKAN: Tombol Admin diberi ID untuk mempermudah kontrol status -->
-            <span id="footer-admin-btn" style="cursor: pointer; opacity: 0.4; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.4" onclick="toggleAdminModal(true)">🔒 Admin</span>
+            <span style="cursor: pointer; opacity: 0.4; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.4" onclick="toggleAdminModal(true)">🔒 Admin</span>
         </p>
     </footer>
 
@@ -406,9 +479,12 @@
         let db_rule = [];
         let currentStep = 0;
         let skorJurusan = {};
-        let isHandlingScrollActive = true;
         let isDatabaseLoaded = false;
-        let isAdminLoggedIn = false; // Flag untuk melacak status masuk admin
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadKnowledgeBase();
+            setupScrollNavbar();
+        });
 
         async function loadKnowledgeBase() {
             try {
@@ -425,9 +501,21 @@
                 
                 renderQuestion();
                 renderAdminTables();
+                populateAdminSelects();
             } catch (err) {
                 alert("Gagal memuat database cloud sheets.");
             }
+        }
+
+        function setupScrollNavbar() {
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
         }
 
         function triggerConsultationTab() {
@@ -447,20 +535,34 @@
             document.getElementById('bar-fill').style.width = `${((currentStep + 1) / db_gejala.length) * 100}%`;
 
             container.innerHTML = `
-                <div class="question-card" id="q-card-element">
+                <div class="question-card slide-in" id="q-card-element">
                     <h3>${item.indikator}</h3>
                     <div class="options-vertical">
-                        <button class="choice-btn choice-btn-yes" onclick="prosesJawabanLogik('${item.kd_gejala}', 3)">
+                        <button class="choice-btn choice-btn-yes" onclick="navigasiJawaban('${item.kd_gejala}', 3)">
                             <span>A. Ya, Sangat Sesuai</span>
                             <span class="icon-indicator">✔</span>
                         </button>
-                        <button class="choice-btn choice-btn-no" onclick="prosesJawabanLogik('${item.kd_gejala}', 0)">
+                        <button class="choice-btn choice-btn-no" onclick="navigasiJawaban('${item.kd_gejala}', 0)">
                             <span>B. Tidak / Kurang Meminati</span>
                             <span class="icon-indicator">✖</span>
                         </button>
                     </div>
                 </div>
             `;
+
+            setTimeout(() => {
+                const card = document.getElementById('q-card-element');
+                if(card) card.classList.remove('slide-in');
+            }, 50);
+        }
+
+        function navigasiJawaban(kdGejala, poin) {
+            const card = document.getElementById('q-card-element');
+            if(card) card.classList.add('slide-out');
+
+            setTimeout(() => {
+                prosesJawabanLogik(kdGejala, poin);
+            }, 200); 
         }
 
         function prosesJawabanLogik(kdGejala, poin) {
@@ -490,31 +592,36 @@
                 
                 let hasilUrut = [];
                 db_jurusan.forEach(j => {
-                    let totalPoin = skorJurusan[j.kd_jurusan] || 0;
-                    hasilUrut.push({ name: j.nama_jurusan, desc: j.deskripsi, score: totalPoin });
+                    let skor = skorJurusan[j.kd_jurusan] || 0;
+                    hasilUrut.push({
+                        kode: j.kd_jurusan,
+                        nama: j.nama_jurusan,
+                        deskripsi: j.deskripsi,
+                        skor: skor
+                    });
                 });
 
-                hasilUrut.sort((a,b) => b.score - a.score);
-                let top3 = hasilUrut.slice(0,3);
-                
-                let resContainer = document.getElementById('result-list-container');
-                resContainer.innerHTML = "";
+                hasilUrut.sort((a, b) => b.skor - a.skor);
 
-                if(top3[0].score === 0) {
-                    resContainer.innerHTML = `<p style="color:#94A3B8; text-align:center; padding: 15px 0; font-size:0.9rem;">Analisis kurang tepat karena Anda memilih tidak meminati semua bidang.</p>`;
-                } else {
-                    top3.forEach((item, index) => {
-                        resContainer.innerHTML += `
-                            <div class="result-item">
-                                <div class="rank-number">#0${index+1}</div>
-                                <div class="res-title">Rekomendasi ${index+1}: ${item.name}</div>
-                                <div class="res-desc">${item.desc} <br><span style="color:var(--secondary); font-weight:700; font-size:0.8rem;">(Kesesuaian: ${item.score} Poin)</span></div>
-                            </div>
-                        `;
-                    });
-                }
-                fokusKeAreaKuesioner();
-            }, 1000);
+                let resultContainer = document.getElementById('result-list-container');
+                resultContainer.innerHTML = "";
+
+                let topRekomendasi = hasilUrut.slice(0, 3);
+                
+                topRekomendasi.forEach((res, index) => {
+                    let cardResult = document.createElement('div');
+                    cardResult.className = "result-item";
+                    cardResult.innerHTML = `
+                        <div class="rank-number">#${index + 1}</div>
+                        <div class="res-title">${res.nama} (${res.kode})</div>
+                        <div class="res-desc">${res.deskripsi}</div>
+                        <div style="margin-top: 8px; font-size: 0.85rem; font-weight: bold; color: var(--secondary);">
+                            Kecocokan Aturan: ${res.skor} Poin
+                        </div>
+                    `;
+                    resultContainer.appendChild(cardResult);
+                });
+            }, 1200);
         }
 
         function restartQuiz() {
@@ -523,177 +630,187 @@
             document.getElementById('result-box').style.display = 'none';
             document.getElementById('quiz-area-box').style.display = 'block';
             renderQuestion();
-            fokusKeAreaKuesioner();
         }
 
-        function fokusKeAreaKuesioner() {
-            const target = document.getElementById('consultation-target-box');
-            if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // PERBAIKAN: Tombol admin tidak berfungsi jika sudah masuk dashboard admin
         function toggleAdminModal(show) {
-            if(isAdminLoggedIn && show) {
-                console.log("Akses diblokir: Anda sudah berada di panel admin.");
-                return; // Berhenti di sini, modal tidak akan terbuka
-            }
-            
-            let overlay = document.getElementById('adminModalOverlay');
-            if(show) {
+            const overlay = document.getElementById('adminModalOverlay');
+            const passInput = document.getElementById('admin-pass-input');
+            document.getElementById('login-error-msg').style.display = 'none';
+            passInput.value = "";
+            if (show) {
                 overlay.classList.add('open-modal');
-                document.getElementById('admin-pass-input').focus();
+                passInput.focus();
             } else {
                 overlay.classList.remove('open-modal');
-                document.getElementById('login-error-msg').style.display = 'none';
-                document.getElementById('admin-pass-input').value = "";
-            }
-        }
-
-        function verifikasiLoginAdmin() {
-            let inputSandi = document.getElementById('admin-pass-input').value;
-            let errorLabel = document.getElementById('login-error-msg');
-            
-            if (inputSandi === ADMIN_PASSWORD) {
-                errorLabel.style.display = 'none';
-                toggleAdminModal(false);
-                openDashboardView();
-            } else {
-                errorLabel.style.display = 'block';
-                document.getElementById('admin-pass-input').value = "";
-                document.getElementById('admin-pass-input').focus();
             }
         }
 
         function handleLoginKeyPress(event) {
-            if (event.key === "Enter") verifikasiLoginAdmin();
+            if (event.key === "Enter") {
+                verifikasiLoginAdmin();
+            }
         }
 
-        function openDashboardView() {
-            isAdminLoggedIn = true; // Set status admin aktif
-            isHandlingScrollActive = false;
-            document.getElementById('main-landing-content').style.display = 'none';
-            document.getElementById('section-admin-dashboard').style.display = 'block';
-            
-            // Menyembunyikan tombol admin di footer agar tidak membingungkan
-            document.getElementById('footer-admin-btn').style.display = 'none';
-            
-            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active-link'));
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function verifikasiLoginAdmin() {
+            let pass = document.getElementById('admin-pass-input').value;
+            if (pass === ADMIN_PASSWORD) {
+                toggleAdminModal(false);
+                document.getElementById('main-landing-content').style.display = 'none';
+                document.getElementById('section-admin-dashboard').style.display = 'block';
+                document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
+            } else {
+                document.getElementById('login-error-msg').style.display = 'block';
+            }
+        }
+
+        function logOutAdmin() {
+            document.getElementById('section-admin-dashboard').style.display = 'none';
+            document.getElementById('main-landing-content').style.display = 'block';
+            document.getElementById('lnk-home').classList.add('active-link');
+            restartQuiz();
         }
 
         function closeDashboardView() {
             document.getElementById('section-admin-dashboard').style.display = 'none';
             document.getElementById('main-landing-content').style.display = 'block';
-            isHandlingScrollActive = true;
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
+            if (event && event.target) {
+                event.target.classList.add('active-link');
+            }
         }
 
-        function logOutAdmin() {
-            isAdminLoggedIn = false; // Reset status admin aktif
-            document.getElementById('footer-admin-btn').style.display = 'inline-block'; // Munculkan kembali tombol admin footer
-            closeDashboardView();
-            document.getElementById('lnk-home').click();
+        function switchCrudTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+            document.querySelectorAll('.crud-view').forEach(v => v.classList.remove('active-crud'));
+
+            if (tabName === 'gejala') {
+                document.getElementById('btn-tab-gejala').classList.add('active-tab');
+                document.getElementById('crud-gejala').classList.add('active-crud');
+            } else if (tabName === 'jurusan') {
+                document.getElementById('btn-tab-jurusan').classList.add('active-tab');
+                document.getElementById('crud-jurusan').classList.add('active-crud');
+            } else if (tabName === 'rule') {
+                document.getElementById('btn-tab-rule').classList.add('active-tab');
+                document.getElementById('crud-rule').classList.add('active-crud');
+            }
         }
 
-        window.addEventListener('scroll', () => {
-            let headerElement = document.getElementById('main-header');
-            if (window.scrollY > 80) headerElement.classList.add('scrolled');
-            else headerElement.classList.remove('scrolled');
-
-            if (!isHandlingScrollActive) return;
-
-            let sections = document.querySelectorAll('#main-landing-content .section-container');
-            let navLinks = document.querySelectorAll('.nav-links a');
-            
-            let currentSectionId = "";
-            sections.forEach(sec => {
-                let secTop = sec.offsetTop - 160;
-                if (window.pageYOffset >= secTop) {
-                    currentSectionId = sec.getAttribute('id');
-                }
+        function renderAdminTables() {
+            let tGejala = document.getElementById('tbl-gejala-body');
+            tGejala.innerHTML = "";
+            db_gejala.forEach(g => {
+                tGejala.innerHTML += `
+                    <tr>
+                        <td><strong>${g.kd_gejala}</strong></td>
+                        <td>${g.indikator}</td>
+                        <td><button class="btn-action btn-delete" onclick="deleteDataCloud('gejala', '${g.kd_gejala}')">Hapus</button></td>
+                    </tr>
+                `;
             });
 
-            navLinks.forEach(link => {
-                link.classList.remove('active-link');
-                if (link.getAttribute('href') === `#${currentSectionId}`) {
-                    link.classList.add('active-link');
-                }
+            let tJurusan = document.getElementById('tbl-jurusan-body');
+            tJurusan.innerHTML = "";
+            db_jurusan.forEach(j => {
+                tJurusan.innerHTML += `
+                    <tr>
+                        <td><strong>${j.kd_jurusan}</strong></td>
+                        <td>${j.nama_jurusan}</td>
+                        <td>${j.deskripsi}</td>
+                        <td><button class="btn-action btn-delete" onclick="deleteDataCloud('jurusan', '${j.kd_jurusan}')">Hapus</button></td>
+                    </tr>
+                `;
             });
-        });
+
+            let tRule = document.getElementById('tbl-rule-body');
+            tRule.innerHTML = "";
+            db_rule.forEach((r, idx) => {
+                tRule.innerHTML += `
+                    <tr>
+                        <td>${r.kd_gejala}</td>
+                        <td>${r.kd_jurusan}</td>
+                        <td><span class="res-badge" style="margin:0; padding:2px 8px;">${r.bobot}</span></td>
+                        <td><button class="btn-action btn-delete" onclick="deleteDataCloud('rule', '${idx}')">Hapus</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function populateAdminSelects() {
+            let selGejala = document.getElementById('sel-r-gejala');
+            let selJurusan = document.getElementById('sel-r-jurusan');
+            selGejala.innerHTML = "";
+            selJurusan.innerHTML = "";
+
+            db_gejala.forEach(g => {
+                selGejala.innerHTML += `<option value="${g.kd_gejala}">${g.kd_gejala} - ${g.indikator.substring(0, 45)}...</option>`;
+            });
+            db_jurusan.forEach(j => {
+                selJurusan.innerHTML += `<option value="${j.kd_jurusan}">${j.kd_jurusan} - ${j.nama_jurusan}</option>`;
+            });
+        }
 
         async function submitCrud(actionType) {
             let payload = { action: actionType };
-            if(actionType === 'addGejala') {
-                payload.kd_gejala = document.getElementById('in-g-kode').value;
-                payload.indikator = document.getElementById('in-g-teks').value;
-            } else if(actionType === 'addJurusan') {
-                payload.kd_jurusan = document.getElementById('in-j-kode').value;
-                payload.nama_jurusan = document.getElementById('in-j-nama').value;
-                payload.deskripsi = document.getElementById('in-j-desc').value;
-            } else if(actionType === 'addRule') {
+
+            if (actionType === 'addGejala') {
+                let kode = document.getElementById('in-g-kode').value.trim();
+                let teks = document.getElementById('in-g-teks').value.trim();
+                if(!kode || !teks) return alert("Lengkapi data!");
+                payload.kd_gejala = kode;
+                payload.indikator = teks;
+            } 
+            else if (actionType === 'addJurusan') {
+                let kode = document.getElementById('in-j-kode').value.trim();
+                let nama = document.getElementById('in-j-nama').value.trim();
+                let desc = document.getElementById('in-j-desc').value.trim();
+                if(!kode || !nama || !desc) return alert("Lengkapi data!");
+                payload.kd_jurusan = kode;
+                payload.nama_jurusan = nama;
+                payload.deskripsi = desc;
+            } 
+            else if (actionType === 'addRule') {
                 payload.kd_gejala = document.getElementById('sel-r-gejala').value;
                 payload.kd_jurusan = document.getElementById('sel-r-jurusan').value;
                 payload.bobot = document.getElementById('sel-r-bobot').value;
             }
 
-            alert("Mengirim data ke cloud sheets...");
-            await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
-            localStorage.setItem('admin_session_logged', 'true');
-            location.reload();
+            executeCloudRequest(payload);
         }
 
-        async function deleteDataCloud(actionType, idKey1, idKey2 = null) {
-            if(!confirm("Yakin ingin menghapus data ini?")) return;
-            let payload = { action: actionType };
-            if(actionType === 'deleteGejala') payload.kd_gejala = idKey1;
-            if(actionType === 'deleteJurusan') payload.kd_jurusan = idKey1;
-            if(actionType === 'deleteRule') { payload.kd_gejala = idKey1; payload.kd_jurusan = idKey2; }
-
-            await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
-            localStorage.setItem('admin_session_logged', 'true');
-            location.reload();
+        async function deleteDataCloud(type, uniqueId) {
+            if(!confirm("Hapus data ini dari cloud sheets?")) return;
+            let payload = { action: 'deleteData', targetSheet: type, id: uniqueId };
+            executeCloudRequest(payload);
         }
 
-        function renderAdminTables() {
-            let tGejala = document.getElementById('tbl-gejala-body');
-            let tJurusan = document.getElementById('tbl-jurusan-body');
-            let tRule = document.getElementById('tbl-rule-body');
-            let selGejala = document.getElementById('sel-r-gejala');
-            let selJurusan = document.getElementById('sel-r-jurusan');
+        async function executeCloudRequest(payload) {
+            document.getElementById('loading-kb').style.display = 'block';
+            document.getElementById('quiz-area-box').style.display = 'none';
 
-            if(!tGejala) return;
-
-            tGejala.innerHTML = ""; tJurusan.innerHTML = ""; tRule.innerHTML = "";
-            selGejala.innerHTML = ""; selJurusan.innerHTML = "";
-
-            db_gejala.forEach(g => {
-                tGejala.innerHTML += `<tr><td><b>${g.kd_gejala}</b></td><td>${g.indikator}</td><td><button class="btn-action btn-delete" onclick="deleteDataCloud('deleteGejala','${g.kd_gejala}')">Hapus</button></td></tr>`;
-                selGejala.innerHTML += `<option value="${g.kd_gejala}">${g.kd_gejala} - ${g.indikator.substring(0,35)}...</option>`;
-            });
-
-            db_jurusan.forEach(j => {
-                tJurusan.innerHTML += `<tr><td><b>${j.kd_jurusan}</b></td><td><b>${j.nama_jurusan}</b></td><td>${j.deskripsi}</td><td><button class="btn-action btn-delete" onclick="deleteDataCloud('deleteJurusan','${j.kd_jurusan}')">Hapus</button></td></tr>`;
-                selJurusan.innerHTML += `<option value="${j.kd_jurusan}">${j.kd_jurusan} - ${j.nama_jurusan}</option>`;
-            });
-
-            db_rule.forEach(r => {
-                let namaJurusanObj = db_jurusan.find(j => j.kd_jurusan === r.kd_jurusan)?.nama_jurusan || r.kd_jurusan;
-                tRule.innerHTML += `<tr><td><b>${r.kd_gejala}</b></td><td>➔ ${namaJurusanObj}</td><td>+${r.bobot}</td><td><button class="btn-action btn-delete" onclick="deleteDataCloud('deleteRule','${r.kd_gejala}','${r.kd_jurusan}')">Putus</button></td></tr>`;
-            });
-
-            if(localStorage.getItem('admin_session_logged') === 'true') {
-                openDashboardView();
-                localStorage.removeItem('admin_session_logged');
+            try {
+                let response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                let resData = await response.json();
+                
+                if(resData.status === 'success') {
+                    alert("Sukses memperbarui data!");
+                    document.getElementById('in-g-kode').value = "";
+                    document.getElementById('in-g-teks').value = "";
+                    document.getElementById('in-j-kode').value = "";
+                    document.getElementById('in-j-nama').value = "";
+                    document.getElementById('in-j-desc').value = "";
+                    await loadKnowledgeBase();
+                } else {
+                    alert("Gagal: " + resData.message);
+                }
+            } catch(e) {
+                alert("Koneksi bermasalah.");
+                document.getElementById('loading-kb').style.display = 'none';
+                document.getElementById('quiz-area-box').style.display = 'block';
             }
         }
-
-        function switchCrudTab(crudId) {
-            document.querySelectorAll('.crud-view').forEach(v => v.classList.remove('active-crud'));
-            document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active-tab'));
-            document.getElementById(`crud-${crudId}`).classList.add('active-crud');
-            document.getElementById(`btn-tab-${crudId}`).classList.add('active-tab');
-        }
-
-        window.onload = loadKnowledgeBase;
     </script>
 </body>
 </html>
