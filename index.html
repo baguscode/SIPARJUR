@@ -23,36 +23,67 @@
         html { scroll-behavior: smooth; }
         body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
 
+        /* HEADER DENGAN TRANSISI HALUS */
         header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             position: sticky; top: 0; z-index: 1000;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Membuat animasi mengecil jadi halus */
         }
 
+        /* NAVBAR DEFAULT */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
-            max-width: 1200px; margin: 0 auto; padding: 15px 20px;
+            max-width: 1200px; margin: 0 auto; 
+            padding: 18px 20px; /* Padding awal sebelum discroll */
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* LOGO KIRI STATIS */
         .logo-area { display: flex; align-items: center; gap: 12px; }
-        .logo-area img { height: 45px; width: auto; animation: float 4s ease-in-out infinite; }
-        .logo-title h1 { font-size: 1.3rem; color: var(--primary); font-weight: 800; }
-        .logo-title p { font-size: 0.65rem; color: var(--secondary); font-weight: 700; }
+        .logo-area img { 
+            height: 45px; /* Tinggi awal logo */
+            width: auto; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .logo-title h1 { font-size: 1.3rem; color: var(--primary); font-weight: 800; transition: all 0.4s ease; }
+        .logo-title p { font-size: 0.65rem; color: var(--secondary); font-weight: 700; transition: all 0.4s ease; }
 
-        .nav-links { display: flex; gap: 20px; list-style: none; }
+        /* ====== EFEK KETIKA HEADER DISKROL KE BAWAH (SCROLLED) ====== */
+        header.scrolled {
+            box-shadow: 0 10px 30px rgba(10, 54, 99, 0.06);
+            background: rgba(255, 255, 255, 0.98);
+        }
+        header.scrolled .navbar {
+            padding: 8px 20px; /* Padding mengecil ketika discroll */
+        }
+        header.scrolled .logo-area img {
+            height: 35px; /* Ukuran gambar logo mengecil */
+        }
+        header.scrolled .logo-title h1 {
+            font-size: 1.15rem; /* Ukuran teks judul sedikit mengecil */
+        }
+        /* ============================================================ */
+
+        /* NAVBAR KANAN DENGAN ANIMASI GARIS BAWAH */
+        .nav-links { display: flex; gap: 10px; list-style: none; }
         .nav-links a {
             text-decoration: none; color: var(--primary); font-weight: 700;
-            font-size: 0.95rem; padding: 5px 10px; cursor: pointer; transition: 0.3s;
+            font-size: 0.95rem; padding: 8px 16px; cursor: pointer; 
+            transition: all 0.3s ease; border-bottom: 3px solid transparent;
         }
-        .nav-links a:hover, .nav-links a.active-link { color: var(--secondary); }
+        .nav-links a:hover, .nav-links a.active-link { 
+            color: var(--secondary); 
+            border-bottom: 3px solid var(--secondary); 
+        }
 
-        .section-panel { display: none; max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-        .section-panel.active-panel { display: block; }
+        /* STRUKTUR HALAMAN */
+        .page-section { max-width: 1200px; margin: 0 auto; padding: 80px 20px; border-bottom: 1px solid var(--border-line); }
 
-        /* HERO */
-        .hero-section { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; min-height: 70vh; align-items: center; }
+        /* BERANDA / HERO */
+        .hero-section { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; min-height: 65vh; align-items: center; }
         .hero-text h2 { font-size: 3rem; color: var(--primary); font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
         .hero-text h2 span { color: var(--secondary); }
         .hero-text p { font-size: 1.1rem; color: #475569; margin-bottom: 30px; }
@@ -64,6 +95,7 @@
         .btn-primary-style { background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); color: white; box-shadow: 0 10px 20px rgba(0, 180, 180, 0.2); }
         .btn-primary-style:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0, 180, 180, 0.4); }
 
+        /* ANIMASI GAMBAR BERANDA */
         .hero-image { display: flex; justify-content: center; align-items: center; }
         .hero-image img { max-width: 80%; filter: drop-shadow(0 20px 30px rgba(10,54,99,0.15)); animation: float 4s ease-in-out infinite; }
         
@@ -72,7 +104,7 @@
             50% { transform: translateY(-15px); } 
         }
 
-        /* KONSULTASI CONTAINER */
+        /* KONSULTASI */
         .consultation-outer-box { background-color: var(--bg-boxed); border-radius: 30px; padding: 50px 30px; color: white; max-width: 900px; margin: 0 auto; }
         .consultation-header-label { text-align: center; margin-bottom: 35px; }
         .consultation-header-label h2 { font-size: 2rem; font-weight: 800; }
@@ -91,11 +123,12 @@
         .choice-btn { width: 100%; padding: 15px 20px; text-align: left; background: #1E293B; border: 2px solid #334155; border-radius: 12px; cursor: pointer; color: #CBD5E1; font-weight: 600; display: flex; justify-content: space-between; transition: 0.2s; }
         .choice-btn:hover { border-color: var(--secondary); background: #273549; color: var(--accent); transform: translateX(4px); }
 
-        /* RESULT LOADING & BOX */
-        #loading-view { text-align: center; padding: 40px 0; display: none; }
+        /* LOADING SPINNER GLOBAL */
         .spinner { border: 4px solid rgba(255,255,255,0.1); width: 45px; height: 45px; border-radius: 50%; border-left-color: var(--secondary); animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        #loading-view { text-align: center; padding: 40px 0; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* CARD HASIL KONSULTASI */
         .result-card { display: none; }
         .res-badge { display: inline-block; background: rgba(242, 169, 0, 0.15); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(242,169,0,0.3); }
         .result-item { background: #111827; border: 1px solid #334155; padding: 20px; border-radius: 14px; position: relative; border-left: 4px solid var(--secondary); margin-bottom: 15px; }
@@ -103,11 +136,38 @@
         .res-title { font-size: 1.15rem; color: #fff; font-weight: 700; margin-bottom: 6px; }
         .res-desc { font-size: 0.9rem; color: #E2E8F0; text-align: justify; }
 
-        /* TENTANG PANEL */
-        .about-box { max-width: 800px; margin: 0 auto; background: #F8FAFC; border: 1px solid var(--border-line); border-radius: 20px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .about-box h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--secondary); padding-bottom: 5px; }
+        /* TENTANG: DESAIN 3 BOX GRID DENGAN ANIMASI HOVER */
+        .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 20px; }
+        .about-card { 
+            background: #F8FAFC; 
+            border: 1px solid var(--border-line); 
+            border-radius: 20px; 
+            padding: 30px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01); 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .about-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--primary); transition: background 0.3s ease;
+        }
+        .about-card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.3rem; font-weight: 700; transition: color 0.3s ease; }
+        .about-card p { text-align: justify; font-size: 0.95rem; color: #475569; }
+        
+        .about-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(10, 54, 99, 0.08);
+            background: #FFFFFF;
+            border-color: rgba(0, 180, 180, 0.3);
+        }
+        .about-card:hover::before { background: var(--secondary); }
+        .about-card:hover h3 { color: var(--secondary); }
 
-        /* CARD STYLE LOGIN FORM ADMIN (BARU) */
+        /* SECTION PANEL ADMIN (HIDDEN DEFAULT) */
+        #section-admin { display: none; }
+
+        /* CARD LOGIN ADMIN */
         .login-card-container { display: flex; justify-content: center; align-items: center; padding: 40px 0; }
         .login-card { background: var(--bg-boxed); color: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(15,23,42,0.15); border: 1px solid rgba(255,255,255,0.05); text-align: center; }
         .login-card h3 { font-size: 1.5rem; color: #FFF; font-weight: 800; margin-bottom: 8px; }
@@ -118,7 +178,7 @@
         .login-form-group input:focus { border-color: var(--secondary); outline: none; background: #243249; }
         .error-message { color: var(--danger); font-size: 0.85rem; font-weight: 600; margin-top: -10px; margin-bottom: 15px; display: none; }
 
-        /* ADMIN PANEL CRUD STYLES */
+        /* DASHBOARD MANAGEMENT CRUD */
         .admin-box { background: white; border: 1px solid var(--border-line); border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 30px; }
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border-line); padding-bottom: 10px; }
         .tab-btn { padding: 8px 18px; border: none; background: #F1F5F9; border-radius: 6px; cursor: pointer; font-weight: 600; color: #475569; }
@@ -141,6 +201,9 @@
         .btn-add { background: var(--secondary); color: white; padding: 10px 20px; border-radius: 6px; font-weight: 700; }
         .btn-delete { background: var(--danger); color: white; }
 
+        @media (max-width: 992px) {
+            .about-grid { grid-template-columns: 1fr; gap: 20px; }
+        }
         @media (max-width: 768px) {
             .navbar { flex-direction: column; gap: 10px; }
             .hero-section { grid-template-columns: 1fr; text-align: center; }
@@ -151,85 +214,100 @@
 </head>
 <body>
 
-    <header>
+    <!-- NAVBAR -->
+    <header id="main-header">
         <div class="navbar">
             <div class="logo-area">
                 <img src="siparjur.png" alt="Logo">
                 <div class="logo-title">
                     <h1>SIPARJUR</h1>
-                    <p>SISTEM PAKAR REKOMENDASI JURUSAN DINAMIS</p>
+                    <p>SISTEM PAKAR REKOMENDASI JURUSAN</p>
                 </div>
             </div>
             <ul class="nav-links">
-                <li><a id="lnk-home" class="active-link" onclick="switchPanel('home')">Beranda</a></li>
-                <li><a id="lnk-consult" onclick="switchPanel('consult')">Konsultasi</a></li>
-                <li><a id="lnk-about" onclick="switchPanel('about')">Tentang</a></li>
-                <li><a id="lnk-admin" onclick="switchPanel('admin')">🔐 Panel Admin</a></li>
+                <li><a href="#section-home" id="lnk-home" class="active-link" onclick="hideAdminPanel()">Beranda</a></li>
+                <li><a href="#section-consult" id="lnk-consult" onclick="hideAdminPanel()">Konsultasi</a></li>
+                <li><a href="#section-about" id="lnk-about" onclick="hideAdminPanel()">Tentang</a></li>
+                <li><a href="#section-admin" id="lnk-admin" onclick="showAdminPanel()">🔐 Admin</a></li>
             </ul>
         </div>
     </header>
 
-    <section id="panel-home" class="section-panel active-panel">
-        <div class="hero-section">
-            <div class="hero-text">
-                <h2>Temukan Masa Depanmu Berbasis <span>Database Cloud</span></h2>
-                <p>Sistem Pakar Forward Chaining dinamik yang terhubung langsung dengan Google Sheets database. Memudahkan penyesuaian aturan (*rule*) langsung oleh pakar tanpa sentuh kodingan.</p>
-                <button class="btn-general btn-primary-style" onclick="switchPanel('consult')">Mulai Konsultasi Rumpun ➔</button>
-            </div>
-            <div class="hero-image">
-                <img src="siparjur.png" alt="Visual">
-            </div>
-        </div>
-    </section>
-
-    <section id="panel-consult" class="section-panel">
-        <div class="consultation-outer-box">
-            <div class="consultation-header-label">
-                <h2>KONSULTASI INDIKATOR MINAT</h2>
-                <p>Basis pengetahuan dimuat secara real-time dari pangkalan data</p>
-            </div>
-            <div class="interactive-card">
-                <div id="loading-kb" style="text-align: center; padding: 20px;">
-                    <div class="spinner"></div>
-                    <p>Sinkronisasi Basis Pengetahuan Cloud Sheets...</p>
+    <!-- BAGIAN 1: BERANDA -->
+    <div id="main-landing-content">
+        <section id="section-home" class="page-section">
+            <div class="hero-section">
+                <div class="hero-text">
+                    <h2>Temukan Masa Depanmu dengan <span>SIPARJUR</span></h2>
+                    <p>Sistem Pakar ini membantu anda untuk menentukan jurusan kuliah sesuai dengan minat anda.</p>
+                    <a href="#section-consult" class="btn-general btn-primary-style">Mulai Konsultasi ➔</a>
                 </div>
-                <div id="quiz-area-box" style="display:none;">
-                    <div class="progress-container">
-                        <div class="progress-text" id="progress-indicator">Memuat...</div>
-                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="bar-fill"></div></div>
+                <div class="hero-image">
+                    <img src="siparjur.png" alt="Visual">
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 2: KONSULTASI -->
+        <section id="section-consult" class="page-section">
+            <div class="consultation-outer-box">
+                <div class="consultation-header-label">
+                    <h2>KONSULTASI INDIKATOR MINAT</h2>
+                    <p>Basis pengetahuan dimuat secara real-time dari pangkalan data</p>
+                </div>
+                <div class="interactive-card">
+                    <div id="loading-kb" style="text-align: center; padding: 20px;">
+                        <div class="spinner"></div>
+                        <p style="color: #94A3B8; font-size: 0.9rem;">Sinkronisasi Basis Pengetahuan Cloud Sheets...</p>
                     </div>
-                    <div id="dynamic-question-container"></div>
-                </div>
-                <div id="loading-view">
-                    <div class="spinner"></div>
-                    <p>Mesin Inferensi Forward Chaining Sedang Melakukan Penalaran...</p>
-                </div>
-                <div class="result-card" id="result-box">
-                    <span class="res-badge">🎯 Top 3 Rekomendasi Jurusan Terbaik</span>
-                    <div id="result-list-container"></div>
-                    <button class="btn-general" style="background:#334155; color:white; width:100%; margin-top:20px;" onclick="restartQuiz()">Ulangi Tes Konsultasi ↺</button>
+                    <div id="quiz-area-box" style="display:none;">
+                        <div class="progress-container">
+                            <div class="progress-text" id="progress-indicator">Memuat...</div>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" id="bar-fill"></div></div>
+                        </div>
+                        <div id="dynamic-question-container"></div>
+                    </div>
+                    <div id="loading-view">
+                        <div class="spinner"></div>
+                        <p>Mesin Inferensi Forward Chaining Sedang Melakukan Penalaran...</p>
+                    </div>
+                    <div class="result-card" id="result-box">
+                        <span class="res-badge">Top 3 Rekomendasi Jurusan Terbaik</span>
+                        <div id="result-list-container"></div>
+                        <button class="btn-general" style="background:#334155; color:white; width:100%; margin-top:20px;" onclick="restartQuiz()">Ulangi Tes Konsultasi ↺</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="panel-about" class="section-panel">
-        <div class="about-box">
-            <h3>Tentang Aplikasi SIPARJUR</h3>
-            <p style="margin-bottom: 15px; text-align: justify;"><strong>SIPARJUR</strong> (Sistem Pakar Rekomendasi Jurusan) dirancang untuk membantu calon mahasiswa menentukan pilihan program studi kuliah terbaik berdasarkan indikator minat dan kecenderungan kompetensi akademik mereka.</p>
-            <h3>Metode Inferensi</h3>
-            <p style="margin-bottom: 15px; text-align: justify;">Sistem ini menerapkan penalaran <strong>Forward Chaining</strong>, di mana penalaran bergerak maju mengumpulkan fakta-fakta berupa jawaban pengguna atas indikator gejala minat, untuk kemudian dicocokkan ke dalam basis aturan matematika (*rule base*) guna melahirkan kesimpulan final yang akurat.</p>
-            <h3>Keunggulan Arsitektur</h3>
-            <p style="text-align: justify;">Berbeda dengan aplikasi konvensional, SIPARJUR versi terbaru mengadopsi teknologi <em>Serverless Dynamic Database</em> memanfaatkan Google Sheets API. Hal ini mempermudah pakar/guru BK mengubah parameter bobot nilai kapan saja tanpa harus menulis ulang kode web.</p>
-        </div>
-    </section>
+        <!-- BAGIAN 2.5: TENTANG -->
+        <section id="section-about" class="page-section">
+            <h2 style="color: var(--primary); text-align: center; font-weight: 800; margin-bottom: 10px;">Informasi Sistem</h2>
+            <p style="text-align: center; color: #64748B; margin-bottom: 40px;">Arsitektur penalaran kecerdasan buatan SIPARJUR</p>
+            
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>Tentang Aplikasi</h3>
+                    <p><strong>SIPARJUR</strong> (Sistem Pakar Rekomendasi Jurusan) dirancang untuk membantu calon mahasiswa menentukan pilihan program studi kuliah terbaik berdasarkan indikator minat dan kecenderungan kompetensi akademik mereka.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Metode Inferensi</h3>
+                    <p>Sistem ini menerapkan penalaran <strong>Forward Chaining</strong>, di mana penalaran bergerak maju mengumpulkan fakta-fakta berupa jawaban pengguna atas indikator gejala minat, untuk kemudian dicocokkan ke dalam basis aturan matematika (*rule base*) guna melahirkan kesimpulan final yang akurat.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Keunggulan Cloud</h3>
+                    <p>Berbeda dengan aplikasi konvensional, SIPARJUR versi terbaru mengadopsi teknologi <em>Serverless Dynamic Database</em> memanfaatkan Google Sheets API. Hal ini mempermudah pakar/guru BK mengubah parameter bobot nilai kapan saja tanpa harus menulis ulang kode web.</p>
+                </div>
+            </div>
+        </section>
+    </div>
 
-    <section id="panel-admin" class="section-panel">
-        
+    <!-- BAGIAN 3: PANEL ADMIN -->
+    <section id="section-admin" class="page-section">
         <div id="admin-login-view" class="login-card-container">
             <div class="login-card">
                 <h3>Otentikasi Pakar</h3>
-                <p>Masukkan sandi rahasia untuk mengelola pangkalan data aturan</p>
+                <p>Masukkan sandi untuk mengelola data</p>
                 <div class="login-form-group">
                     <label>Kata Sandi Admin</label>
                     <input type="password" id="admin-pass-input" placeholder="••••••••" onkeypress="handleLoginKeyPress(event)">
@@ -239,8 +317,16 @@
             </div>
         </div>
 
+        <div id="admin-loading-auth" style="text-align: center; padding: 60px 0; display: none;">
+            <div class="spinner" style="border-left-color: var(--primary);"></div>
+            <p style="font-weight: 600; color: var(--primary);">Memverifikasi berkas enkripsi & memuat dasbor...</p>
+        </div>
+
         <div id="admin-dashboard-view" style="display: none;">
-            <h2 style="margin-bottom: 20px; color: var(--primary);">⚙️ Pangkalan Manajemen Aturan (Pakar/Admin)</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: var(--primary);">⚙️ Pangkalan Manajemen Aturan (Pakar/Admin)</h2>
+                <button class="btn-general" style="background: #64748B; color: white; padding: 8px 20px; font-size: 0.85rem;" onclick="logOutAdmin()">Keluar Panel ➔</button>
+            </div>
             
             <div class="admin-tabs">
                 <button id="btn-tab-gejala" class="tab-btn active-tab" onclick="switchCrudTab('gejala')">Data Gejala Indikator</button>
@@ -248,6 +334,7 @@
                 <button id="btn-tab-rule" class="tab-btn" onclick="switchCrudTab('rule')">Matriks Rule / Aturan</button>
             </div>
 
+            <!-- CRUD GEJALA -->
             <div id="crud-gejala" class="crud-view active-crud admin-box">
                 <h4>Tambah Data Indikator Gejala Baru</h4>
                 <div class="form-inline">
@@ -269,6 +356,7 @@
                 </div>
             </div>
 
+            <!-- CRUD JURUSAN -->
             <div id="crud-jurusan" class="crud-view admin-box">
                 <h4>Tambah Klaster Rumpun Jurusan Baru</h4>
                 <div class="form-inline">
@@ -294,6 +382,7 @@
                 </div>
             </div>
 
+            <!-- CRUD RULE -->
             <div id="crud-rule" class="crud-view admin-box">
                 <h4>Petakan Aturan Keterkaitan Gejala & Jurusan (*Rule Base*)</h4>
                 <div class="form-inline">
@@ -324,15 +413,12 @@
         </div>
     </section>
 
-    <footer style="background: #0F172A; color: #64748B; text-align: center; padding: 25px; font-size: 0.85rem; border-top: 1px solid #1E293B;">
-        <p>&copy; 2026 SIPARJUR Cloud System - Framework Google Sheets API & GitHub Pages.</p>
+    <footer style="background: #0F172A; color: #64748B; text-align: center; padding: 25px; font-size: 0.85rem;">
+        <p>&copy; 2026 SIPARJUR - Sistem Pakar Rekomendasi Jurusan.</p>
     </footer>
 
     <script>
-        // PASTE URL WEB APP DARI GOOGLE APPS SCRIPT KAMU DI BAWAH INI:
-        const API_URL = "MASUKKAN_URL_DEPLOYMENT_KAMU_DISINI";
-        
-        // KATA SANDI PANEL ADMIN
+        const API_URL = "https://script.google.com/macros/s/AKfycbzKB1FtMUyt_ZV3_Hh-gfsdleCVc5CcGB4uvHtRIxfxy1g6E4p7h7pNbrX1-1JYHQ_D/exec";
         const ADMIN_PASSWORD = "admin123"; 
 
         let db_gejala = [];
@@ -340,7 +426,7 @@
         let db_rule = [];
         let currentStep = 0;
         let skorJurusan = {};
-        let isAdminAuthenticated = false;
+        let isHandlingScrollActive = true;
 
         async function loadKnowledgeBase() {
             try {
@@ -357,7 +443,7 @@
                 renderQuestion();
                 renderAdminTables();
             } catch (err) {
-                alert("Gagal memuat database cloud. Pastikan URL API Web App Apps Script sudah benar.");
+                alert("Gagal memuat database cloud.");
             }
         }
 
@@ -441,16 +527,35 @@
             renderQuestion();
         }
 
-        // --- SISTEM LOGIN CARD INTERAKTIF (BARU) ---
+        function showAdminPanel() {
+            isHandlingScrollActive = false;
+            document.getElementById('main-landing-content').style.display = 'none';
+            document.getElementById('section-admin').style.display = 'block';
+            
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active-link'));
+            document.getElementById('lnk-admin').classList.add('active-link');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('section-admin').style.display = 'none';
+            document.getElementById('main-landing-content').style.display = 'block';
+            isHandlingScrollActive = true;
+        }
+
         function verifikasiLoginAdmin() {
             let inputSandi = document.getElementById('admin-pass-input').value;
             let errorLabel = document.getElementById('login-error-msg');
             
             if (inputSandi === ADMIN_PASSWORD) {
-                isAdminAuthenticated = true;
                 errorLabel.style.display = 'none';
                 document.getElementById('admin-login-view').style.display = 'none';
-                document.getElementById('admin-dashboard-view').style.display = 'block';
+                document.getElementById('admin-loading-auth').style.display = 'block';
+
+                setTimeout(() => {
+                    document.getElementById('admin-loading-auth').style.display = 'none';
+                    document.getElementById('admin-dashboard-view').style.display = 'block';
+                }, 1500);
             } else {
                 errorLabel.style.display = 'block';
                 document.getElementById('admin-pass-input').value = "";
@@ -464,7 +569,46 @@
             }
         }
 
-        // --- MANAJEMEN CRUD API ---
+        function logOutAdmin() {
+            document.getElementById('admin-pass-input').value = "";
+            document.getElementById('admin-dashboard-view').style.display = 'none';
+            document.getElementById('admin-login-view').style.display = 'flex';
+            hideAdminPanel();
+            document.getElementById('lnk-home').click();
+        }
+
+        // --- SISTEM DETEKSI SCROLL UNTUK HIGHLIGHT & MENGECILKAN HEADER ---
+        window.addEventListener('scroll', () => {
+            let headerElement = document.getElementById('main-header');
+            
+            // JIKA SCREEN DISKROL LEBIH DARI 20 PIXEL, KECILKAN HEADER
+            if (window.scrollY > 20) {
+                headerElement.classList.add('scrolled');
+            } else {
+                headerElement.classList.remove('scrolled');
+            }
+
+            if (!isHandlingScrollActive) return;
+
+            let sections = document.querySelectorAll('#main-landing-content .page-section');
+            let navLinks = document.querySelectorAll('.nav-links a');
+            
+            let currentSectionId = "";
+            sections.forEach(sec => {
+                let secTop = sec.offsetTop - 150;
+                if (window.pageYOffset >= secTop) {
+                    currentSectionId = sec.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active-link');
+                if (link.getAttribute('href') === `#${currentSectionId}`) {
+                    link.classList.add('active-link');
+                }
+            });
+        });
+
         async function submitCrud(actionType) {
             let payload = { action: actionType };
 
@@ -484,8 +628,7 @@
             alert("Sedang mengirim instruksi perubahan ke Cloud Sheets database...");
             await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
             
-            // Simpan status login di sessionStorage agar setelah reload tidak perlu login lagi saat mengedit data
-            sessionStorage.setItem('admin_logged', 'true');
+            localStorage.setItem('admin_session_logged', 'true');
             location.reload();
         }
 
@@ -498,7 +641,7 @@
             if(actionType === 'deleteRule') { payload.kd_gejala = idKey1; payload.kd_jurusan = idKey2; }
 
             await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
-            sessionStorage.setItem('admin_logged', 'true');
+            localStorage.setItem('admin_session_logged', 'true');
             location.reload();
         }
 
@@ -527,27 +670,11 @@
                 tRule.innerHTML += `<tr><td><b>${r.kd_gejala}</b></td><td>➔ ${namaJurusanObj}</td><td><span style="background:#E2E8F0; padding:2px 8px; border-radius:4px; font-weight:700;">+${r.bobot}</span></td><td><button class="btn-action btn-delete" onclick="deleteDataCloud('deleteRule','${r.kd_gejala}','${r.kd_jurusan}')">Putus</button></td></tr>`;
             });
 
-            // Cek jika admin baru saja melakukan aksi CRUD, langsung buka dashboard tanpa minta sandi lagi
-            if(sessionStorage.getItem('admin_logged') === 'true') {
-                isAdminAuthenticated = true;
+            if(localStorage.getItem('admin_session_logged') === 'true') {
+                showAdminPanel();
                 document.getElementById('admin-login-view').style.display = 'none';
                 document.getElementById('admin-dashboard-view').style.display = 'block';
-                sessionStorage.removeItem('admin_logged'); // Reset
-            }
-        }
-
-        function switchPanel(panelId) {
-            document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active-panel'));
-            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active-link'));
-            
-            document.getElementById(`panel-${panelId}`).classList.add('active-panel');
-            document.getElementById(`lnk-${panelId}`).classList.add('active-link');
-
-            // Reset view login jika pindah panel dan belum login
-            if(panelId === 'admin' && !isAdminAuthenticated) {
-                document.getElementById('admin-login-view').style.display = 'flex';
-                document.getElementById('admin-dashboard-view').style.display = 'none';
-                document.getElementById('admin-pass-input').value = "";
+                localStorage.removeItem('admin_session_logged');
             }
         }
 
