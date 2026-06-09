@@ -37,7 +37,7 @@
         }
 
         .logo-area { display: flex; align-items: center; gap: 12px; }
-        .logo-area img { height: 45px; width: auto; }
+        .logo-area img { height: 45px; width: auto; animation: float 4s ease-in-out infinite; }
         .logo-title h1 { font-size: 1.3rem; color: var(--primary); font-weight: 800; }
         .logo-title p { font-size: 0.65rem; color: var(--secondary); font-weight: 700; }
 
@@ -64,8 +64,14 @@
         .btn-primary-style { background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); color: white; box-shadow: 0 10px 20px rgba(0, 180, 180, 0.2); }
         .btn-primary-style:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0, 180, 180, 0.4); }
 
-        .hero-image img { max-width: 80%; filter: drop-shadow(0 20px 30px rgba(10,54,99,0.1)); animation: float 4s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        /* ANIMASI MELAYANG (FLOATING) KEMBALI AKTIF */
+        .hero-image { display: flex; justify-content: center; align-items: center; }
+        .hero-image img { max-width: 80%; filter: drop-shadow(0 20px 30px rgba(10,54,99,0.15)); animation: float 4s ease-in-out infinite; }
+        
+        @keyframes float { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-15px); } 
+        }
 
         /* KONSULTASI CONTAINER */
         .consultation-outer-box { background-color: var(--bg-boxed); border-radius: 30px; padding: 50px 30px; color: white; max-width: 900px; margin: 0 auto; }
@@ -98,6 +104,10 @@
         .res-title { font-size: 1.15rem; color: #fff; font-weight: 700; margin-bottom: 6px; }
         .res-desc { font-size: 0.9rem; color: #E2E8F0; text-align: justify; }
 
+        /* TENTANG PANEL */
+        .about-box { max-width: 800px; margin: 0 auto; background: #F8FAFC; border: 1px solid var(--border-line); border-radius: 20px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .about-box h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--secondary); padding-bottom: 5px; }
+
         /* ADMIN PANEL CRUD STYLES */
         .admin-box { background: white; border: 1px solid var(--border-line); border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 30px; }
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border-line); padding-bottom: 10px; }
@@ -124,7 +134,7 @@
         @media (max-width: 768px) {
             .navbar { flex-direction: column; gap: 10px; }
             .hero-section { grid-template-columns: 1fr; text-align: center; }
-            .hero-image { order: -1; } .hero-image img { max-width: 40%; }
+            .hero-image { order: -1; } .hero-image img { max-width: 45%; }
             .form-inline { grid-template-columns: 1fr; }
         }
     </style>
@@ -144,7 +154,8 @@
             <ul class="nav-links">
                 <li><a id="lnk-home" class="active-link" onclick="switchPanel('home')">Beranda</a></li>
                 <li><a id="lnk-consult" onclick="switchPanel('consult')">Konsultasi</a></li>
-                <li><a id="lnk-admin" onclick="switchPanel('admin')">🔐 Panel Admin</a></li>
+                <li><a id="lnk-about" onclick="switchPanel('about')">Tentang</a></li>
+                <li><a id="lnk-admin" onclick="aksesPanelAdmin()">🔐 Panel Admin</a></li>
             </ul>
         </div>
     </header>
@@ -171,7 +182,7 @@
                 <p>Basis pengetahuan dimuat secara real-time dari pangkalan data</p>
             </div>
             <div class="interactive-card">
-                <!-- Box Loading Memuat Data Dari Sheet -->
+                <!-- Box Loading -->
                 <div id="loading-kb" style="text-align: center; padding: 20px;">
                     <div class="spinner"></div>
                     <p>Sinkronisasi Basis Pengetahuan Cloud Sheets...</p>
@@ -183,9 +194,7 @@
                         <div class="progress-text" id="progress-indicator">Memuat...</div>
                         <div class="progress-bar-bg"><div class="progress-bar-fill" id="bar-fill"></div></div>
                     </div>
-                    <div id="dynamic-question-container">
-                        <!-- Pertanyaan Di-Inject Otomatis via JS -->
-                    </div>
+                    <div id="dynamic-question-container"></div>
                 </div>
 
                 <!-- Loading Hitung Score -->
@@ -204,7 +213,21 @@
         </div>
     </section>
 
-    <!-- PANEL 3: ADMIN (CRUD) -->
+    <!-- PANEL 3: TENTANG (ABOUT) -->
+    <section id="panel-about" class="section-panel">
+        <div class="about-box">
+            <h3>Tentang Aplikasi SIPARJUR</h3>
+            <p style="margin-bottom: 15px; text-align: justify;"><strong>SIPARJUR</strong> (Sistem Pakar Rekomendasi Jurusan) dirancang untuk membantu calon mahasiswa menentukan pilihan program studi kuliah terbaik berdasarkan indikator minat dan kecenderungan kompetensi akademik mereka.</p>
+            
+            <h3>Metode Inferensi</h3>
+            <p style="margin-bottom: 15px; text-align: justify;">Sistem ini menerapkan penalaran <strong>Forward Chaining</strong>, di mana penalaran bergerak maju mengumpulkan fakta-fakta berupa jawaban pengguna atas indikator gejala minat, untuk kemudian dicocokkan ke dalam basis aturan matematika (*rule base*) guna melahirkan kesimpulan final yang akurat.</p>
+            
+            <h3>Keunggulan Arsitektur</h3>
+            <p style="text-align: justify;">Berbeda dengan aplikasi konvensional, SIPARJUR versi terbaru mengadopsi teknologi <em>Serverless Dynamic Database</em> memanfaatkan Google Sheets API. Hal ini mempermudah pakar/guru BK mengubah parameter bobot nilai kapan saja tanpa harus menulis ulang kode web.</p>
+        </div>
+    </section>
+
+    <!-- PANEL 4: ADMIN (CRUD) -->
     <section id="panel-admin" class="section-panel">
         <h2 style="margin-bottom: 20px; color: var(--primary);">⚙️ Pangkalan Manajemen Aturan (Pakar/Admin)</h2>
         
@@ -298,15 +321,18 @@
 
     <script>
         // PASTE URL WEB APP DARI GOOGLE APPS SCRIPT KAMU DI BAWAH INI:
-        const API_URL = "https://script.google.com/macros/s/AKfycbzKB1FtMUyt_ZV3_Hh-gfsdleCVc5CcGB4uvHtRIxfxy1g6E4p7h7pNbrX1-1JYHQ_D/exec";
+        const API_URL = "MASUKKAN_URL_DEPLOYMENT_KAMU_DISINI";
+        
+        // KATA SANDI PANEL ADMIN (Silakan ganti teks di bawah jika ingin mengubah sandi)
+        const ADMIN_PASSWORD = "admin123"; 
 
         let db_gejala = [];
         let db_jurusan = [];
         let db_rule = [];
         let currentStep = 0;
         let skorJurusan = {};
+        let isAdminAuthenticated = false; // Status login admin
 
-        // Ambil Data Terupdate Dari Cloud Saat Pertama Kali Aplikasi Dibuka
         async function loadKnowledgeBase() {
             try {
                 let res = await fetch(`${API_URL}?action=getKnowledgeBase`);
@@ -322,7 +348,7 @@
                 renderQuestion();
                 renderAdminTables();
             } catch (err) {
-                alert("Gagal memuat database cloud. Pastikan URL API Web App Apps Script sudah benar dan diset 'Anyone'.");
+                alert("Gagal memuat database cloud. Pastikan URL API Web App Apps Script sudah benar.");
             }
         }
 
@@ -347,7 +373,6 @@
 
         function prosesJawaban(kdGejala, poin) {
             if (poin > 0) {
-                // Cari relasi aturan di matriks rule
                 let aturanCocok = db_rule.filter(r => r.kd_gejala === kdGejala);
                 aturanCocok.forEach(rule => {
                     if(!skorJurusan[rule.kd_jurusan]) skorJurusan[rule.kd_jurusan] = 0;
@@ -371,7 +396,6 @@
                 document.getElementById('loading-view').style.display = 'none';
                 document.getElementById('result-box').style.display = 'block';
                 
-                // Urutkan nilai tertinggi (Forward Chaining)
                 let hasilUrut = [];
                 db_jurusan.forEach(j => {
                     let totalPoin = skorJurusan[j.kd_jurusan] || 0;
@@ -408,7 +432,23 @@
             renderQuestion();
         }
 
-        // --- MANAJEMEN CRUD API (POST) VIA WEBSITE ---
+        // --- SISTEM VALIDASI PASSWORD ADMIN ---
+        function aksesPanelAdmin() {
+            if (isAdminAuthenticated) {
+                switchPanel('admin');
+            } else {
+                let inputSandi = prompt("🔐 Dokumen Terkunci. Masukkan Kata Sandi Pakar/Admin:");
+                if (inputSandi === ADMIN_PASSWORD) {
+                    isAdminAuthenticated = true;
+                    alert("Akses diterima! Selamat datang di pusat manajemen aturan.");
+                    switchPanel('admin');
+                } else if (inputSandi !== null) {
+                    alert("❌ Kata sandi keliru! Anda tidak diizinkan masuk.");
+                }
+            }
+        }
+
+        // --- MANAJEMEN CRUD API ---
         async function submitCrud(actionType) {
             let payload = { action: actionType };
 
@@ -425,24 +465,13 @@
                 payload.bobot = document.getElementById('sel-r-bobot').value;
             }
 
-            if(!API_URL || API_URL.includes("MASUKKAN_URL")) {
-                alert("Gagal. Anda belum memasukkan token URL Apps Script di bagian atas kodingan JS script.");
-                return;
-            }
-
             alert("Sedang mengirim instruksi perubahan ke Cloud Sheets database...");
-            
-            await fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-
-            // Refresh data terbaru setelah CRUD sukses dilakukan
+            await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
             location.reload();
         }
 
         async function deleteDataCloud(actionType, idKey1, idKey2 = null) {
-            if(!confirm("Apakah Anda yakin ingin menghapus aturan data baris ini secara permanen dari Sheet?")) return;
+            if(!confirm("Apakah Anda yakin ingin menghapus data ini dari Sheet?")) return;
             let payload = { action: actionType };
 
             if(actionType === 'deleteGejala') payload.kd_gejala = idKey1;
@@ -457,7 +486,6 @@
             let tGejala = document.getElementById('tbl-gejala-body');
             let tJurusan = document.getElementById('tbl-jurusan-body');
             let tRule = document.getElementById('tbl-rule-body');
-            
             let selGejala = document.getElementById('sel-r-gejala');
             let selJurusan = document.getElementById('sel-r-jurusan');
 
@@ -476,11 +504,10 @@
 
             db_rule.forEach(r => {
                 let namaJurusanObj = db_jurusan.find(j => j.kd_jurusan === r.kd_jurusan)?.nama_jurusan || r.kd_jurusan;
-                tRule.innerHTML += `<tr><td><b>${r.kd_gejala}</b></td><td>➔ ${namaJurusanObj}</td><td><span style="background:#E2E8F0; padding:2px 8px; border-radius:4px; font-weight:700;">+${r.bobot}</span></td><td><button class="btn-action btn-delete" onclick="deleteDataCloud('deleteRule','${r.kd_gejala}','${r.kd_jurusan}')">Putus Aturan</button></td></tr>`;
+                tRule.innerHTML += `<tr><td><b>${r.kd_gejala}</b></td><td>➔ ${namaJurusanObj}</td><td><span style="background:#E2E8F0; padding:2px 8px; border-radius:4px; font-weight:700;">+${r.bobot}</span></td><td><button class="btn-action btn-delete" onclick="deleteDataCloud('deleteRule','${r.kd_gejala}','${r.kd_jurusan}')">Putus</button></td></tr>`;
             });
         }
 
-        // --- SISTEM NAVIGASI & TAB KONTROLER ---
         function switchPanel(panelId) {
             document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active-panel'));
             document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active-link'));
@@ -497,7 +524,6 @@
             document.getElementById(`btn-tab-${crudId}`).classList.add('active-tab');
         }
 
-        // Jalankan sinkronisasi database awalan saat halaman web siap
         window.onload = loadKnowledgeBase;
     </script>
 </body>
