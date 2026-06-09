@@ -64,7 +64,6 @@
         .btn-primary-style { background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); color: white; box-shadow: 0 10px 20px rgba(0, 180, 180, 0.2); }
         .btn-primary-style:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0, 180, 180, 0.4); }
 
-        /* ANIMASI MELAYANG (FLOATING) KEMBALI AKTIF */
         .hero-image { display: flex; justify-content: center; align-items: center; }
         .hero-image img { max-width: 80%; filter: drop-shadow(0 20px 30px rgba(10,54,99,0.15)); animation: float 4s ease-in-out infinite; }
         
@@ -108,6 +107,17 @@
         .about-box { max-width: 800px; margin: 0 auto; background: #F8FAFC; border: 1px solid var(--border-line); border-radius: 20px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .about-box h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--secondary); padding-bottom: 5px; }
 
+        /* CARD STYLE LOGIN FORM ADMIN (BARU) */
+        .login-card-container { display: flex; justify-content: center; align-items: center; padding: 40px 0; }
+        .login-card { background: var(--bg-boxed); color: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(15,23,42,0.15); border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .login-card h3 { font-size: 1.5rem; color: #FFF; font-weight: 800; margin-bottom: 8px; }
+        .login-card p { color: #94A3B8; font-size: 0.9rem; margin-bottom: 25px; }
+        .login-form-group { display: flex; flex-direction: column; gap: 8px; text-align: left; margin-bottom: 20px; }
+        .login-form-group label { font-size: 0.85rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .login-form-group input { background: #1E293B; border: 2px solid #334155; padding: 14px; border-radius: 12px; color: white; font-size: 1rem; width: 100%; transition: 0.3s; }
+        .login-form-group input:focus { border-color: var(--secondary); outline: none; background: #243249; }
+        .error-message { color: var(--danger); font-size: 0.85rem; font-weight: 600; margin-top: -10px; margin-bottom: 15px; display: none; }
+
         /* ADMIN PANEL CRUD STYLES */
         .admin-box { background: white; border: 1px solid var(--border-line); border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 30px; }
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border-line); padding-bottom: 10px; }
@@ -141,32 +151,30 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <header>
         <div class="navbar">
             <div class="logo-area">
                 <img src="siparjur.png" alt="Logo">
                 <div class="logo-title">
                     <h1>SIPARJUR</h1>
-                    <p>SISTEM PAKAR REKOMENDASI JURUSAN DINAMIS</p>
+                    <p>SISTEM PAKAR REKOMENDASI JURUSAN KULIAH</p>
                 </div>
             </div>
             <ul class="nav-links">
                 <li><a id="lnk-home" class="active-link" onclick="switchPanel('home')">Beranda</a></li>
                 <li><a id="lnk-consult" onclick="switchPanel('consult')">Konsultasi</a></li>
                 <li><a id="lnk-about" onclick="switchPanel('about')">Tentang</a></li>
-                <li><a id="lnk-admin" onclick="aksesPanelAdmin()">🔐 Panel Admin</a></li>
+                <li><a id="lnk-admin" onclick="switchPanel('admin')">🔐Admin</a></li>
             </ul>
         </div>
     </header>
 
-    <!-- PANEL 1: BERANDA -->
     <section id="panel-home" class="section-panel active-panel">
         <div class="hero-section">
             <div class="hero-text">
-                <h2>Temukan Masa Depanmu Berbasis <span>Database Cloud</span></h2>
-                <p>Sistem Pakar Forward Chaining dinamis yang terhubung langsung dengan Google Sheets database. Memudahkan penyesuaian aturan (*rule*) langsung oleh pakar tanpa sentuh coding.</p>
-                <button class="btn-general btn-primary-style" onclick="switchPanel('consult')">Mulai Konsultasi Rumpun ➔</button>
+                <h2>Temukan Masa Depanmu dengan <span>SIPARJUR</span></h2>
+                <p>Sistem Pakar yang membantu anda untuk menentukan jurusan sesuai minat anda.</p>
+                <button class="btn-general btn-primary-style" onclick="switchPanel('consult')">Mulai Konsultasi ➔</button>
             </div>
             <div class="hero-image">
                 <img src="siparjur.png" alt="Visual">
@@ -174,7 +182,6 @@
         </div>
     </section>
 
-    <!-- PANEL 2: KONSULTASI -->
     <section id="panel-consult" class="section-panel">
         <div class="consultation-outer-box">
             <div class="consultation-header-label">
@@ -182,13 +189,9 @@
                 <p>Basis pengetahuan dimuat secara real-time dari pangkalan data</p>
             </div>
             <div class="interactive-card">
-                <!-- Box Loading -->
                 <div id="loading-kb" style="text-align: center; padding: 20px;">
                     <div class="spinner"></div>
-                    <p>Sinkronisasi Basis Pengetahuan Cloud Sheets...</p>
                 </div>
-
-                <!-- Box Utama Kuesioner -->
                 <div id="quiz-area-box" style="display:none;">
                     <div class="progress-container">
                         <div class="progress-text" id="progress-indicator">Memuat...</div>
@@ -196,16 +199,12 @@
                     </div>
                     <div id="dynamic-question-container"></div>
                 </div>
-
-                <!-- Loading Hitung Score -->
                 <div id="loading-view">
                     <div class="spinner"></div>
                     <p>Mesin Inferensi Forward Chaining Sedang Melakukan Penalaran...</p>
                 </div>
-
-                <!-- Box Hasil Akhir -->
                 <div class="result-card" id="result-box">
-                    <span class="res-badge">🎯 Top 3 Rekomendasi Jurusan Terbaik</span>
+                    <span class="res-badge"> Top 3 Rekomendasi Jurusan Terbaik</span>
                     <div id="result-list-container"></div>
                     <button class="btn-general" style="background:#334155; color:white; width:100%; margin-top:20px;" onclick="restartQuiz()">Ulangi Tes Konsultasi ↺</button>
                 </div>
@@ -213,104 +212,113 @@
         </div>
     </section>
 
-    <!-- PANEL 3: TENTANG (ABOUT) -->
     <section id="panel-about" class="section-panel">
         <div class="about-box">
             <h3>Tentang Aplikasi SIPARJUR</h3>
             <p style="margin-bottom: 15px; text-align: justify;"><strong>SIPARJUR</strong> (Sistem Pakar Rekomendasi Jurusan) dirancang untuk membantu calon mahasiswa menentukan pilihan program studi kuliah terbaik berdasarkan indikator minat dan kecenderungan kompetensi akademik mereka.</p>
-            
             <h3>Metode Inferensi</h3>
             <p style="margin-bottom: 15px; text-align: justify;">Sistem ini menerapkan penalaran <strong>Forward Chaining</strong>, di mana penalaran bergerak maju mengumpulkan fakta-fakta berupa jawaban pengguna atas indikator gejala minat, untuk kemudian dicocokkan ke dalam basis aturan matematika (*rule base*) guna melahirkan kesimpulan final yang akurat.</p>
-            
             <h3>Keunggulan Arsitektur</h3>
             <p style="text-align: justify;">Berbeda dengan aplikasi konvensional, SIPARJUR versi terbaru mengadopsi teknologi <em>Serverless Dynamic Database</em> memanfaatkan Google Sheets API. Hal ini mempermudah pakar/guru BK mengubah parameter bobot nilai kapan saja tanpa harus menulis ulang kode web.</p>
         </div>
     </section>
 
-    <!-- PANEL 4: ADMIN (CRUD) -->
     <section id="panel-admin" class="section-panel">
-        <h2 style="margin-bottom: 20px; color: var(--primary);">⚙️ Pangkalan Manajemen Aturan (Pakar/Admin)</h2>
         
-        <div class="admin-tabs">
-            <button id="btn-tab-gejala" class="tab-btn active-tab" onclick="switchCrudTab('gejala')">Data Gejala Indikator</button>
-            <button id="btn-tab-jurusan" class="tab-btn" onclick="switchCrudTab('jurusan')">Data Klaster Jurusan</button>
-            <button id="btn-tab-rule" class="tab-btn" onclick="switchCrudTab('rule')">Matriks Rule / Aturan</button>
-        </div>
-
-        <!-- CRUD GEJALA -->
-        <div id="crud-gejala" class="crud-view active-crud admin-box">
-            <h4>Tambah Data Indikator Gejala Baru</h4>
-            <div class="form-inline">
-                <div class="form-group">
-                    <label>Kode Gejala</label>
-                    <input type="text" id="in-g-kode" placeholder="Contoh: G21">
+        <div id="admin-login-view" class="login-card-container">
+            <div class="login-card">
+                <h3>Otentikasi Pakar</h3>
+                <p>Masukkan sandi rahasia untuk mengelola pangkalan data aturan</p>
+                <div class="login-form-group">
+                    <label>Kata Sandi Admin</label>
+                    <input type="password" id="admin-pass-input" placeholder="••••••••" onkeypress="handleLoginKeyPress(event)">
                 </div>
-                <div class="form-group" style="grid-column: span 2;">
-                    <label>Deskripsi Kalimat Indikator Minat</label>
-                    <input type="text" id="in-g-teks" placeholder="Masukkan kalimat pertanyaan kuesioner...">
-                </div>
-                <button class="btn-general btn-add" onclick="submitCrud('addGejala')">Simpan ke Sheet</button>
-            </div>
-            <div class="table-responsive">
-                <table>
-                    <thead><tr><th>Kode</th><th>Pertanyaan Indikator Minat</th><th>Aksi</th></tr></thead>
-                    <tbody id="tbl-gejala-body"></tbody>
-                </table>
+                <div id="login-error-msg" class="error-message">❌ Kata sandi tidak cocok, coba lagi!</div>
+                <button class="btn-general btn-primary-style" style="width: 100%; padding: 12px 0;" onclick="verifikasiLoginAdmin()">Buka Dokumen Kontrol</button>
             </div>
         </div>
 
-        <!-- CRUD JURUSAN -->
-        <div id="crud-jurusan" class="crud-view admin-box">
-            <h4>Tambah Klaster Rumpun Jurusan Baru</h4>
-            <div class="form-inline">
-                <div class="form-group">
-                    <label>Kode Jurusan</label>
-                    <input type="text" id="in-j-kode" placeholder="Contoh: J11">
-                </div>
-                <div class="form-group">
-                    <label>Nama Rumpun Jurusan</label>
-                    <input type="text" id="in-j-nama" placeholder="Nama Program Studi...">
-                </div>
-                <div class="form-group">
-                    <label>Deskripsi / Solusi Pakar</label>
-                    <textarea id="in-j-desc" placeholder="Tulis uraian deskripsi ilmu..."></textarea>
-                </div>
-                <button class="btn-general btn-add" onclick="submitCrud('addJurusan')">Simpan ke Sheet</button>
+        <div id="admin-dashboard-view" style="display: none;">
+            <h2 style="margin-bottom: 20px; color: var(--primary);">⚙️ Pangkalan Manajemen Aturan (Pakar/Admin)</h2>
+            
+            <div class="admin-tabs">
+                <button id="btn-tab-gejala" class="tab-btn active-tab" onclick="switchCrudTab('gejala')">Data Gejala Indikator</button>
+                <button id="btn-tab-jurusan" class="tab-btn" onclick="switchCrudTab('jurusan')">Data Klaster Jurusan</button>
+                <button id="btn-tab-rule" class="tab-btn" onclick="switchCrudTab('rule')">Matriks Rule / Aturan</button>
             </div>
-            <div class="table-responsive">
-                <table>
-                    <thead><tr><th>Kode</th><th>Nama Jurusan</th><th>Uraian Deskripsi Ilmu</th><th>Aksi</th></tr></thead>
-                    <tbody id="tbl-jurusan-body"></tbody>
-                </table>
-            </div>
-        </div>
 
-        <!-- CRUD RULE -->
-        <div id="crud-rule" class="crud-view admin-box">
-            <h4>Petakan Aturan Keterkaitan Gejala & Jurusan (*Rule Base*)</h4>
-            <div class="form-inline">
-                <div class="form-group">
-                    <label>Pilih Gejala</label>
-                    <select id="sel-r-gejala"></select>
+            <div id="crud-gejala" class="crud-view active-crud admin-box">
+                <h4>Tambah Data Indikator Gejala Baru</h4>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>Kode Gejala</label>
+                        <input type="text" id="in-g-kode" placeholder="Contoh: G21">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Deskripsi Kalimat Indikator Minat</label>
+                        <input type="text" id="in-g-teks" placeholder="Masukkan kalimat pertanyaan kuesioner...">
+                    </div>
+                    <button class="btn-general btn-add" onclick="submitCrud('addGejala')">Simpan ke Sheet</button>
                 </div>
-                <div class="form-group">
-                    <label>Memicu Jurusan</label>
-                    <select id="sel-r-jurusan"></select>
+                <div class="table-responsive">
+                    <table>
+                        <thead><tr><th>Kode</th><th>Pertanyaan Indikator Minat</th><th>Aksi</th></tr></thead>
+                        <tbody id="tbl-gejala-body"></tbody>
+                    </table>
                 </div>
-                <div class="form-group">
-                    <label>Bobot Poin Aturan</label>
-                    <select id="sel-r-bobot">
-                        <option value="3">3 (Sangat Berpengaruh)</option>
-                        <option value="1">1 (Pendukung Ringan)</option>
-                    </select>
-                </div>
-                <button class="btn-general btn-add" onclick="submitCrud('addRule')">Hubungkan Aturan</button>
             </div>
-            <div class="table-responsive">
-                <table>
-                    <thead><tr><th>Kode Gejala</th><th>Menambah Poin Ke Rumpun Jurusan</th><th>Nilai Bobot</th><th>Aksi</th></tr></thead>
-                    <tbody id="tbl-rule-body"></tbody>
-                </table>
+
+            <div id="crud-jurusan" class="crud-view admin-box">
+                <h4>Tambah Klaster Rumpun Jurusan Baru</h4>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>Kode Jurusan</label>
+                        <input type="text" id="in-j-kode" placeholder="Contoh: J11">
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Rumpun Jurusan</label>
+                        <input type="text" id="in-j-nama" placeholder="Nama Program Studi...">
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi / Solusi Pakar</label>
+                        <textarea id="in-j-desc" placeholder="Tulis uraian deskripsi ilmu..."></textarea>
+                    </div>
+                    <button class="btn-general btn-add" onclick="submitCrud('addJurusan')">Simpan ke Sheet</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead><tr><th>Kode</th><th>Nama Jurusan</th><th>Uraian Deskripsi Ilmu</th><th>Aksi</th></tr></thead>
+                        <tbody id="tbl-jurusan-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="crud-rule" class="crud-view admin-box">
+                <h4>Petakan Aturan Keterkaitan Gejala & Jurusan (*Rule Base*)</h4>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>Pilih Gejala</label>
+                        <select id="sel-r-gejala"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Memicu Jurusan</label>
+                        <select id="sel-r-jurusan"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Bobot Poin Aturan</label>
+                        <select id="sel-r-bobot">
+                            <option value="3">3 (Sangat Berpengaruh)</option>
+                            <option value="1">1 (Pendukung Ringan)</option>
+                        </select>
+                    </div>
+                    <button class="btn-general btn-add" onclick="submitCrud('addRule')">Hubungkan Aturan</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead><tr><th>Kode Gejala</th><th>Menambah Poin Ke Rumpun Jurusan</th><th>Nilai Bobot</th><th>Aksi</th></tr></thead>
+                        <tbody id="tbl-rule-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </section>
@@ -321,9 +329,9 @@
 
     <script>
         // PASTE URL WEB APP DARI GOOGLE APPS SCRIPT KAMU DI BAWAH INI:
-        const API_URL = "MASUKKAN_URL_DEPLOYMENT_KAMU_DISINI";
+        const API_URL = "https://script.google.com/macros/s/AKfycbzKB1FtMUyt_ZV3_Hh-gfsdleCVc5CcGB4uvHtRIxfxy1g6E4p7h7pNbrX1-1JYHQ_D/exec";
         
-        // KATA SANDI PANEL ADMIN (Silakan ganti teks di bawah jika ingin mengubah sandi)
+        // KATA SANDI PANEL ADMIN
         const ADMIN_PASSWORD = "admin123"; 
 
         let db_gejala = [];
@@ -331,7 +339,7 @@
         let db_rule = [];
         let currentStep = 0;
         let skorJurusan = {};
-        let isAdminAuthenticated = false; // Status login admin
+        let isAdminAuthenticated = false;
 
         async function loadKnowledgeBase() {
             try {
@@ -432,19 +440,26 @@
             renderQuestion();
         }
 
-        // --- SISTEM VALIDASI PASSWORD ADMIN ---
-        function aksesPanelAdmin() {
-            if (isAdminAuthenticated) {
-                switchPanel('admin');
+        // --- SISTEM LOGIN CARD INTERAKTIF (BARU) ---
+        function verifikasiLoginAdmin() {
+            let inputSandi = document.getElementById('admin-pass-input').value;
+            let errorLabel = document.getElementById('login-error-msg');
+            
+            if (inputSandi === ADMIN_PASSWORD) {
+                isAdminAuthenticated = true;
+                errorLabel.style.display = 'none';
+                document.getElementById('admin-login-view').style.display = 'none';
+                document.getElementById('admin-dashboard-view').style.display = 'block';
             } else {
-                let inputSandi = prompt("🔐 Dokumen Terkunci. Masukkan Kata Sandi Pakar/Admin:");
-                if (inputSandi === ADMIN_PASSWORD) {
-                    isAdminAuthenticated = true;
-                    alert("Akses diterima! Selamat datang di pusat manajemen aturan.");
-                    switchPanel('admin');
-                } else if (inputSandi !== null) {
-                    alert("❌ Kata sandi keliru! Anda tidak diizinkan masuk.");
-                }
+                errorLabel.style.display = 'block';
+                document.getElementById('admin-pass-input').value = "";
+                document.getElementById('admin-pass-input').focus();
+            }
+        }
+
+        function handleLoginKeyPress(event) {
+            if (event.key === "Enter") {
+                verifikasiLoginAdmin();
             }
         }
 
@@ -467,6 +482,9 @@
 
             alert("Sedang mengirim instruksi perubahan ke Cloud Sheets database...");
             await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+            
+            // Simpan status login di sessionStorage agar setelah reload tidak perlu login lagi saat mengedit data
+            sessionStorage.setItem('admin_logged', 'true');
             location.reload();
         }
 
@@ -479,6 +497,7 @@
             if(actionType === 'deleteRule') { payload.kd_gejala = idKey1; payload.kd_jurusan = idKey2; }
 
             await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+            sessionStorage.setItem('admin_logged', 'true');
             location.reload();
         }
 
@@ -506,6 +525,14 @@
                 let namaJurusanObj = db_jurusan.find(j => j.kd_jurusan === r.kd_jurusan)?.nama_jurusan || r.kd_jurusan;
                 tRule.innerHTML += `<tr><td><b>${r.kd_gejala}</b></td><td>➔ ${namaJurusanObj}</td><td><span style="background:#E2E8F0; padding:2px 8px; border-radius:4px; font-weight:700;">+${r.bobot}</span></td><td><button class="btn-action btn-delete" onclick="deleteDataCloud('deleteRule','${r.kd_gejala}','${r.kd_jurusan}')">Putus</button></td></tr>`;
             });
+
+            // Cek jika admin baru saja melakukan aksi CRUD, langsung buka dashboard tanpa minta sandi lagi
+            if(sessionStorage.getItem('admin_logged') === 'true') {
+                isAdminAuthenticated = true;
+                document.getElementById('admin-login-view').style.display = 'none';
+                document.getElementById('admin-dashboard-view').style.display = 'block';
+                sessionStorage.removeItem('admin_logged'); // Reset
+            }
         }
 
         function switchPanel(panelId) {
@@ -514,6 +541,13 @@
             
             document.getElementById(`panel-${panelId}`).classList.add('active-panel');
             document.getElementById(`lnk-${panelId}`).classList.add('active-link');
+
+            // Reset view login jika pindah panel dan belum login
+            if(panelId === 'admin' && !isAdminAuthenticated) {
+                document.getElementById('admin-login-view').style.display = 'flex';
+                document.getElementById('admin-dashboard-view').style.display = 'none';
+                document.getElementById('admin-pass-input').value = "";
+            }
         }
 
         function switchCrudTab(crudId) {
