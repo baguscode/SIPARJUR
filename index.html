@@ -188,17 +188,14 @@
         .btn-add { background: var(--secondary); color: white; padding: 10px 18px; border-radius: 6px; font-weight: 700; font-size: 0.85rem; }
         .btn-delete { background: var(--danger); color: white; }
 
-        /* ============================================================
-           🌟 QUERY RESPONSIVE MEDIA KHUSUS HP (ANTI BERANTAKAN) 
-           ============================================================ */
+        /* QUERY RESPONSIVE MEDIA KHUSUS HP (ANTI BERANTAKAN) */
         @media (max-width: 992px) {
             .about-grid { grid-template-columns: 1fr; gap: 16px; }
         }
 
         @media (max-width: 768px) {
-            body { padding-top: 135px; } /* Memberi ruang lebih longgar di HP agar konten tidak tertutup */
+            body { padding-top: 135px; } 
             
-            /* Navbar atas menjadi ringkas vertikal */
             .navbar { flex-direction: column; gap: 12px; padding: 12px 15px; }
             .logo-area { flex-direction: row; gap: 10px; text-align: left; }
             .logo-area img { height: 36px; }
@@ -207,7 +204,6 @@
             .nav-links { width: 100%; justify-content: center; gap: 4px; }
             .nav-links a { font-size: 0.85rem; padding: 6px 10px; }
 
-            /* Penyesuaian section beranda di HP */
             .hero-section { grid-template-columns: 1fr; text-align: center; gap: 20px; min-height: auto; padding: 20px 0; }
             .hero-text h2 { font-size: 2rem; margin-bottom: 12px; }
             .hero-text p { font-size: 0.95rem; margin-bottom: 20px; }
@@ -215,7 +211,6 @@
             .hero-image { order: -1; margin-bottom: 10px; } 
             .hero-image img { max-width: 45%; }
 
-            /* Penyesuaian modul kuesioner di HP */
             .consultation-header-label h2 { font-size: 1.5rem; }
             .consultation-header-label p { font-size: 0.8rem; }
             .interactive-card { padding: 22px 18px; min-height: auto; border-radius: 16px; }
@@ -224,7 +219,6 @@
             .question-card h3 { font-size: 1.05rem; margin-bottom: 20px; text-align: left; }
             .choice-btn { padding: 14px 16px; font-size: 0.85rem; border-radius: 10px; }
             
-            /* Form input admin di HP menjadi satu kolom vertikal */
             .form-inline { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
             .form-group style { grid-column: auto !important; }
             .btn-add { width: 100%; margin-top: 5px; }
@@ -274,6 +268,9 @@
                 <div class="interactive-card">
                     <div id="loading-kb" style="text-align: center; padding: 30px 0;">
                         <div class="spinner"></div>
+                        <p style="color: #64748B; font-size: 0.9rem; font-weight: 600;">Sinkronisasi Basis Pengetahuan Cloud Sheets...</p>
+                    </div>
+
                     <div id="quiz-area-box" style="display:none;">
                         <div class="progress-container">
                             <div class="progress-text" id="progress-indicator">Memuat...</div>
@@ -381,7 +378,7 @@
 
     <div class="admin-modal-overlay" id="adminModalOverlay">
         <div class="login-card">
-            <h3>ADMIN</h3>
+            <h3>Otentikasi Pakar</h3>
             <p>Masukkan kunci sandi untuk masuk dokumen kontrol</p>
             <div class="login-form-group">
                 <label>Sandi Administrator</label>
@@ -398,7 +395,7 @@
     <footer style="background: #0F172A; color: #64748B; text-align: center; padding: 25px 20px; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.02);">
         <p>&copy; 2026 SIPARJUR - Sistem Pakar Rekomendasi Jurusan.</p>
         <p style="margin-top: 10px;">
-            <span style="cursor: pointer; opacity: 0.3; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.3" onclick="toggleAdminModal(true)">🔒 Control Panel</span>
+            <span style="cursor: pointer; opacity: 0.3; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.3" onclick="toggleAdminModal(true)">🔒 Admin</span>
         </p>
     </footer>
 
@@ -582,7 +579,6 @@
             document.getElementById('lnk-home').click();
         }
 
-        // SCROLL HANDLING ANTI GETER
         window.addEventListener('scroll', () => {
             let headerElement = document.getElementById('main-header');
             
