@@ -9,183 +9,229 @@
             --primary: #0A3663;      
             --secondary: #00B4B4;    
             --accent: #F2A900;       
-            --bg-light: #F8FAFC;
+            --bg-light: #F1F5F9;
+            --bg-gradient: linear-gradient(135deg, #E2E8F0 0%, #F1F5F9 50%, #DEE2E6 100%);
             --bg-boxed: #0F172A;        
             --card-inner: #1E293B;      
-            --text-dark: #0F172A;
+            --text-dark: #1E293B;
             --text-light: #F8FAFC;
-            --border-line: #E2E8F0;
+            --border-line: rgba(226, 232, 240, 0.8);
             --danger: #EF4444;
+            --danger-hover: #DC2626;
             --success: #10B981;
+            --success-hover: #059669;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         html { scroll-behavior: smooth; }
-        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; padding-top: 90px; } 
+        body { 
+            background: var(--bg-gradient); 
+            color: var(--text-dark); 
+            line-height: 1.6; 
+            padding-top: 90px;
+            position: relative;
+            overflow-x: hidden;
+        } 
 
-        /* HEADER & NAVBAR (FIXED & PROPORSI HALUS) */
+        /* ORNAMEN LATAR BELAKANG AGAR TIDAK POLOS & KAKU */
+        body::before {
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: linear-gradient(135deg, rgba(0, 180, 180, 0.15), rgba(10, 54, 99, 0.1));
+            border-radius: 50%; top: 15%; right: -100px; filter: blur(80px); z-index: -1;
+        }
+        body::after {
+            content: ''; position: absolute; width: 500px; height: 500px;
+            background: linear-gradient(135deg, rgba(242, 169, 0, 0.1), rgba(0, 180, 180, 0.08));
+            border-radius: 50%; bottom: 20%; left: -150px; filter: blur(100px); z-index: -1;
+        }
+
+        /* HEADER & NAVBAR */
         header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.01);
-            transition: background 0.3s ease, box-shadow 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 30px rgba(15, 23, 42, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
             max-width: 1200px; margin: 0 auto; padding: 18px 20px; 
-            transition: padding 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .logo-area { display: flex; align-items: center; gap: 12px; }
-        .logo-area img { height: 44px; width: auto; transition: height 0.3s ease; }
-        .logo-title h1 { font-size: 1.25rem; color: var(--primary); font-weight: 800; }
-        .logo-title p { font-size: 0.65rem; color: var(--secondary); font-weight: 700; letter-spacing: 0.5px; }
+        .logo-area img { height: 44px; width: auto; transition: all 0.3s ease; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
+        .logo-title h1 { font-size: 1.3rem; color: var(--primary); font-weight: 800; letter-spacing: -0.5px; }
+        .logo-title p { font-size: 0.65rem; color: var(--secondary); font-weight: 700; letter-spacing: 0.8px; }
 
-        /* KONDISI SETELAH SCROLL DOWN */
         header.scrolled {
-            box-shadow: 0 10px 30px rgba(10, 54, 99, 0.06);
-            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 10px 30px rgba(10, 54, 99, 0.08);
+            background: rgba(255, 255, 255, 0.95);
         }
         header.scrolled .navbar { padding: 12px 20px; }
-        header.scrolled .logo-area img { height: 35px; }
+        header.scrolled .logo-area img { height: 36px; }
 
         /* NAVIGATION LINKS */
         .nav-links { display: flex; gap: 8px; list-style: none; }
         .nav-links a {
-            text-decoration: none; color: var(--primary); font-weight: 700;
-            font-size: 0.95rem; padding: 8px 14px; cursor: pointer; 
-            transition: all 0.2s ease; border-bottom: 3px solid transparent;
+            text-decoration: none; color: #475569; font-weight: 700;
+            font-size: 0.95rem; padding: 8px 16px; cursor: pointer; 
+            transition: all 0.2s ease; border-radius: 8px;
         }
-        .nav-links a:hover, .nav-links a.active-link { 
-            color: var(--secondary); border-bottom: 3px solid var(--secondary); 
+        .nav-links a:hover {
+            color: var(--primary); background: rgba(10, 54, 99, 0.05);
+        }
+        .nav-links a.active-link { 
+            color: white; background: var(--primary); box-shadow: 0 4px 12px rgba(10, 54, 99, 0.2);
         }
 
         /* STRUKTUR HALAMAN */
-        .page-section { max-width: 1200px; margin: 0 auto; padding: 50px 20px; }
+        .page-section { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
 
         /* BERANDA / HERO */
-        .hero-section { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; min-height: 60vh; align-items: center; }
-        .hero-text h2 { font-size: 2.8rem; color: var(--primary); font-weight: 800; margin-bottom: 18px; line-height: 1.2; }
-        .hero-text h2 span { color: var(--secondary); }
-        .hero-text p { font-size: 1.05rem; color: #475569; margin-bottom: 25px; }
+        .hero-section { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; min-height: 55vh; align-items: center; }
+        .hero-text h2 { font-size: 3rem; color: var(--primary); font-weight: 800; margin-bottom: 20px; line-height: 1.15; letter-spacing: -1px; }
+        .hero-text h2 span { color: var(--secondary); position: relative; }
+        .hero-text p { font-size: 1.1rem; color: #475569; margin-bottom: 30px; font-weight: 500; }
         
         .btn-general {
-            display: inline-block; padding: 14px 32px; border-radius: 50px; font-weight: 700;
-            text-decoration: none; border: none; cursor: pointer; transition: 0.3s; text-align: center;
+            display: inline-block; padding: 14px 36px; border-radius: 50px; font-weight: 700;
+            text-decoration: none; border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-align: center;
         }
-        .btn-primary-style { background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); color: white; box-shadow: 0 10px 20px rgba(0, 180, 180, 0.15); }
-        .btn-primary-style:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0, 180, 180, 0.3); }
+        .btn-primary-style { background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); color: white; box-shadow: 0 10px 25px rgba(0, 180, 180, 0.25); }
+        .btn-primary-style:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 180, 180, 0.4); }
 
         .hero-image { display: flex; justify-content: center; align-items: center; }
-        .hero-image img { max-width: 75%; filter: drop-shadow(0 20px 30px rgba(10,54,99,0.12)); animation: float 4s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        .hero-image img { max-width: 75%; filter: drop-shadow(0 25px 35px rgba(10,54,99,0.15)); animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* MODEL KUESIONER KARTU */
-        .consultation-outer-box { max-width: 700px; margin: 0 auto; }
-        .consultation-header-label { text-align: center; margin-bottom: 25px; }
-        .consultation-header-label h2 { font-size: 2rem; font-weight: 800; color: var(--primary); }
-        .consultation-header-label p { color: #64748B; margin-top: 4px; font-size: 0.9rem; }
+        /* KARTU KUESIONER INTERAKTIF (PREMIUM LUXURY DESIGN) */
+        .consultation-outer-box { max-width: 720px; margin: 0 auto; scroll-margin-top: 140px; }
+        .consultation-header-label { text-align: center; margin-bottom: 30px; }
+        .consultation-header-label h2 { font-size: 2.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .consultation-header-label p { color: #64748B; margin-top: 6px; font-size: 0.95rem; font-weight: 500; }
 
         .interactive-card { 
-            background: #FFFFFF; border-radius: 20px; padding: 35px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03); border: 1px solid var(--border-line);
-            position: relative; overflow: hidden; min-height: 300px;
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px; padding: 40px; 
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); 
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative; overflow: hidden; min-height: 320px;
+            transition: all 0.3s ease;
         }
         
         /* PROGRESS BAR */
-        .progress-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: #F1F5F9; padding: 10px 16px; border-radius: 12px; }
-        .progress-text { font-weight: 700; color: var(--primary); font-size: 0.85rem; }
-        .progress-bar-bg { background: #E2E8F0; height: 8px; width: 60%; border-radius: 10px; overflow: hidden; }
-        .progress-bar-fill { background: linear-gradient(to right, var(--secondary), var(--primary)); height: 100%; width: 0%; transition: width 0.4s ease; }
+        .progress-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; background: rgba(241, 245, 249, 0.9); padding: 12px 20px; border-radius: 14px; border: 1px solid rgba(226, 232, 240, 0.5); }
+        .progress-text { font-weight: 700; color: var(--primary); font-size: 0.85rem; letter-spacing: 0.5px; }
+        .progress-bar-bg { background: #E2E8F0; height: 8px; width: 65%; border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { background: linear-gradient(to right, var(--secondary), var(--primary)); height: 100%; width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
         /* ANIMASI TRANSISI KARTU PERTANYAAN */
-        .question-card { transition: all 0.3s ease; opacity: 1; transform: translateX(0); }
-        .question-card.slide-out { opacity: 0; transform: translateX(-25px); }
-        .question-card.slide-in { opacity: 0; transform: translateX(25px); }
+        .question-card { transition: all 0.25s ease; opacity: 1; transform: translateX(0); }
+        .question-card.slide-out { opacity: 0; transform: translateX(-30px); }
+        .question-card.slide-in { opacity: 0; transform: translateX(30px); }
 
-        .question-card h3 { font-size: 1.25rem; color: var(--primary); margin-bottom: 25px; line-height: 1.5; font-weight: 700; text-align: center; }
-        .options-vertical { display: flex; flex-direction: column; gap: 12px; }
+        .question-card h3 { font-size: 1.35rem; color: var(--primary); margin-bottom: 30px; line-height: 1.5; font-weight: 700; text-align: center; padding: 0 10px; }
+        .options-vertical { display: flex; flex-direction: column; gap: 14px; }
         
-        /* TOMBOL PILIHAN JAWABAN LUAS */
+        /* TOMBOL PILIHAN JAWABAN MENARIK */
         .choice-btn { 
-            width: 100%; padding: 16px 20px; text-align: left; 
-            background: #F8FAFC; border: 2px solid #E2E8F0; border-radius: 14px; 
-            cursor: pointer; color: var(--text-dark); font-size: 0.95rem; font-weight: 600; 
-            display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease; 
+            width: 100%; padding: 18px 24px; text-align: left; 
+            background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 16px; 
+            cursor: pointer; color: var(--text-dark); font-size: 1rem; font-weight: 700; 
+            display: flex; justify-content: space-between; align-items: center; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
         }
-        .choice-btn:hover { 
-            border-color: var(--secondary); background: rgba(0, 180, 180, 0.02); 
-            color: var(--primary); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0, 180, 180, 0.05);
+        
+        /* Tombol Setuju / Ya (Hijau) */
+        .choice-btn-yes:hover { 
+            border-color: var(--success); background: rgba(16, 185, 129, 0.04); 
+            color: var(--success); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.1);
         }
-        .choice-btn .icon-indicator { font-size: 1.1rem; color: #CBD5E1; }
+        .choice-btn-yes:hover .icon-indicator { color: var(--success); }
+
+        /* Tombol Tidak Setuju / Tidak (Merah) */
+        .choice-btn-no:hover { 
+            border-color: var(--danger); background: rgba(239, 68, 68, 0.04); 
+            color: var(--danger); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.1);
+        }
+        .choice-btn-no:hover .icon-indicator { color: var(--danger); }
+
+        .choice-btn .icon-indicator { font-size: 1.2rem; color: #CBD5E1; transition: color 0.2s; }
 
         /* LOADING SPINNER GLOBAL */
         .spinner { border: 4px solid #E2E8F0; width: 45px; height: 45px; border-radius: 50%; border-left-color: var(--secondary); animation: spin 1s linear infinite; margin: 15px auto; }
-        #loading-view { text-align: center; padding: 30px 0; display: none; }
+        #loading-view { text-align: center; padding: 40px 0; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* CARD HASIL KONSULTASI */
         .result-card { display: none; }
-        .res-badge { display: inline-block; background: rgba(242, 169, 0, 0.1); color: #D97706; padding: 5px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(242,169,0,0.15); }
-        .result-item { background: #FFFFFF; border: 1px solid var(--border-line); padding: 20px; border-radius: 14px; position: relative; border-left: 5px solid var(--secondary); margin-bottom: 12px; }
-        .rank-number { position: absolute; right: 20px; top: 12px; font-size: 1.4rem; font-weight: 900; color: #E2E8F0; }
-        .res-title { font-size: 1.1rem; color: var(--primary); font-weight: 700; margin-bottom: 6px; }
-        .res-desc { font-size: 0.9rem; color: #475569; text-align: justify; }
+        .res-badge { display: inline-block; background: rgba(242, 169, 0, 0.12); color: #C27803; padding: 6px 18px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; border: 1px solid rgba(242,169,0,0.2); }
+        .result-item { background: #FFFFFF; border: 1px solid var(--border-line); padding: 22px; border-radius: 16px; position: relative; border-left: 6px solid var(--secondary); margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .rank-number { position: absolute; right: 24px; top: 14px; font-size: 1.6rem; font-weight: 900; color: #E2E8F0; }
+        .res-title { font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 6px; }
+        .res-desc { font-size: 0.95rem; color: #475569; text-align: justify; }
 
         /* TENTANG INFO GRID */
-        .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 15px; }
+        .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 15px; }
         .about-card { 
-            background: #FFFFFF; border: 1px solid var(--border-line); border-radius: 16px; padding: 25px; 
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-line); border-radius: 20px; padding: 30px; 
             position: relative; overflow: hidden; transition: 0.3s;
         }
-        .about-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary); }
-        .about-card h3 { color: var(--primary); margin-bottom: 10px; font-size: 1.15rem; font-weight: 700; }
-        .about-card p { text-align: justify; font-size: 0.9rem; color: #475569; }
-        .about-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(10, 54, 99, 0.05); }
+        .about-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--primary); }
+        .about-card h3 { color: var(--primary); margin-bottom: 12px; font-size: 1.2rem; font-weight: 700; }
+        .about-card p { text-align: justify; font-size: 0.95rem; color: #475569; }
+        .about-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(10, 54, 99, 0.06); background: white; }
 
         /* POP-UP MODAL BOX ADMIN */
         .admin-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px);
             z-index: 2000; display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 20px;
         }
         .admin-modal-overlay.open-modal { opacity: 1; pointer-events: auto; }
         .login-card { 
-            background: var(--bg-boxed); color: white; border-radius: 20px; padding: 35px 25px; 
-            width: 100%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); text-align: center;
-            transform: scale(0.9); transition: transform 0.3s ease;
+            background: var(--bg-boxed); color: white; border-radius: 24px; padding: 40px 30px; 
+            width: 100%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); text-align: center;
+            transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .admin-modal-overlay.open-modal .login-card { transform: scale(1); }
-        .login-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; }
-        .login-card p { color: #94A3B8; font-size: 0.85rem; margin-bottom: 20px; }
-        .login-form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-bottom: 20px; }
-        .login-form-group label { font-size: 0.8rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; }
-        .login-form-group input { background: #1E293B; border: 2px solid #334155; padding: 12px 15px; border-radius: 10px; color: white; font-size: 1rem; width: 100%; }
+        .login-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+        .login-card p { color: #94A3B8; font-size: 0.9rem; margin-bottom: 25px; }
+        .login-form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-bottom: 25px; }
+        .login-form-group label { font-size: 0.8rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .login-form-group input { background: #1E293B; border: 2px solid #334155; padding: 14px 16px; border-radius: 12px; color: white; font-size: 1rem; width: 100%; transition: 0.2s; }
+        .login-form-group input:focus { border-color: var(--secondary); outline: none; }
         
         /* DASHBOARD CONTROL PANEL */
         #section-admin-dashboard { display: none; }
-        .admin-box { background: white; border: 1px solid var(--border-line); border-radius: 14px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.01); }
-        .admin-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid var(--border-line); padding-bottom: 10px; overflow-x: auto; }
-        .tab-btn { padding: 8px 14px; border: none; background: #F1F5F9; border-radius: 6px; cursor: pointer; font-weight: 600; color: #475569; font-size: 0.85rem; white-space: nowrap; }
+        .admin-box { background: white; border: 1px solid var(--border-line); border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .admin-tabs { display: flex; gap: 8px; margin-bottom: 25px; border-bottom: 2px solid #F1F5F9; padding-bottom: 12px; overflow-x: auto; }
+        .tab-btn { padding: 10px 18px; border: none; background: #F1F5F9; border-radius: 8px; cursor: pointer; font-weight: 700; color: #475569; font-size: 0.9rem; white-space: nowrap; transition: 0.2s; }
         .tab-btn.active-tab { background: var(--primary); color: white; }
 
         .crud-view { display: none; }
         .crud-view.active-crud { display: block; }
-        .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto; gap: 12px; align-items: end; background: #F8FAFC; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border-line); }
-        .form-group { display: flex; flex-direction: column; gap: 4px; }
-        .form-group label { font-size: 0.8rem; font-weight: 700; color: var(--primary); }
-        .form-group input, .form-group textarea, .form-group select { padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 0.85rem; }
+        .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto; gap: 14px; align-items: end; background: #F8FAFC; padding: 20px; border-radius: 14px; margin-bottom: 25px; border: 1px solid var(--border-line); }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
+        .form-group input, .form-group textarea, .form-group select { padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--secondary); outline: none; }
         
-        .table-responsive { overflow-x: auto; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th, td { padding: 10px; border-bottom: 1px solid var(--border-line); }
+        .table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 12px; border: 1px solid var(--border-line); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+        th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-line); }
         th { background: #F8FAFC; color: var(--primary); font-weight: 700; }
-        .btn-action { padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.75rem; }
-        .btn-add { background: var(--secondary); color: white; padding: 10px 18px; border-radius: 6px; font-weight: 700; font-size: 0.85rem; }
+        .btn-action { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.8rem; }
+        .btn-add { background: var(--secondary); color: white; padding: 11px 22px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; }
         .btn-delete { background: var(--danger); color: white; }
 
         /* QUERY RESPONSIVE MEDIA KHUSUS HP (ANTI BERANTAKAN) */
@@ -205,22 +251,21 @@
             .nav-links a { font-size: 0.85rem; padding: 6px 10px; }
 
             .hero-section { grid-template-columns: 1fr; text-align: center; gap: 20px; min-height: auto; padding: 20px 0; }
-            .hero-text h2 { font-size: 2rem; margin-bottom: 12px; }
-            .hero-text p { font-size: 0.95rem; margin-bottom: 20px; }
+            .hero-text h2 { font-size: 2.2rem; margin-bottom: 12px; }
+            .hero-text p { font-size: 1rem; margin-bottom: 24px; }
             .btn-general { width: 100%; padding: 12px 24px; font-size: 0.95rem; }
             .hero-image { order: -1; margin-bottom: 10px; } 
-            .hero-image img { max-width: 45%; }
+            .hero-image img { max-width: 50%; }
 
-            .consultation-header-label h2 { font-size: 1.5rem; }
-            .consultation-header-label p { font-size: 0.8rem; }
-            .interactive-card { padding: 22px 18px; min-height: auto; border-radius: 16px; }
+            .consultation-header-label h2 { font-size: 1.6rem; }
+            .consultation-header-label p { font-size: 0.85rem; }
+            .interactive-card { padding: 25px 20px; min-height: auto; border-radius: 20px; }
             .progress-container { flex-direction: column; gap: 8px; align-items: flex-start; padding: 10px; margin-bottom: 20px; }
             .progress-bar-bg { width: 100%; height: 6px; }
-            .question-card h3 { font-size: 1.05rem; margin-bottom: 20px; text-align: left; }
-            .choice-btn { padding: 14px 16px; font-size: 0.85rem; border-radius: 10px; }
+            .question-card h3 { font-size: 1.1rem; margin-bottom: 24px; text-align: center; padding: 0; }
+            .choice-btn { padding: 14px 18px; font-size: 0.9rem; border-radius: 12px; }
             
-            .form-inline { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
-            .form-group style { grid-column: auto !important; }
+            .form-inline { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
             .btn-add { width: 100%; margin-top: 5px; }
         }
     </style>
@@ -238,7 +283,7 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#section-home" id="lnk-home" class="active-link" onclick="closeDashboardView()">Beranda</a></li>
-                <li><a href="#section-consult" id="lnk-consult" onclick="closeDashboardView()">Konsultasi</a></li>
+                <li><a href="#section-consult" id="lnk-consult" onclick="triggerConsultationTab()">Konsultasi</a></li>
                 <li><a href="#section-about" id="lnk-about" onclick="closeDashboardView()">Tentang</a></li>
             </ul>
         </div>
@@ -250,7 +295,7 @@
                 <div class="hero-text">
                     <h2>Temukan Masa Depanmu dengan <span>SIPARJUR</span></h2>
                     <p>Sistem Pakar ini membantu anda untuk menentukan jurusan kuliah sesuai dengan minat anda secara akurat.</p>
-                    <a href="#section-consult" class="btn-general btn-primary-style">Mulai Konsultasi ➔</a>
+                    <a href="#section-consult" class="btn-general btn-primary-style" onclick="triggerConsultationTab()">Mulai Konsultasi ➔</a>
                 </div>
                 <div class="hero-image">
                     <img src="siparjur.png" alt="Visual">
@@ -259,16 +304,15 @@
         </section>
 
         <section id="section-consult" class="page-section">
-            <div class="consultation-outer-box">
+            <div class="consultation-outer-box" id="consultation-target-box">
                 <div class="consultation-header-label">
-                    <h2>KONSULTASI INDIKATOR MINAT</h2>
-                    <p>Silakan jawab indikator gejala minat di bawah ini dengan sejujurnya</p>
+                    <h2>KONSULTASI </h2>
+                    <p>Silakan jawab pertanyaan dibawah ini sesuai dengan minat anda</p>
                 </div>
                 
                 <div class="interactive-card">
                     <div id="loading-kb" style="text-align: center; padding: 30px 0;">
                         <div class="spinner"></div>
-                        <p style="color: #64748B; font-size: 0.9rem; font-weight: 600;">Sinkronisasi Basis Pengetahuan Cloud Sheets...</p>
                     </div>
 
                     <div id="quiz-area-box" style="display:none;">
@@ -287,7 +331,7 @@
                     <div class="result-card" id="result-box">
                         <span class="res-badge">🏆 Hasil Analisis Rekomendasi Jurusan</span>
                         <div id="result-list-container"></div>
-                        <button class="btn-general" style="background:#475569; color:white; width:100%; margin-top:20px; border-radius: 12px;" onclick="restartQuiz()">Ulangi Tes Konsultasi ↺</button>
+                        <button class="btn-general" style="background: var(--primary); color:white; width:100%; margin-top:25px; border-radius: 14px; box-shadow: 0 4px 12px rgba(10,54,99,0.15);" onclick="restartQuiz()">Ulangi Tes Konsultasi ↺</button>
                     </div>
                 </div>
             </div>
@@ -317,7 +361,7 @@
     <section id="section-admin-dashboard" class="page-section">
         <div class="admin-box">
             <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 15px;">
-                <h2 style="color: var(--primary); font-size: 1.4rem;">⚙️ Manajemen Aturan (Pakar/Admin)</h2>
+                <h2 style="color: var(--primary); font-size: 1.4rem;">⚙️ Panel Kontrol Administrasi (Pakar)</h2>
                 <button class="btn-general" style="background: #64748B; color: white; padding: 8px 20px; font-size: 0.85rem; border-radius: 8px; width: fit-content;" onclick="logOutAdmin()">Keluar Panel ➔</button>
             </div>
             
@@ -378,16 +422,15 @@
 
     <div class="admin-modal-overlay" id="adminModalOverlay">
         <div class="login-card">
-            <h3>Otentikasi Pakar</h3>
-            <p>Masukkan kunci sandi untuk masuk dokumen kontrol</p>
+            <h3>ADMIN PANEL</h3>
+            <p>Masukkan kata sandi dengan benar</p>
             <div class="login-form-group">
-                <label>Sandi Administrator</label>
                 <input type="password" id="admin-pass-input" placeholder="••••••••" onkeypress="handleLoginKeyPress(event)">
             </div>
             <div id="login-error-msg" style="color: var(--danger); font-size: 0.85rem; font-weight: 600; margin-bottom: 15px; display: none;">❌ Sandi salah, akses ditolak!</div>
             <div style="display: flex; gap: 10px;">
                 <button class="btn-general" style="background: #334155; color: white; flex: 1; border-radius: 12px; padding: 12px 0;" onclick="toggleAdminModal(false)">Batal</button>
-                <button class="btn-general btn-primary-style" style="flex: 2; border-radius: 12px; padding: 12px 0;" onclick="verifikasiLoginAdmin()">Buka</button>
+                <button class="btn-general btn-primary-style" style="flex: 2; border-radius: 12px; padding: 12px 0;" onclick="verifikasiLoginAdmin()">Masuk</button>
             </div>
         </div>
     </div>
@@ -395,7 +438,7 @@
     <footer style="background: #0F172A; color: #64748B; text-align: center; padding: 25px 20px; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.02);">
         <p>&copy; 2026 SIPARJUR - Sistem Pakar Rekomendasi Jurusan.</p>
         <p style="margin-top: 10px;">
-            <span style="cursor: pointer; opacity: 0.3; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.3" onclick="toggleAdminModal(true)">🔒 Admin</span>
+            <span style="cursor: pointer; opacity: 0.4; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.4" onclick="toggleAdminModal(true)">🔒 Admin</span>
         </p>
     </footer>
 
@@ -409,6 +452,7 @@
         let currentStep = 0;
         let skorJurusan = {};
         let isHandlingScrollActive = true;
+        let isDatabaseLoaded = false; // Flag status database
 
         async function loadKnowledgeBase() {
             try {
@@ -418,6 +462,7 @@
                 db_gejala = data.gejala;
                 db_jurusan = data.jurusan;
                 db_rule = data.rule;
+                isDatabaseLoaded = true;
 
                 document.getElementById('loading-kb').style.display = 'none';
                 document.getElementById('quiz-area-box').style.display = 'block';
@@ -429,6 +474,16 @@
             }
         }
 
+        // PERBAIKAN: Fungsi Navigasi Tab Konsultasi Instan Tanpa Reload Data Berulang
+        function triggerConsultationTab() {
+            closeDashboardView();
+            if (isDatabaseLoaded) {
+                document.getElementById('loading-kb').style.display = 'none';
+                document.getElementById('quiz-area-box').style.display = 'block';
+            }
+        }
+
+        // PERBAIKAN: Menghilangkan teks ganda/double title bawaan kodingan lama
         function renderQuestion() {
             if(db_gejala.length === 0) return;
             let container = document.getElementById('dynamic-question-container');
@@ -437,17 +492,18 @@
             document.getElementById('progress-indicator').innerText = `Pertanyaan ${currentStep + 1} dari ${db_gejala.length}`;
             document.getElementById('bar-fill').style.width = `${((currentStep + 1) / db_gejala.length) * 100}%`;
 
+            // Langsung menyajikan properti indikator sheet murni
             container.innerHTML = `
                 <div class="question-card slide-in" id="q-card-element">
-                    <h3>Apakah Anda memiliki ketertarikan pada bidang: "${item.indikator}"?</h3>
+                    <h3>${item.indikator}</h3>
                     <div class="options-vertical">
-                        <button class="choice-btn" onclick="navigasiJawaban('${item.kd_gejala}', 3)">
+                        <button class="choice-btn choice-btn-yes" onclick="navigasiJawaban('${item.kd_gejala}', 3)">
                             <span>A. Ya, Sangat Sesuai</span>
-                            <span class="icon-indicator">➔</span>
+                            <span class="icon-indicator">✔</span>
                         </button>
-                        <button class="choice-btn" onclick="navigasiJawaban('${item.kd_gejala}', 0)">
+                        <button class="choice-btn choice-btn-no" onclick="navigasiJawaban('${item.kd_gejala}', 0)">
                             <span>B. Tidak / Kurang Meminati</span>
-                            <span class="icon-indicator">➔</span>
+                            <span class="icon-indicator">✖</span>
                         </button>
                     </div>
                 </div>
@@ -465,7 +521,7 @@
 
             setTimeout(() => {
                 prosesJawabanLogik(kdGejala, poin);
-            }, 220); 
+            }, 200); 
         }
 
         function prosesJawabanLogik(kdGejala, poin) {
@@ -518,15 +574,27 @@
                         `;
                     });
                 }
-            }, 1400);
+                
+                // Fokus otomatis pasca hitung hasil selesai
+                fokusKeAreaKuesioner();
+            }, 1000);
         }
 
+        // PERBAIKAN: Fungsi Reset & Fokus lancar anti-lompat halaman
         function restartQuiz() {
             currentStep = 0;
             skorJurusan = {};
             document.getElementById('result-box').style.display = 'none';
             document.getElementById('quiz-area-box').style.display = 'block';
             renderQuestion();
+            fokusKeAreaKuesioner();
+        }
+
+        function fokusKeAreaKuesioner() {
+            const target = document.getElementById('consultation-target-box');
+            if(target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         function toggleAdminModal(show) {
@@ -581,7 +649,6 @@
 
         window.addEventListener('scroll', () => {
             let headerElement = document.getElementById('main-header');
-            
             if (window.scrollY > 80) {
                 headerElement.classList.add('scrolled');
             } else {
@@ -648,6 +715,8 @@
             let tRule = document.getElementById('tbl-rule-body');
             let selGejala = document.getElementById('sel-r-gejala');
             let selJurusan = document.getElementById('sel-r-jurusan');
+
+            if(!tGejala) return;
 
             tGejala.innerHTML = ""; tJurusan.innerHTML = ""; tRule.innerHTML = "";
             selGejala.innerHTML = ""; selJurusan.innerHTML = "";
