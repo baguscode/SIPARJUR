@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIPARJUR - Sistem Pakar Rekomendasi Jurusan</title>
+    <style>
+        /* --- DESIGN SYSTEM REFRESH --- */
+        :root {
+            --primary: #0A3663;      
+            --secondary: #00B4B4;    
+            --accent: #F2A900;       
+            --bg-light: #FFFFFF;
+            --bg-boxed: #0F172A;        
+            --card-inner: #1E293B;      
+            --text-dark: #0F172A;
+            --text-light: #F8FAFC;
+            --border-line: #E2E8F0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- STICKY NAVBAR W/ FIXED SMOOTH ANIMATION --- */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.02);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        header.scrolled {
+            box-shadow: 0 10px 30px rgba(10, 54, 99, 0.08);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        header.scrolled .navbar {
+            padding: 10px 20px; 
+        }
+
+        header.scrolled .logo-area img {
+            transform: scale(0.85); 
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 20px; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-area img {
+            height: 48px;
+            width: auto;
+            transform-origin: left center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-title h1 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .logo-title p {
+            font-size: 0.7rem;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px; 
+            background: var(--secondary);
+            border-radius: 2px;
+            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .nav-links a.active-link {
+            color: var(--secondary);
+        }
+
+        .nav-links a.active-link::after {
+            width: 100%;
+        }
+
+        /* --- BASE SCROLL REVEAL CLASS --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            min-height: calc(100vh - 88px);
+            align-items: center;
+            background-color: var(--bg-light);
+            scroll-margin-top: 120px; 
+        }
+
+        .hero-text h2 {
+            font-size: 3.2rem;
+            color: var(--primary);
+            line-height: 1.2;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .hero-text h2 span {
+            color: var(--secondary);
+        }
+
+        .hero-text p {
+            font-size: 1.15rem;
+            color: #475569;
+            margin-bottom: 35px;
+        }
+
+        .btn-start {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 180, 180, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: pulseBtn 2s infinite;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 180, 180, 0.5);
+        }
+
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 0 0 0 rgba(0, 180, 180, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 180, 180, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 180, 180, 0); }
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 95%; 
+            height: auto;
+            filter: drop-shadow(0 20px 35px rgba(10, 54, 99, 0.15));
+            animation: floatLogo 4s ease-in-out infinite;
+        }
+
+        @keyframes floatLogo {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* --- CONTAINER BOX AREA UTAMA (KONSULTASI) --- */
+        .consultation-outer-box {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 60px 40px;
+            background-color: var(--bg-boxed); 
+            border-radius: 36px;
+            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.3);
+            scroll-margin-top: 140px; 
+        }
+
+        .consultation-header-label {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .consultation-header-label h2 {
+            color: #FFFFFF;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .consultation-header-label p {
+            color: #94A3B8;
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+
+        .interactive-card {
+            background: var(--card-inner);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Progress Tracker */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .progress-bar-bg {
+            background: #334155;
+            height: 6px;
+            width: 70%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: var(--secondary);
+            height: 100%;
+            width: 6.66%; 
+            transition: width 0.3s ease;
+        }
+
+        /* Question Box */
+        .question-wrapper {
+            min-height: 180px;
+        }
+
+        .question-card {
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: fadeInCard 0.4s ease-in-out;
+        }
+
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-card h3 {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .options-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .choice-btn {
+            width: 100%;
+            padding: 16px 20px;
+            text-align: left;
+            background: #1E293B;
+            border: 2px solid #334155;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: #CBD5E1;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--secondary);
+            background: #273549;
+            color: var(--accent); 
+            transform: translateX(6px);
+        }
+
+        /* --- OUTPUT AREA --- */
+        .result-card {
+            display: none;
+            animation: fadeInCard 0.5s ease-in-out forwards;
+        }
+
+        .res-badge {
+            display: inline-block;
+            background: rgba(242, 169, 0, 0.15);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border: 1px solid rgba(242, 169, 0, 0.3);
+        }
+
+        .result-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .result-item {
+            background: #111827;
+            border: 1px solid #334155;
+            padding: 20px;
+            border-radius: 16px;
+            position: relative;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .rank-number {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.08);
+        }
+
+        .res-title {
+            font-size: 1.2rem;
+            color: #FFFFFF;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .res-desc {
+            font-size: 0.95rem;
+            color: #E2E8F0; 
+            text-align: justify;
+        }
+
+        .reset-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #334155;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+        }
+
+        .reset-btn:hover { 
+            background: var(--primary); 
+        }
+
+        /* --- INFO CARA KERJA (TENTANG) --- */
+        .how-it-works {
+            max-width: 850px;
+            margin: 100px auto;
+            padding: 0 20px;
+            text-align: center;
+            scroll-margin-top: 160px; 
+        }
+
+        .how-it-works h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 45px;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+        }
+
+        .step-card {
+            background: #F8FAFC;
+            border-radius: 18px;
+            padding: 30px 20px;
+            border: 1px solid var(--border-line);
+            transition: transform 0.3s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-icon { font-size: 2rem; margin-bottom: 15px; }
+        .step-card h4 { color: var(--primary); font-weight: 700; margin-bottom: 10px;}
+        .step-card p { font-size: 0.88rem; color: #64748B; }
+
+        footer {
+            background: #0F172A;
+            color: #64748B;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.88rem;
+            border-top: 1px solid #1E293B;
+        }
+
+        /* --- REKAYASA OPTIMALISASI RESPONSif (HP & TABLET) --- */
+        @media (max-width: 992px) {
+            .navbar { flex-direction: column; gap: 12px; padding: 15px 20px; }
+            .nav-links { gap: 18px; }
+            .nav-links a { font-size: 0.9rem; }
+            
+            .hero-section { 
+                grid-template-columns: 1fr; 
+                text-align: center; 
+                padding: 30px 16px;
+                min-height: auto;
+                gap: 20px;
+            }
+            .hero-text h2 { font-size: 2.2rem; margin-bottom: 16px; } /* Diperkecil agar proporsional */
+            .hero-text p { font-size: 1rem; margin-bottom: 25px; }
+            .btn-start { padding: 14px 30px; font-size: 0.95rem; }
+            
+            .hero-image { order: -1; }
+            .hero-image img { max-width: 50%; } 
+
+            /* Mengecilkan padding luar box kuesioner di HP */
+            .consultation-outer-box { 
+                margin: 20px 12px; 
+                padding: 30px 16px; 
+                border-radius: 24px; 
+                scroll-margin-top: 180px;
+            }
+            .consultation-header-label { margin-bottom: 25px; }
+            .consultation-header-label h2 { font-size: 1.6rem; }
+            .consultation-header-label p { font-size: 0.88rem; }
+
+            /* Menyesuaikan kartu kuesioner bagian dalam */
+            .interactive-card { padding: 24px 16px; border-radius: 16px; }
+            .progress-container { margin-bottom: 25px; padding-bottom: 15px; }
+            .progress-text { font-size: 0.85rem; }
+            .progress-bar-bg { width: 60%; }
+
+            .question-wrapper { min-height: auto; }
+            .question-card h3 { font-size: 1.05rem; margin-bottom: 20px; text-align: left; }
+            .choice-btn { padding: 14px 16px; font-size: 0.9rem; border-radius: 12px; }
+            .choice-btn:hover { transform: none; } /* Matikan translate X di HP agar tidak canggung */
+
+            /* Area Hasil di HP */
+            .res-title { font-size: 1.05rem; }
+            .res-desc { font-size: 0.88rem; text-align: left; }
+            .rank-number { font-size: 1.2rem; top: 10px; right: 15px; }
+
+            .how-it-works { margin: 60px auto; padding: 0 16px; scroll-margin-top: 180px; }
+            .how-it-works h3 { font-size: 1.4rem; margin-bottom: 30px; }
+            .steps-container { grid-template-columns: 1fr; gap: 15px; }
+            .step-card { padding: 20px 16px; }
+        }
+
+        /* Optimasi Ekstrem Khusus Layar HP Sangat Kecil (Lebar < 400px) */
+        @media (max-width: 400px) {
+            .logo-title h1 { font-size: 1.2rem; }
+            .logo-title p { display: none; } /* Sembunyikan sub-slogan di HP ultra-kecil */
+            .hero-text h2 { font-size: 1.8rem; }
+            .consultation-header-label h2 { font-size: 1.35rem; }
+            .question-card h3 { font-size: 0.98rem; }
+            .choice-btn { font-size: 0.85rem; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="navbar">
+            <div class="logo-area">
+                <img src="siparjur.png" alt="Logo SIPARJUR">
+                <div class="logo-title">
+                    <h1>SIPARJUR</h1>
+                    <p>SISTEM PAKAR REKOMENDASI JURUSAN KULIAH</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" id="nav-home" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'});">Beranda</a></li>
+                <li><a href="#consultation-box-area" id="nav-consult" onclick="event.preventDefault(); document.getElementById('consultation-box-area').scrollIntoView({behavior: 'smooth'});">Konsultasi</a></li>
+                <li><a href="#how-it-works-area" id="nav-about" onclick="event.preventDefault(); document.getElementById('how-it-works-area').scrollIntoView({behavior: 'smooth'});">Tentang</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero-section" id="hero-area">
+        <div class="hero-text reveal">
+            <h2>Temukan Masa Depanmu Bersama <span>SIPARJUR</span></h2>
+            <p>Sistem Pakar berbasis Forward Chaining cerdas yang memetakan kecenderungan minat riil Anda menuju rumpun program studi kuliah secara tepat sasaran.</p>
+            <button class="btn-start" onclick="document.getElementById('consultation-box-area').scrollIntoView({behavior: 'smooth'});">Mulai Konsultasi Sekarang 👇</button>
+        </div>
+        <div class="hero-image reveal">
+            <img src="siparjur.png" alt="Siparjur Visual">
+        </div>
+    </section>
+
+    <div class="consultation-outer-box reveal" id="consultation-box-area">
+        
+        <div class="consultation-header-label">
+            <h2>KONSULTASI SISTEM PAKAR</h2>
+            <p>Jawablah instrumen indikator di bawah sesuai dengan minat nyata Anda</p>
+        </div>
+
+        <main class="interactive-card">
+            
+            <div class="progress-container" id="tracker-box">
+                <div class="progress-text" id="progress-indicator">Pertanyaan 1 dari 15</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="bar-fill"></div>
+                </div>
+            </div>
+            
+            <div class="question-wrapper" id="quiz-box">
+                
+                <div class="question-card active" id="card-1">
+                    <h3>1. Apakah Anda tertarik melakukan analisis data numerik, memecahkan teka-teki logika, atau menulis baris kode program (*coding*)?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R1', 3)"><span>A. Ya, saya sangat menyukai bidang tersebut</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R1', 0)"><span>B. Tidak, saya kurang berminat</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-2">
+                    <h3>2. Apakah Anda merasa senang saat mengajar orang lain, berkomunikasi di depan umum, atau menangani masalah sosial kemasyarakatan?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R2', 3)"><span>A. Ya, itu adalah passion saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R2', 0)"><span>B. Tidak, saya lebih suka bekerja sendiri</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-3">
+                    <h3>3. Apakah Anda memiliki imajinasi tinggi dalam merancang ilustrasi visual, mengedit aset multimedia, atau membuat sketsa gambar?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R3', 3)"><span>A. Ya, saya menyukai dunia seni dan kreativitas</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R3', 0)"><span>B. Tidak, saya tidak terlalu berbakat di bidang seni</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-4">
+                    <h3>4. Apakah Anda gemar meneliti struktur hukum, membaca buku sejarah politik, atau menganalisis kasus regulasi perundang-undangan?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R4', 3)"><span>A. Ya, membaca dan menganalisis aturan menarik bagi saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R4', 0)"><span>B. Tidak, itu terlalu teoritis untuk saya</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-5">
+                    <h3>5. Apakah Anda memiliki ketertarikan mendalam pada eksperimen laboratorium kimia, struktur anatomi makhluk hidup, atau ilmu kefarmasian?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R5', 3)"><span>A. Ya, saya tertarik dengan sains medis dan mahluk hidup</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R5', 0)"><span>B. Tidak, saya kurang menyukai sains laboratorium</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-6">
+                    <h3>6. Apakah Anda menyukai aktivitas merancang model miniatur jembatan, menghitung mekanika kekuatan bahan, atau rekayasa mesin fisik?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R6', 3)"><span>A. Ya, dunia teknik bangunan dan manufaktur menarik bagi saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R6', 0)"><span>B. Tidak, saya menghindari perhitungan fisik teknik</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-7">
+                    <h3>7. Apakah Anda menikmati proses menyusun strategi pemasaran produk, mengelola arus kas keuangan, atau merintis ide bisnis digital?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R7', 3)"><span>A. Ya, wirausaha dan manajemen bisnis adalah orientasi saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R7', 0)"><span>B. Tidak, saya tidak terlalu tertarik pada urusan dagang</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-8">
+                    <h3>8. Apakah Anda menyukai interaksi intensif melayani tamu asing, mempelajari ragam bahasa asing, atau mengelola akomodasi wisata/perhotelan?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R8', 3)"><span>A. Ya, saya senang berjejaring secara global lintas budaya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R8', 0)"><span>B. Tidak, saya kurang percaya diri di area itu</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-9">
+                    <h3>9. Apakah Anda peduli terhadap ekosistem alam liar, budidaya ketahanan pangan, perkebunan modern, atau manajemen agribisnis?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R9', 3)"><span>A. Ya, sektor agrikultur dan kelestarian hayati penting bagi saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R9', 0)"><span>B. Tidak, saya lebih menyukai lingkungan urban/perkotaan</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-10">
+                    <h3>10. Apakah Anda tertarik mengeksplorasi kondisi kejiwaan psikologis manusia, konseling kesehatan mental, atau dinamika perkembangan anak?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R10', 3)"><span>A. Ya, dunia psikologi dan empati manusia sangat memikat saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R10', 0)"><span>B. Tidak, saya kurang sabar menghadapi problem perilaku</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-11">
+                    <h3>11. Apakah Anda suka membangun sistem jaringan komputer, mengamankan data dari peretas (*cybersecurity*), atau mengonfigurasi server?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R1', 3)"><span>A. Ya, infrastruktur jaringan sangat menarik bagi saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R1', 0)"><span>B. Tidak, saya kurang tertarik hal teknis komputer sistem</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-12">
+                    <h3>12. Apakah Anda tertarik untuk meneliti metode pengajaran baru, merancang kurikulum interaktif, atau mengembangkan aplikasi edukasi teknologi?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R2', 3)"><span>A. Ya, saya ingin memajukan dunia pendidikan inovatif</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R2', 0)"><span>B. Tidak, itu bukan fokus minat saya</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-13">
+                    <h3>13. Apakah Anda menikmati proses pembuatan video animasi, pemodelan objek 3D, atau efek visual perfilman?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R3', 3)"><span>A. Ya, industri kreatif multimedia adalah dunia saya</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R3', 0)"><span>B. Tidak, saya lebih suka bidang non-seni</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-14">
+                    <h3>14. Apakah Anda suka membaca artikel tentang saham, menganalisis laporan rugi laba, atau merencanakan investasi keuangan jangka panjang?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R7', 3)"><span>A. Ya, dunia pasar modal dan finansial sangat seru</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R7', 0)"><span>B. Tidak, hitungan akuntansi bisnis membuat saya pusing</span> ➔</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="card-15">
+                    <h3>15. Apakah Anda merasa penasaran dengan cara kerja kelistrikan otomatis, pemrograman robotika, atau sensor otomatisasi industri?</h3>
+                    <div class="options-vertical">
+                        <button class="choice-btn" onclick="nextStep('R6', 3)"><span>A. Ya, sistem otomasi hardware masa depan sangat keren</span> ➔</button>
+                        <button class="choice-btn" onclick="nextStep('R6', 0)"><span>B. Tidak, saya tidak tertarik pada mesin industri</span> ➔</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="result-card" id="result-box">
+                <span class="res-badge">🎯 Top 3 Rekomendasi Jurusan Terbaik Anda</span>
+                <div class="result-list" id="result-list-container">
+                    </div>
+                <button class="reset-btn" onclick="resetQuiz()">Ulangi Tes Dari Awal ↺</button>
+            </div>
+
+        </main>
+    </div>
+
+    <section class="how-it-works reveal" id="how-it-works-area">
+        <h3>⚙️ Bagaimana Sistem Ini Bekerja?</h3>
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-icon">📥</div>
+                <h4>1. Kuesioner Aturan</h4>
+                <p>Pengguna menjawab instrumen berdasarkan ketertarikan riil untuk mengumpulkan fakta.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">🧠</div>
+                <h4>2. Mesin Inferensi</h4>
+                <p>Mesin Forward Chaining mencocokkan fakta akumulatif ke dalam pangkalan basis pengetahuan.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">🏆</div>
+                <h4>3. Filter Top 3</h4>
+                <p>Sistem memilah bobot kesesuaian tertinggi dan menyajikan 3 hasil terbaik secara komparatif.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 SIPARJUR - Sistem Pakar Rekomendasi Jurusan Kuliah. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        const totalPertanyaan = 15;
+        
+        let jScores = [
+            { id: 1, name: "Teknik Informatika / Sistem Informasi", score: 0, desc: "Sangat cocok untuk Anda yang menyukai ketajaman logika berpikir, pemrograman komputer, basis data, dan pengembangan infrastruktur teknologi modern." },
+            { id: 2, name: "Pendidikan Guru (PGSD / Tekpen)", score: 0, desc: "Sempurna bagi yang berjiwa sosial tinggi, senang mengajar, melakukan edukasi publik, serta tertarik pada pengembangan media instruksional pembelajaran." },
+            { id: 3, name: "Desain Komunikasi Visual (DKV)", score: 0, desc: "Pilihan terbaik untuk menampung bakat kreativitas tinggi Anda di bidang ilustrasi digital, penataan estetika visual, periklanan, dan branding media." },
+            { id: 4, name: "Ilmu Hukum / Hukum Tata Negara", score: 0, desc: "Sesuai bagi Anda yang memiliki ketertarikan tinggi pada analisis pasal yuridis, penegakan keadilan hukum, dokumen legalitas, dan dinamika politik." },
+            { id: 5, name: "Farmasi / Ilmu Gizi / Medis", score: 0, desc: "Sangat selaras dengan minat Anda di area laboratorium klinis, formulasi struktur obat-obatan, jaminan kesehatan, serta biologi manusia." },
+            { id: 6, name: "Teknik Sipil / Arsitektur / Elektro", score: 0, desc: "Menjembatani kemampuan mekanika dan spasial Anda dalam merancang hardware otomatis, cetak biru bangunan, maupun kelistrikan makro." },
+            { id: 7, name: "Manajemen Bisnis / Akuntansi", score: 0, desc: "Mengoptimalkan insting manajerial Anda dalam merancang strategi pasar ritel, audit finansial korporasi, serta ekosistem startup digital." },
+            { id: 8, name: "Sastra Inggris / Hubungan Internasional", score: 0, desc: "Menyalurkan minat komunikasi lintas budaya Anda dalam penguasaan linguistik, negosiasi diplomasi global, serta tata kelola perhotelan internasional." },
+            { id: 9, name: "Agroteknologi / Agribisnis", score: 0, desc: "Menjawab kepedulian Anda terhadap tata kelola pangan mandiri, rekayasa genetika tanaman pertanian, serta bisnis distribusi hasil bumi." },
+            { id: 10, name: "Psikologi Klinis & Konseling", score: 0, desc: "Wadah ideal untuk mengasah empati interpersonal Anda dalam mempelajari mentalitas kepribadian, konseling trauma, serta resolusi konflik sosial." }
+        ];
+
+        function nextStep(kodeR, points) {
+            if (points > 0) {
+                if(kodeR === 'R1') { jScores[0].score += 3; jScores[5].score += 1; }
+                if(kodeR === 'R2') { jScores[1].score += 3; jScores[7].score += 1; }
+                if(kodeR === 'R3') { jScores[2].score += 3; jScores[5].score += 1; }
+                if(kodeR === 'R4') { jScores[3].score += 3; jScores[7].score += 1; }
+                if(kodeR === 'R5') { jScores[4].score += 3; jScores[8].score += 1; }
+                if(kodeR === 'R6') { jScores[5].score += 3; jScores[0].score += 1; }
+                if(kodeR === 'R7') { jScores[6].score += 3; jScores[0].score += 1; }
+                if(kodeR === 'R8') { jScores[7].score += 3; jScores[1].score += 1; }
+                if(kodeR === 'R9') { jScores[8].score += 3; jScores[4].score += 1; }
+                if(kodeR === 'R10') { jScores[9].score += 3; jScores[1].score += 1; }
+            }
+
+            document.getElementById(`card-${currentStep}`).classList.remove('active');
+            currentStep++;
+            
+            if (currentStep <= totalPertanyaan) {
+                document.getElementById('progress-indicator').innerText = `Pertanyaan ${currentStep} dari ${totalPertanyaan}`;
+                document.getElementById('bar-fill').style.width = `${(currentStep / totalPertanyaan) * 100}%`;
+                document.getElementById(`card-${currentStep}`).classList.add('active');
+            } else {
+                tampilkanHasilTop3();
+            }
+        }
+
+        function tampilkanHasilTop3() {
+            document.getElementById('tracker-box').style.display = 'none';
+            document.getElementById('quiz-box').style.display = 'none';
+            
+            let sorted = [...jScores].sort((a, b) => b.score - a.score);
+            let top3 = sorted.slice(0, 3);
+            
+            let container = document.getElementById('result-list-container');
+            container.innerHTML = ""; 
+
+            let totalSkor = top3.reduce((sum, item) => sum + item.score, 0);
+
+            if(totalSkor === 0) {
+                container.innerHTML = `
+                    <div class="result-item">
+                        <div class="res-title">Hasil Kurang Valid</div>
+                        <div class="res-desc">Anda memilih opsi negatif pada seluruh indikator minat. Silakan ulangi tes dengan opsi yang lebih sesuai.</div>
+                    </div>
+                `;
+            } else {
+                // Modifikasi saran tambahan: Judul ringkasan deskriptif sebelum list
+                container.innerHTML = `<p style="color: #94A3B8; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Berdasarkan kalkulasi algoritma Forward Chaining terhadap jawaban instrumen Anda, berikut adalah 3 klaster program studi yang paling relevan dengan potensi minat Anda:</p>`;
+                
+                top3.forEach((jurusan, index) => {
+                    let rank = index + 1;
+                    container.innerHTML += `
+                        <div class="result-item">
+                            <div class="rank-number">#0${rank}</div>
+                            <div class="res-title">Peringkat ${rank}: ${jurusan.name}</div>
+                            <div class="res-desc">${jurusan.desc}</div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('result-box').style.display = "block";
+        }
+
+        function resetQuiz() {
+            currentStep = 1;
+            jScores.forEach(j => j.score = 0);
+            
+            document.getElementById('result-box').style.display = 'none';
+            document.getElementById('tracker-box').style.display = 'flex';
+            document.getElementById('quiz-box').style.display = 'block';
+            
+            document.getElementById('progress-indicator').innerText = `Pertanyaan 1 dari ${totalPertanyaan}`;
+            document.getElementById('bar-fill').style.width = `${(1 / totalPertanyaan) * 100}%`;
+            
+            for (let i = 1; i <= totalPertanyaan; i++) {
+                document.getElementById(`card-${i}`).classList.remove('active');
+            }
+            document.getElementById('card-1').classList.add('active');
+
+            document.getElementById('consultation-box-area').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+
+        /* --- LOGIKA DETEKSI SCROLL HEADER --- */
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 60) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        /* --- NAV LINK ACTIVE OBSERVER --- */
+        const navLinks = {
+            'hero-area': document.getElementById('nav-home'),
+            'consultation-box-area': document.getElementById('nav-consult'),
+            'how-it-works-area': document.getElementById('nav-about')
+        };
+
+        const navObserverOptions = {
+            root: null,
+            threshold: 0.2,
+            rootMargin: "-10% 0px -40% 0px"
+        };
+
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    Object.values(navLinks).forEach(link => link.classList.remove('active-link'));
+                    if (navLinks[entry.target.id]) {
+                        navLinks[entry.target.id].classList.add('active-link');
+                    }
+                }
+            });
+        }, navObserverOptions);
+
+        navObserver.observe(document.getElementById('hero-area'));
+        navObserver.observe(document.getElementById('consultation-box-area'));
+        navObserver.observe(document.getElementById('how-it-works-area'));
+
+        /* --- REVEAL ANIMATION DRIVER --- */
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.05
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => revealObserver.observe(el));
+            document.getElementById('nav-home').classList.add('active-link');
+        });
+    </script>
+</body>
+</html>
