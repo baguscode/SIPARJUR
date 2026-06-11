@@ -416,13 +416,12 @@ async function addGejala() {
         indikator: teks
     });
     
-    if (success) {
-        document.getElementById('g-kode').value = '';
-        document.getElementById('g-teks').value = '';
-        await loadAdminData();
-        await loadKnowledgeBase();
-    }
-    
+   if (success) {
+    document.getElementById('g-kode').value = '';
+    document.getElementById('g-teks').value = '';
+    await loadAdminData();    // ← Harus memuat ulang data admin
+    await loadKnowledgeBase(); // ← Harus memuat ulang data konsultasi
+}
     btn.innerHTML = originalText;
     btn.disabled = false;
 }
