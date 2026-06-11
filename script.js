@@ -114,11 +114,15 @@ function scrollToSection(section) {
 // ==================== LOAD DATABASE MAIN (dengan timestamp anti cache) ====================
 async function loadKnowledgeBase() {
     try {
-        // Tambahkan timestamp untuk menghindari cache
+        // Paksa ambil data baru dengan timestamp
         const timestamp = Date.now();
         const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
+        
+        console.log("Mengambil data dari:", proxyUrl);
         let res = await fetch(proxyUrl);
         let data = await res.json();
+        
+        console.log("Data diterima:", data);
         
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
@@ -134,8 +138,8 @@ async function loadKnowledgeBase() {
             document.getElementById('dynamic-question-container').innerHTML = '<p style="color: red; text-align:center;">⚠️ Belum ada data gejala di database. Silakan tambahkan melalui Admin Panel.</p>';
         }
     } catch(err) {
-        console.error(err);
-        document.getElementById('loading-kb').innerHTML = '<p style="color: red; text-align:center;">❌ Gagal konek database. Periksa URL Apps Script dan pastikan sudah di-deploy.</p>';
+        console.error("Load error:", err);
+        document.getElementById('loading-kb').innerHTML = '<p style="color: red; text-align:center;">❌ Gagal konek database: ' + err.message + '</p>';
     }
 }
 
