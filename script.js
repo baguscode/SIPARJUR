@@ -4,7 +4,7 @@ const ADMIN_PASSWORD = "admin123";
 
 // CORS Proxy (gratis, untuk bypass CORS)
 
-const CORS_PROXY = "https://api.allorigins.win/raw?url=";
+const CORS_PROXY = "https://corsproxy.io/?";
 let dbGejala = [], dbJurusan = [], dbRule = [];
 let currentStep = 0;
 let skorJurusan = {};
