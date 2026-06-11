@@ -396,8 +396,7 @@ async function sendPostRequest(payload) {
         console.log("Response:", result);
         
         if (result.status === 'success') {
-            alert("✅ Berhasil!");
-            // Delay 1 detik agar server selesai memproses
+            alert("✅ Berhasil!");  // ← HANYA 1 ALERT DI SINI
             await new Promise(resolve => setTimeout(resolve, 1000));
             return true;
         } else {
@@ -432,13 +431,12 @@ async function addGejala() {
         document.getElementById('g-teks').value = '';
         await loadAdminData();
         await loadKnowledgeBase();
-        alert("✅ Data sudah diperbarui!");
+        // Hanya 1 alert, tidak pakai alert tambahan
     }
     
     btn.innerHTML = originalText;
     btn.disabled = false;
 }
-
 async function addJurusan() {
     let kode = document.getElementById('j-kode').value.trim();
     let nama = document.getElementById('j-nama').value.trim();
