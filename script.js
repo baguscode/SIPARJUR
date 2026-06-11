@@ -3,8 +3,8 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwi0L3mUEmsvbNGGFp0ha94
 const ADMIN_PASSWORD = "admin123";
 
 // CORS Proxy (gratis, untuk bypass CORS)
-
 const CORS_PROXY = "https://corsproxy.io/?";
+
 let dbGejala = [], dbJurusan = [], dbRule = [];
 let currentStep = 0;
 let skorJurusan = {};
@@ -111,13 +111,15 @@ function scrollToSection(section) {
     if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
 }
 
-// ==================== LOAD DATABASE MAIN (GET Request - via Proxy) ====================
+// ==================== LOAD DATABASE MAIN (dengan timestamp anti cache) ====================
 async function loadKnowledgeBase() {
     try {
-        // Untuk GET request, kita pakai proxy juga
-        const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase";
+        // Tambahkan timestamp untuk menghindari cache
+        const timestamp = Date.now();
+        const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
         let res = await fetch(proxyUrl);
         let data = await res.json();
+        
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
@@ -281,17 +283,21 @@ function updateActiveLinkOnScroll() {
     });
 }
 
-// ==================== ADMIN FUNCTIONS (CRUD dengan CORS PROXY) ====================
+// ==================== ADMIN FUNCTIONS (dengan timestamp anti cache) ====================
 
 async function loadAdminData() {
+    // Tampilkan loading
     document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3" class="loading-row">⏳ Memuat......</td></tr>';
     document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="4" class="loading-row">⏳ Memuat......</td></tr>';
     document.getElementById('table-rule').innerHTML = '<tr><td colspan="4" class="loading-row">⏳ Memuat......</td></tr>';
     
     try {
-        const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase";
+        // Tambahkan timestamp untuk menghindari cache
+        const timestamp = Date.now();
+        const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
         let res = await fetch(proxyUrl);
         let data = await res.json();
+        
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
@@ -369,11 +375,10 @@ function populateAdminSelects() {
     });
 }
 
-// ==================== CRUD dengan CORS PROXY ====================
+// ==================== CRUD dengan CORS PROXY (dengan delay & refresh) ====================
 
 async function sendPostRequest(payload) {
     try {
-        // Kirim POST via proxy
         const proxyUrl = CORS_PROXY + API_URL;
         const response = await fetch(proxyUrl, {
             method: 'POST',
@@ -388,6 +393,8 @@ async function sendPostRequest(payload) {
         
         if (result.status === 'success') {
             alert("✅ Berhasil!");
+            // Delay 1 detik agar server selesai memproses
+            await new Promise(resolve => setTimeout(resolve, 1000));
             return true;
         } else {
             alert("❌ Gagal: " + (result.message || "Unknown error"));
@@ -416,12 +423,14 @@ async function addGejala() {
         indikator: teks
     });
     
-   if (success) {
-    document.getElementById('g-kode').value = '';
-    document.getElementById('g-teks').value = '';
-    await loadAdminData();    // ← Harus memuat ulang data admin
-    await loadKnowledgeBase(); // ← Harus memuat ulang data konsultasi
-}
+    if (success) {
+        document.getElementById('g-kode').value = '';
+        document.getElementById('g-teks').value = '';
+        await loadAdminData();
+        await loadKnowledgeBase();
+        alert("✅ Data sudah diperbarui!");
+    }
+    
     btn.innerHTML = originalText;
     btn.disabled = false;
 }
@@ -450,6 +459,7 @@ async function addJurusan() {
         document.getElementById('j-desc').value = '';
         await loadAdminData();
         await loadKnowledgeBase();
+        alert("✅ Data sudah diperbarui!");
     }
     
     btn.innerHTML = originalText;
@@ -478,6 +488,7 @@ async function addRule() {
     if (success) {
         await loadAdminData();
         await loadKnowledgeBase();
+        alert("✅ Data sudah diperbarui!");
     }
     
     btn.innerHTML = originalText;
@@ -507,6 +518,7 @@ async function deleteAdminItem(type, id) {
     if (success) {
         await loadAdminData();
         await loadKnowledgeBase();
+        alert("✅ Data sudah diperbarui!");
     }
     
     btn.innerHTML = originalText;
