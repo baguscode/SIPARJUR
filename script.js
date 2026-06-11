@@ -1,5 +1,5 @@
 // ==================== KONFIGURASI ====================
-const API_URL = "https://script.google.com/macros/s/AKfycbwFBcDnbhjBzWyYzSp3uPapSso5kj2HW5yPF9aWCAPPTMpd1uh86jfaFWE1SXoIuXqy/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwMkXuMchAES76T89MhQS4tznQSe28d_mWTQLIV_sBsZvDrxE-ngLTgBGMsXOvvNG7i/exec";
 const ADMIN_PASSWORD = "admin123";
 
 // CORS Proxy (gratis, untuk bypass CORS)
