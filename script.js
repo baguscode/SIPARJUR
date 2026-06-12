@@ -2,39 +2,35 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbwi0L3mUEmsvbNGGFp0ha94XJKzhnAANPGMAhZOG_GewD7NaLFKlvFQg8UMTTNbsQPt/exec";
 const ADMIN_PASSWORD = "admin123";
 const CORS_PROXY = "https://corsproxy.io/";
+
 let dbGejala = [], dbJurusan = [], dbRule = [];
 let currentStep = 0;
 let skorJurusan = {};
 
 // ==================== PASSWORD TOGGLE ====================
 function togglePassword() {
-    const passwordInput = document.getElementById('adminPassword');
-    const eyeIcon = document.querySelector('.eye-icon');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        eyeIcon.innerHTML = '🙈';
+    const input = document.getElementById('adminPassword');
+    const icon = event.target;
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerHTML = '🙈';
     } else {
-        passwordInput.type = 'password';
-        eyeIcon.innerHTML = '👁️';
+        input.type = 'password';
+        icon.innerHTML = '👁️';
     }
 }
 
 // ==================== ADMIN MODAL ====================
 function openAdminModal() {
-    const modal = document.getElementById('adminModal');
-    if (modal) modal.classList.add('show');
-    const passInput = document.getElementById('adminPassword');
-    if (passInput) passInput.value = '';
-    const eyeIcon = document.querySelector('.eye-icon');
-    if (eyeIcon) eyeIcon.innerHTML = '👁️';
-    const errorMsg = document.getElementById('adminErrorMsg');
-    if (errorMsg) errorMsg.style.display = 'none';
-    setTimeout(() => { if (passInput) passInput.focus(); }, 100);
+    document.getElementById('adminModal').classList.add('show');
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminPassword').type = 'password';
+    document.getElementById('adminErrorMsg').style.display = 'none';
+    setTimeout(() => document.getElementById('adminPassword').focus(), 100);
 }
 
 function closeAdminModal() {
-    const modal = document.getElementById('adminModal');
-    if (modal) modal.classList.remove('show');
+    document.getElementById('adminModal').classList.remove('show');
 }
 
 function checkAdminPassword() {
@@ -43,11 +39,10 @@ function checkAdminPassword() {
         closeAdminModal();
         showAdminPanel();
     } else {
-        const errorMsg = document.getElementById('adminErrorMsg');
-        if (errorMsg) errorMsg.style.display = 'block';
+        document.getElementById('adminErrorMsg').style.display = 'block';
         document.getElementById('adminPassword').value = '';
         document.getElementById('adminPassword').focus();
-        setTimeout(() => { if (errorMsg) errorMsg.style.display = 'none'; }, 2000);
+        setTimeout(() => document.getElementById('adminErrorMsg').style.display = 'none', 2000);
     }
 }
 
@@ -57,7 +52,7 @@ function showAdminPanel() {
     document.getElementById('adminPanel').style.display = 'block';
     document.getElementById('mainFooter').style.display = 'none';
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
-    document.getElementById('nav-admin').classList.add('active-link'); // Admin jadi active
+    document.getElementById('nav-admin').classList.add('active-link');
     loadAdminData();
 }
 
@@ -69,11 +64,11 @@ function hideAdminPanel() {
     document.getElementById('nav-home').classList.add('active-link');
     scrollToSection('home');
 }
+
 function showMainContent() {
     if (document.getElementById('adminPanel').style.display === 'block') return;
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('mainFooter').style.display = 'block';
-    document.getElementById('adminFloatingBtn').style.display = 'flex';
 }
 
 // ==================== SMOOTH SCROLL ====================
@@ -101,33 +96,30 @@ async function loadKnowledgeBase() {
         dbRule = data.rule || [];
         document.getElementById('loading-kb').style.display = 'none';
         document.getElementById('quiz-area-box').style.display = 'block';
-        if(dbGejala.length > 0) { resetQuiz(); }
+        if (dbGejala.length > 0) { resetQuiz(); }
         else { document.getElementById('dynamic-question-container').innerHTML = '<p style="color:red;text-align:center;">⚠️ Belum ada data. Tambah di Admin Panel.</p>'; }
-    } catch(err) {
-        console.error(err);
-        document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal konek database.</p>';
-    }
+    } catch(err) { console.error(err); document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal konek database.</p>'; }
 }
 
 function renderCurrentQuestion() {
-    if(dbGejala.length === 0 || currentStep >= dbGejala.length) return;
+    if (dbGejala.length === 0 || currentStep >= dbGejala.length) return;
     let item = dbGejala[currentStep];
     document.getElementById('progress-indicator').innerText = `Pertanyaan ${currentStep+1} dari ${dbGejala.length}`;
     document.getElementById('bar-fill').style.width = `${((currentStep+1)/dbGejala.length)*100}%`;
     let container = document.getElementById('dynamic-question-container');
-    container.innerHTML = `<div class="question-card active" id="current-question-card"><h3>${currentStep+1}. ${escapeHtml(item.indikator)}</h3><div class="options-vertical"><button class="choice-btn" onclick="answerQuestion('${escapeHtml(item.kd_gejala)}', 3)"><span>✅ Ya</span><span>➔</span></button><button class="choice-btn" onclick="answerQuestion('${escapeHtml(item.kd_gejala)}', 0)"><span>❌ Tidak</span><span>➔</span></button></div></div>`;
+    container.innerHTML = `<div class="question-card active"><h3>${currentStep+1}. ${escapeHtml(item.indikator)}</h3><div class="options-vertical"><button class="choice-btn" onclick="answerQuestion('${escapeHtml(item.kd_gejala)}', 3)"><span>✅ Ya</span><span>➔</span></button><button class="choice-btn" onclick="answerQuestion('${escapeHtml(item.kd_gejala)}', 0)"><span>❌ Tidak</span><span>➔</span></button></div></div>`;
 }
 
 function answerQuestion(kdGejala, points) {
-    if(points > 0) {
+    if (points > 0) {
         let matchedRules = dbRule.filter(r => r.kd_gejala === kdGejala);
         matchedRules.forEach(rule => {
-            if(!skorJurusan[rule.kd_jurusan]) skorJurusan[rule.kd_jurusan] = 0;
+            if (!skorJurusan[rule.kd_jurusan]) skorJurusan[rule.kd_jurusan] = 0;
             skorJurusan[rule.kd_jurusan] += parseInt(rule.bobot) || 0;
         });
     }
     currentStep++;
-    if(currentStep < dbGejala.length) { renderCurrentQuestion(); }
+    if (currentStep < dbGejala.length) { renderCurrentQuestion(); }
     else { showResults(); }
 }
 
@@ -137,11 +129,11 @@ function showResults() {
     setTimeout(() => {
         document.getElementById('loading-view').style.display = 'none';
         document.getElementById('result-box').style.display = 'block';
-        let hasil = dbJurusan.map(j => ({ nama: j.nama_jurusan, deskripsi: j.deskripsi, skor: skorJurusan[j.kd_jurusan] || 0 })).sort((a,b) => b.skor - a.skor).slice(0,3);
+        let hasil = dbJurusan.map(j => ({ nama: j.nama_jurusan, deskripsi: j.deskripsi, skor: skorJurusan[j.kd_jurusan] || 0 })).sort((a, b) => b.skor - a.skor).slice(0, 3);
         let container = document.getElementById('result-list-container');
         container.innerHTML = '';
         let totalSkor = hasil.reduce((sum, h) => sum + h.skor, 0);
-        if(totalSkor === 0) { container.innerHTML = '<div class="result-item"><div class="res-title">📭 Hasil Kurang Valid</div><div class="res-desc">Silakan ulangi tes.</div></div>'; }
+        if (totalSkor === 0) { container.innerHTML = '<div class="result-item"><div class="res-title">📭 Hasil Kurang Valid</div><div class="res-desc">Silakan ulangi tes.</div></div>'; }
         else { hasil.forEach((h, idx) => { container.innerHTML += `<div class="result-item"><div class="rank-number">#${idx+1}</div><div class="res-title">🏆 ${escapeHtml(h.nama)}</div><div class="res-desc">${escapeHtml(h.deskripsi)}</div><div style="margin-top:8px;font-size:0.8rem;color:var(--secondary);">🎯 Skor: ${h.skor} poin</div></div>`; }); }
         document.getElementById('result-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 1200);
@@ -153,61 +145,36 @@ function resetQuiz() {
     document.getElementById('result-box').style.display = 'none';
     document.getElementById('quiz-area-box').style.display = 'block';
     renderCurrentQuestion();
-    
     // Scroll ke section konsultasi
     const consultSection = document.getElementById('consult-section');
-    if (consultSection) {
-        consultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    if (consultSection) { consultSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 }
 
 function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
+    return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
 }
 
 // ==================== SCROLL SPY ====================
 function updateActiveLinkOnScroll() {
     if (document.getElementById('adminPanel').style.display === 'block') return;
-    
     const sections = [
         { id: 'home-section', navId: 'nav-home' },
         { id: 'consult-section', navId: 'nav-consult' },
         { id: 'about-section', navId: 'nav-about' }
-        // Admin tidak masuk scroll spy
     ];
-    
-    let currentSection = '';
-    const scrollPosition = window.scrollY + 150;
-    
-    for (let section of sections) {
-        const element = document.getElementById(section.id);
-        if (element) {
-            const offsetTop = element.offsetTop;
-            const offsetBottom = offsetTop + element.offsetHeight;
-            if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-                currentSection = section.id;
-                break;
-            }
-        }
+    let current = '';
+    const pos = window.scrollY + 150;
+    for (let s of sections) {
+        const el = document.getElementById(s.id);
+        if (el && pos >= el.offsetTop && pos < el.offsetTop + el.offsetHeight) { current = s.id; break; }
     }
-    
-    sections.forEach(section => {
-        const navLink = document.getElementById(section.navId);
-        if (navLink) {
-            if (currentSection === section.id) {
-                navLink.classList.add('active-link');
-            } else {
-                navLink.classList.remove('active-link');
-            }
-        }
+    sections.forEach(s => {
+        const link = document.getElementById(s.navId);
+        if (link) current === s.id ? link.classList.add('active-link') : link.classList.remove('active-link');
     });
 }
+
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
     document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
@@ -224,76 +191,64 @@ async function loadAdminData() {
         renderAdminTables();
         populateAdminSelects();
         document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } catch(e) { console.error(e); document.getElementById('table-gejala').innerHTML = `<tr><td colspan="3">❌ Error: ${e.message}</td></tr>`; }
+    } catch (e) { console.error(e); document.getElementById('table-gejala').innerHTML = `<td><td colspan="3">❌ Error</td></tr>`; }
 }
 
 function renderAdminTables() {
-    const tGejala = document.getElementById('table-gejala');
-    if (tGejala) {
-        if (dbGejala.length === 0) { tGejala.innerHTML = '<tr><td colspan="3">📭 Belum ada data</td></tr>'; }
-        else { tGejala.innerHTML = dbGejala.map(g => `<tr><td><strong>${escapeHtml(g.kd_gejala)}</strong></td><td>${escapeHtml(g.indikator)}</td><td><button class="btn-delete" onclick="deleteAdminItem('gejala','${escapeHtml(g.kd_gejala)}')">🗑 Hapus</button></td></tr>`).join(''); }
-    }
-    const tJurusan = document.getElementById('table-jurusan');
-    if (tJurusan) {
-        if (dbJurusan.length === 0) { tJurusan.innerHTML = '<tr><td colspan="4">📭 Belum ada数据</td></tr>'; }
-        else { tJurusan.innerHTML = dbJurusan.map(j => `<tr><td><strong>${escapeHtml(j.kd_jurusan)}</strong></td><td>${escapeHtml(j.nama_jurusan)}</td><td>${escapeHtml(j.deskripsi)}</td><td><button class="btn-delete" onclick="deleteAdminItem('jurusan','${escapeHtml(j.kd_jurusan)}')">🗑 Hapus</button></td></tr>`).join(''); }
-    }
-    const tRule = document.getElementById('table-rule');
-    if (tRule) {
-        if (dbRule.length === 0) { tRule.innerHTML = '<tr><td colspan="4">📭 Belum ada data</td></tr>'; }
-        else { tRule.innerHTML = dbRule.map(r => `<tr><td>${escapeHtml(r.kd_gejala)}</td><td>${escapeHtml(r.kd_jurusan)}</td><td><span class="badge-bobot">${r.bobot}</span></td><td><button class="btn-delete" onclick="deleteAdminItem('rule','${escapeHtml(r.kd_gejala)}|${escapeHtml(r.kd_jurusan)}')">🗑 Hapus</button></td></tr>`).join(''); }
-    }
+    const tg = document.getElementById('table-gejala');
+    if (tg) tg.innerHTML = dbGejala.length ? dbGejala.map(g => `<tr><td><strong>${escapeHtml(g.kd_gejala)}</strong></td><td>${escapeHtml(g.indikator)}</td><td><button class="btn-delete" onclick="deleteAdminItem('gejala','${escapeHtml(g.kd_gejala)}')">🗑 Hapus</button></td></tr>`).join('') : '<tr><td colspan="3">📭 Belum ada data</td></tr>';
+    const tj = document.getElementById('table-jurusan');
+    if (tj) tj.innerHTML = dbJurusan.length ? dbJurusan.map(j => `<tr><td><strong>${escapeHtml(j.kd_jurusan)}</strong></td><td>${escapeHtml(j.nama_jurusan)}</td><td>${escapeHtml(j.deskripsi)}</td><td><button class="btn-delete" onclick="deleteAdminItem('jurusan','${escapeHtml(j.kd_jurusan)}')">🗑 Hapus</button></td></tr>`).join('') : '<tr><td colspan="4">📭 Belum ada data</td></tr>';
+    const tr = document.getElementById('table-rule');
+    if (tr) tr.innerHTML = dbRule.length ? dbRule.map(r => `<tr><td>${escapeHtml(r.kd_gejala)}</td><td>${escapeHtml(r.kd_jurusan)}</td><td><span class="badge-bobot">${r.bobot}</span></td><td><button class="btn-delete" onclick="deleteAdminItem('rule','${escapeHtml(r.kd_gejala)}|${escapeHtml(r.kd_jurusan)}')">🗑 Hapus</button></td></tr>`).join('') : '<tr><td colspan="4">📭 Belum ada data</td></tr>';
 }
 
 function populateAdminSelects() {
-    const selGejala = document.getElementById('rule-gejala');
-    const selJurusan = document.getElementById('rule-jurusan');
-    if (!selGejala || !selJurusan) return;
-    selGejala.innerHTML = '<option value="">-- Pilih Gejala --</option>';
-    selJurusan.innerHTML = '<option value="">-- Pilih Jurusan --</option>';
-    dbGejala.forEach(g => { selGejala.innerHTML += `<option value="${escapeHtml(g.kd_gejala)}">${escapeHtml(g.kd_gejala)} - ${escapeHtml(g.indikator.substring(0,50))}...</option>`; });
-    dbJurusan.forEach(j => { selJurusan.innerHTML += `<option value="${escapeHtml(j.kd_jurusan)}">${escapeHtml(j.kd_jurusan)} - ${escapeHtml(j.nama_jurusan)}</option>`; });
+    const sg = document.getElementById('rule-gejala');
+    const sj = document.getElementById('rule-jurusan');
+    if (!sg || !sj) return;
+    sg.innerHTML = '<option value="">-- Pilih Gejala --</option>';
+    sj.innerHTML = '<option value="">-- Pilih Jurusan --</option>';
+    dbGejala.forEach(g => sg.innerHTML += `<option value="${escapeHtml(g.kd_gejala)}">${escapeHtml(g.kd_gejala)} - ${escapeHtml(g.indikator.substring(0, 50))}...</option>`);
+    dbJurusan.forEach(j => sj.innerHTML += `<option value="${escapeHtml(j.kd_jurusan)}">${escapeHtml(j.kd_jurusan)} - ${escapeHtml(j.nama_jurusan)}</option>`);
 }
 
 async function sendPostRequest(payload) {
     try {
-        const proxyUrl = CORS_PROXY + API_URL;
-        const response = await fetch(proxyUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const result = await response.json();
+        const res = await fetch(CORS_PROXY + API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const result = await res.json();
         if (result.status === 'success') { alert("✅ Berhasil!"); await new Promise(r => setTimeout(r, 1000)); return true; }
-        else { alert("❌ Gagal: " + (result.message || "Error")); return false; }
-    } catch(err) { console.error(err); alert("❌ Gagal: " + err.message); return false; }
+        else { alert("❌ Gagal"); return false; }
+    } catch (err) { console.error(err); alert("❌ Error"); return false; }
 }
 
 async function addGejala() {
     let kode = document.getElementById('g-kode').value.trim();
     let teks = document.getElementById('g-teks').value.trim();
-    if (!kode || !teks) return alert("Lengkapi kode dan pertanyaan!");
+    if (!kode || !teks) return alert("Lengkapi data!");
     const btn = event.target;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '⏳ Menyimpan...'; btn.disabled = true;
-    const success = await sendPostRequest({ action: 'addGejala', kd_gejala: kode, indikator: teks });
-    if (success) {
+    const txt = btn.innerHTML;
+    btn.innerHTML = '⏳...'; btn.disabled = true;
+    if (await sendPostRequest({ action: 'addGejala', kd_gejala: kode, indikator: teks })) {
         document.getElementById('g-kode').value = ''; document.getElementById('g-teks').value = '';
         await loadAdminData(); await loadKnowledgeBase();
     }
-    btn.innerHTML = originalText; btn.disabled = false;
+    btn.innerHTML = txt; btn.disabled = false;
 }
 
 async function addJurusan() {
     let kode = document.getElementById('j-kode').value.trim();
     let nama = document.getElementById('j-nama').value.trim();
     let desc = document.getElementById('j-desc').value.trim();
-    if (!kode || !nama || !desc) return alert("Lengkapi semua data!");
+    if (!kode || !nama || !desc) return alert("Lengkapi data!");
     const btn = event.target;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '⏳ Menyimpan...'; btn.disabled = true;
-    const success = await sendPostRequest({ action: 'addJurusan', kd_jurusan: kode, nama_jurusan: nama, deskripsi: desc });
-    if (success) {
+    const txt = btn.innerHTML;
+    btn.innerHTML = '⏳...'; btn.disabled = true;
+    if (await sendPostRequest({ action: 'addJurusan', kd_jurusan: kode, nama_jurusan: nama, deskripsi: desc })) {
         document.getElementById('j-kode').value = ''; document.getElementById('j-nama').value = ''; document.getElementById('j-desc').value = '';
         await loadAdminData(); await loadKnowledgeBase();
     }
-    btn.innerHTML = originalText; btn.disabled = false;
+    btn.innerHTML = txt; btn.disabled = false;
 }
 
 async function addRule() {
@@ -302,25 +257,25 @@ async function addRule() {
     let bobot = document.getElementById('rule-bobot').value;
     if (!gejala || !jurusan) return alert("Pilih gejala dan jurusan!");
     const btn = event.target;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '⏳ Menyimpan...'; btn.disabled = true;
-    const success = await sendPostRequest({ action: 'addRule', kd_gejala: gejala, kd_jurusan: jurusan, bobot: bobot });
-    if (success) { await loadAdminData(); await loadKnowledgeBase(); }
-    btn.innerHTML = originalText; btn.disabled = false;
+    const txt = btn.innerHTML;
+    btn.innerHTML = '⏳...'; btn.disabled = true;
+    if (await sendPostRequest({ action: 'addRule', kd_gejala: gejala, kd_jurusan: jurusan, bobot: bobot })) {
+        await loadAdminData(); await loadKnowledgeBase();
+    }
+    btn.innerHTML = txt; btn.disabled = false;
 }
 
 async function deleteAdminItem(type, id) {
-    if (!confirm(`Hapus data ${type} ini?`)) return;
+    if (!confirm(`Hapus data ${type}?`)) return;
     let payload = {};
     if (type === 'gejala') payload = { action: 'deleteGejala', kd_gejala: id };
     else if (type === 'jurusan') payload = { action: 'deleteJurusan', kd_jurusan: id };
-    else if (type === 'rule') { let [gejala, jurusan] = id.split('|'); payload = { action: 'deleteRule', kd_gejala: gejala, kd_jurusan: jurusan }; }
+    else if (type === 'rule') { let [g, j] = id.split('|'); payload = { action: 'deleteRule', kd_gejala: g, kd_jurusan: j }; }
     const btn = event.target;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '⏳ Menghapus...'; btn.disabled = true;
-    const success = await sendPostRequest(payload);
-    if (success) { await loadAdminData(); await loadKnowledgeBase(); }
-    btn.innerHTML = originalText; btn.disabled = false;
+    const txt = btn.innerHTML;
+    btn.innerHTML = '⏳...'; btn.disabled = true;
+    if (await sendPostRequest(payload)) { await loadAdminData(); await loadKnowledgeBase(); }
+    btn.innerHTML = txt; btn.disabled = false;
 }
 
 function switchTab(tab) {
@@ -333,18 +288,15 @@ function switchTab(tab) {
 
 // ==================== EVENT LISTENER ====================
 window.addEventListener('scroll', () => {
-    const header = document.getElementById('main-header');
-    if (window.scrollY > 60) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
+    const h = document.getElementById('main-header');
+    if (window.scrollY > 60) h.classList.add('scrolled');
+    else h.classList.remove('scrolled');
     updateActiveLinkOnScroll();
 });
-
-document.addEventListener('click', function(e) { if (e.target && e.target.id === 'resetQuizBtn') resetQuiz(); });
-
-const revealObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.05 });
-
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+document.addEventListener('click', e => { if (e.target && e.target.id === 'resetQuizBtn') resetQuiz(); });
+const observer = new IntersectionObserver(e => e.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }), { threshold: 0.05 });
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     document.getElementById('nav-home').classList.add('active-link');
     loadKnowledgeBase();
 });
