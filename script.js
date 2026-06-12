@@ -2,7 +2,7 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbwi0L3mUEmsvbNGGFp0ha94XJKzhnAANPGMAhZOG_GewD7NaLFKlvFQg8UMTTNbsQPt/exec";
 const ADMIN_PASSWORD = "admin123";
 
-// CORS Proxy (gratis, untuk bypass CORS)
+// CORS Proxy
 const CORS_PROXY = "https://corsproxy.io/?";
 
 let dbGejala = [], dbJurusan = [], dbRule = [];
@@ -111,10 +111,9 @@ function scrollToSection(section) {
     if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
 }
 
-// ==================== LOAD DATABASE MAIN (dengan timestamp anti cache) ====================
+// ==================== LOAD DATABASE MAIN ====================
 async function loadKnowledgeBase() {
     try {
-        // Tambahkan timestamp untuk menghindari cache
         const timestamp = Date.now();
         const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
         let res = await fetch(proxyUrl);
@@ -155,14 +154,6 @@ function renderCurrentQuestion() {
             </div>
         </div>
     `;
-    
-    setTimeout(() => {
-        let card = document.getElementById('current-question-card');
-        if(card) {
-            card.classList.add('question-highlight');
-            setTimeout(() => card.classList.remove('question-highlight'), 1600);
-        }
-    }, 100);
 }
 
 function answerQuestion(kdGejala, points) {
@@ -225,15 +216,6 @@ function resetQuiz() {
     document.getElementById('result-box').style.display = 'none';
     document.getElementById('quiz-area-box').style.display = 'block';
     renderCurrentQuestion();
-    
-    setTimeout(() => {
-        let questionCard = document.getElementById('current-question-card');
-        if(questionCard) {
-            questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            questionCard.classList.add('question-highlight');
-            setTimeout(() => questionCard.classList.remove('question-highlight'), 1600);
-        }
-    }, 200);
 }
 
 function escapeHtml(str) {
@@ -283,41 +265,32 @@ function updateActiveLinkOnScroll() {
     });
 }
 
-// ==================== ADMIN FUNCTIONS (dengan timestamp anti cache) ====================
+// ==================== ADMIN FUNCTIONS ====================
 
 async function loadAdminData() {
     // Tampilkan loading
-    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3" class="loading-row">⏳ Memuat data terbaru...🚀</td></tr>', [
-  { 
-    "type": "paragraph",
-    "children": [
-      { 
-        "type": "text",
-        "value": "document.getElementById('table-jurusan').innerHTML = '"
-      }
-    ]
-  },
-  { 
-    "type": "text",
-    "value": "<td colspan=\"4\" class=\"loading-row\">⏳ Memuat data terbaru...🚀</td>"
-  },
-  { 
-    "type": "text",
-    "value": "';"
-  },
-  { 
-    "type": "text",
-    "value": "document.getElementById('table-rule').innerHTML = '"
-  },
-  { 
-    "type": "text",
-    "value": "<td colspan=\"4\" class=\"loading-row\">⏳ Memuat data terbaru...🚀</td>"
-  },
-  { 
-    "type": "text",
-    "value": "';"
-  }
-]
+    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3" class="loading-row">⏳ Memuat data terbaru...</td></tr>';
+    document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="4" class="loading-row">⏳ Memuat data terbaru...</td></tr>';
+    document.getElementById('table-rule').innerHTML = '<tr><td colspan="4" class="loading-row">⏳ Memuat data terbaru...</td></tr>';
+    
+    try {
+        const timestamp = Date.now();
+        const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
+        let res = await fetch(proxyUrl);
+        let data = await res.json();
+        
+        dbGejala = data.gejala || [];
+        dbJurusan = data.jurusan || [];
+        dbRule = data.rule || [];
+        
+        renderAdminTables();
+        populateAdminSelects();
+        scrollAdminToTop();
+    } catch(e) {
+        console.error("Load error:", e);
+        document.getElementById('table-gejala').innerHTML = `<tr><td colspan="3" style="color:red;">❌ Error: ${e.message}</td></tr>`;
+    }
+}
 
 function renderAdminTables() {
     // Tabel Gejala
@@ -383,8 +356,6 @@ function populateAdminSelects() {
     });
 }
 
-// ==================== CRUD dengan CORS PROXY (dengan delay & refresh) ====================
-
 async function sendPostRequest(payload) {
     try {
         const proxyUrl = CORS_PROXY + API_URL;
@@ -400,7 +371,7 @@ async function sendPostRequest(payload) {
         console.log("Response:", result);
         
         if (result.status === 'success') {
-            alert("✅ Berhasil!");  // ← HANYA 1 ALERT DI SINI
+            alert("✅ Berhasil!");
             await new Promise(resolve => setTimeout(resolve, 1000));
             return true;
         } else {
@@ -413,6 +384,7 @@ async function sendPostRequest(payload) {
         return false;
     }
 }
+
 async function addGejala() {
     let kode = document.getElementById('g-kode').value.trim();
     let teks = document.getElementById('g-teks').value.trim();
@@ -434,12 +406,12 @@ async function addGejala() {
         document.getElementById('g-teks').value = '';
         await loadAdminData();
         await loadKnowledgeBase();
-        // Hanya 1 alert, tidak pakai alert tambahan
     }
     
     btn.innerHTML = originalText;
     btn.disabled = false;
 }
+
 async function addJurusan() {
     let kode = document.getElementById('j-kode').value.trim();
     let nama = document.getElementById('j-nama').value.trim();
@@ -464,7 +436,6 @@ async function addJurusan() {
         document.getElementById('j-desc').value = '';
         await loadAdminData();
         await loadKnowledgeBase();
-        alert("✅ Data sudah diperbarui!");
     }
     
     btn.innerHTML = originalText;
@@ -493,7 +464,6 @@ async function addRule() {
     if (success) {
         await loadAdminData();
         await loadKnowledgeBase();
-        alert("✅ Data sudah diperbarui!");
     }
     
     btn.innerHTML = originalText;
@@ -523,7 +493,6 @@ async function deleteAdminItem(type, id) {
     if (success) {
         await loadAdminData();
         await loadKnowledgeBase();
-        alert("✅ Data sudah diperbarui!");
     }
     
     btn.innerHTML = originalText;
