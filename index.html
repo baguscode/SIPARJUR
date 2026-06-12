@@ -1,227 +1,110 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>SIPARJUR - Sistem Pakar Rekomendasi Jurusan</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <header id="main-header">
-        <div class="navbar">
-            <div class="logo-area">
-                <img src="siparjur.png" alt="Logo SIPARJUR" onerror="this.src='https://via.placeholder.com/48?text=Logo'">
-                <div class="logo-title">
-                    <h1>SIPARJUR</h1>
-                    <p>SISTEM PAKAR REKOMENDASI JURUSAN KULIAH</p>
-                </div>
-            </div>
-            <ul class="nav-links">
-                <li><a onclick="showMainContent(); scrollToSection('home')" id="nav-home">Beranda</a></li>
-                <li><a onclick="showMainContent(); scrollToSection('consult')" id="nav-consult">Konsultasi</a></li>
-                <li><a onclick="showMainContent(); scrollToSection('about')" id="nav-about">Tentang</a></li>
-            </ul>
+<!-- ADMIN PANEL (tersembunyi) -->
+<div id="adminPanel" style="display: none;">
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>⚙️ SIPARJUR - Panel Administrator</h1>
+            <button class="btn-logout" onclick="hideAdminPanel()">← Kembali ke Beranda</button>
         </div>
-    </header>
+        
+        <div class="admin-tabs">
+            <button class="tab-btn active-tab" onclick="switchTab('gejala')">📋 Data Gejala</button>
+            <button class="tab-btn" onclick="switchTab('jurusan')">🎓 Data Jurusan</button>
+            <button class="tab-btn" onclick="switchTab('rule')">🔗 Matriks Rule</button>
+        </div>
 
-    <!-- MAIN CONTENT (Beranda, Konsultasi, Tentang) -->
-    <div id="mainContent">
-        <!-- BERANDA SECTION -->
-        <section id="home-section" class="hero-section reveal">
-            <div class="hero-text">
-                <h2>Temukan Masa Depanmu Bersama <span>SIPARJUR</span></h2>
-                <p>Sistem Pakar berbasis Forward Chaining yang memetakan kecenderungan minat Anda menuju rumpun program studi kuliah secara tepat sasaran.</p>
-                <button class="btn-start" onclick="scrollToSection('consult')">Mulai Konsultasi Sekarang 👇</button>
-            </div>
-            <div class="hero-image">
-                <img src="siparjur.png" alt="Siparjur Visual" onerror="this.src='https://via.placeholder.com/400?text=SIPARJUR'">
-            </div>
-        </section>
-
-        <!-- KONSULTASI SECTION -->
-        <section id="consult-section" class="consultation-outer-box reveal">
-            <div class="consultation-header-label">
-                <h2>KONSULTASI SISTEM PAKAR</h2>
-                <p>Jawablah instrumen indikator di bawah sesuai dengan minat nyata Anda</p>
-            </div>
-            <main class="interactive-card">
-                <div id="loading-kb" style="text-align: center; padding: 30px 0;">
-                    <div class="spinner"></div>
-                    <p style="color: #94A3B8; margin-top: 15px;">Memuat database dari cloud...</p>
-                </div>
-                <div id="quiz-area-box" style="display: none;">
-                    <div class="progress-container">
-                        <div class="progress-text" id="progress-indicator">Memuat...</div>
-                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="bar-fill"></div></div>
+        <!-- TAB GEJALA -->
+        <div id="tab-gejala" class="tab-content active">
+            <div class="form-card">
+                <h3>Tambah Gejala Baru</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kode Gejala</label>
+                        <input type="text" id="g-kode" placeholder="Contoh: G01" class="admin-input">
                     </div>
-                    <div id="dynamic-question-container"></div>
-                </div>
-                <div id="loading-view">
-                    <div class="spinner"></div>
-                    <p>Mesin Inferensi Forward Chaining Sedang Melakukan Penalaran...</p>
-                </div>
-                <div class="result-card" id="result-box">
-                    <span class="res-badge">🎯 Top 3 Rekomendasi Jurusan Terbaik Anda</span>
-                    <div class="result-list" id="result-list-container"></div>
-                    <button class="reset-btn" id="resetQuizBtn">🔄 Ulangi Tes Konsultasi</button>
-                </div>
-            </main>
-        </section>
-
-        <!-- TENTANG SECTION -->
-        <section id="about-section" class="how-it-works reveal">
-            <h3>⚙️ Bagaimana Sistem Ini Bekerja?</h3>
-            <div class="steps-container">
-                <div class="step-card"><div class="step-icon">📥</div><h4>1. Kuesioner Aturan</h4><p>Pengguna menjawab instrumen berdasarkan ketertarikan riil untuk mengumpulkan fakta.</p></div>
-                <div class="step-card"><div class="step-icon">🧠</div><h4>2. Mesin Inferensi</h4><p>Mesin Forward Chaining mencocokkan fakta akumulatif ke dalam pangkalan basis pengetahuan.</p></div>
-                <div class="step-card"><div class="step-icon">🏆</div><h4>3. Filter Top 3</h4><p>Sistem memilah bobot kesesuaian tertinggi dan menyajikan 3 hasil terbaik secara komparatif.</p></div>
-            </div>
-        </section>
-    </div>
-
-    <!-- ADMIN PANEL (tersembunyi) -->
-    <div id="adminPanel" style="display: none;">
-        <div class="admin-container">
-            <div class="admin-header">
-                <h1>⚙️ SIPARJUR - Panel Administrator</h1>
-                <button class="btn-logout" onclick="hideAdminPanel()">← Kembali ke Beranda</button>
-            </div>
-            
-            <div class="admin-tabs">
-                <button class="tab-btn active-tab" onclick="switchTab('gejala')">📋 Data Gejala</button>
-                <button class="tab-btn" onclick="switchTab('jurusan')">🎓 Data Jurusan</button>
-                <button class="tab-btn" onclick="switchTab('rule')">🔗 Matriks Rule</button>
-            </div>
-
-            <div id="tab-gejala" class="tab-content active">
-                <div class="form-card">
-                    <h3>Tambah Gejala Baru</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Kode Gejala</label>
-                            <input type="text" id="g-kode" placeholder="Contoh: G01" class="admin-input">
-                        </div>
-                        <div class="form-group">
-                            <label>Pertanyaan Indikator Minat</label>
-                            <input type="text" id="g-teks" placeholder="Apakah Anda tertarik..." class="admin-input">
-                        </div>
-                        <button class="btn-primary" onclick="addGejala()">+ Tambah Gejala</button>
+                    <div class="form-group">
+                        <label>Pertanyaan Indikator Minat</label>
+                        <input type="text" id="g-teks" placeholder="Apakah Anda tertarik..." class="admin-input">
                     </div>
-                </div>
-                <div class="table-wrapper">
-                    <table class="admin-table">
-                        <thead>
-                            <tr><th style="width:100px">Kode</th><th>Pertanyaan</th><th style="width:100px">Aksi</th></tr>
-                        </thead>
-                        <tbody id="table-gejala">
-                            <tr><td colspan="3" style="text-align:center;">⏳ Memuat data...</td></tr>
-                        </tbody>
-                    </table>
+                    <button class="btn-primary" onclick="addGejala()">+ Tambah Gejala</button>
                 </div>
             </div>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th style="width:100px">Kode</th><th>Pertanyaan</th><th style="width:100px">Aksi</th></tr>
+                    </thead>
+                    <tbody id="table-gejala">
+                        <tr><td colspan="3" style="text-align:center;">⏳ Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <div id="tab-jurusan" class="tab-content">
-                <div class="form-card">
-                    <h3>Tambah Jurusan Baru</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Kode Jurusan</label>
-                            <input type="text" id="j-kode" placeholder="Contoh: J01" class="admin-input">
-                        </div>
-                        <div class="form-group">
-                            <label>Nama Jurusan</label>
-                            <input type="text" id="j-nama" placeholder="Teknik Informatika" class="admin-input">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Deskripsi Jurusan</label>
-                            <textarea id="j-desc" placeholder="Deskripsi lengkap tentang jurusan ini..." rows="2" class="admin-textarea"></textarea>
-                        </div>
-                        <button class="btn-primary" onclick="addJurusan()">+ Tambah Jurusan</button>
+        <!-- TAB JURUSAN -->
+        <div id="tab-jurusan" class="tab-content">
+            <div class="form-card">
+                <h3>Tambah Jurusan Baru</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kode Jurusan</label>
+                        <input type="text" id="j-kode" placeholder="Contoh: J01" class="admin-input">
                     </div>
-                </div>
-                <div class="table-wrapper">
-                    <table class="admin-table">
-                        <thead>
-                            <tr><th style="width:100px">Kode</th><th style="width:200px">Nama Jurusan</th><th>Deskripsi</th><th style="width:100px">Aksi</th></tr>
-                        </thead>
-                        <tbody id="table-jurusan">
-                            <tr><td colspan="4" style="text-align:center;">⏳ Memuat data...</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="form-group">
+                        <label>Nama Jurusan</label>
+                        <input type="text" id="j-nama" placeholder="Teknik Informatika" class="admin-input">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Deskripsi Jurusan</label>
+                        <textarea id="j-desc" placeholder="Deskripsi lengkap tentang jurusan ini..." rows="2" class="admin-textarea"></textarea>
+                    </div>
+                    <button class="btn-primary" onclick="addJurusan()">+ Tambah Jurusan</button>
                 </div>
             </div>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th style="width:100px">Kode</th><th style="width:200px">Nama Jurusan</th><th>Deskripsi</th><th style="width:100px">Aksi</th></tr>
+                    </thead>
+                    <tbody id="table-jurusan">
+                        <tr><td colspan="4" style="text-align:center;">⏳ Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <div id="tab-rule" class="tab-content">
-                <div class="form-card">
-                    <h3>Hubungkan Gejala ke Jurusan</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Pilih Gejala</label>
-                            <select id="rule-gejala" class="admin-select"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Pilih Jurusan</label>
-                            <select id="rule-jurusan" class="admin-select"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Bobot Pengaruh</label>
-                            <select id="rule-bobot" class="admin-select">
-                                <option value="3">🔥 Bobot 3 (Pengaruh Utama)</option>
-                                <option value="1">📌 Bobot 1 (Pendukung)</option>
-                            </select>
-                        </div>
-                        <button class="btn-primary" onclick="addRule()">+ Hubungkan</button>
+        <!-- TAB RULE -->
+        <div id="tab-rule" class="tab-content">
+            <div class="form-card">
+                <h3>Hubungkan Gejala ke Jurusan</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pilih Gejala</label>
+                        <select id="rule-gejala" class="admin-select"></select>
                     </div>
+                    <div class="form-group">
+                        <label>Pilih Jurusan</label>
+                        <select id="rule-jurusan" class="admin-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Bobot Pengaruh</label>
+                        <select id="rule-bobot" class="admin-select">
+                            <option value="3">🔥 Bobot 3 (Pengaruh Utama)</option>
+                            <option value="1">📌 Bobot 1 (Pendukung)</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="addRule()">+ Hubungkan</button>
                 </div>
-                <div class="table-wrapper">
-                    <table class="admin-table">
-                        <thead>
-                            <tr><th style="width:100px">Kode Gejala</th><th style="width:100px">Jurusan</th><th style="width:80px">Bobot</th><th style="width:80px">Aksi</th></tr>
-                        </thead>
-                        <tbody id="table-rule">
-                            <tr><td colspan="4" style="text-align:center;">⏳ Memuat data...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th style="width:100px">Kode Gejala</th><th style="width:100px">Jurusan</th><th style="width:80px">Bobot</th><th style="width:80px">Aksi</th></tr>
+                    </thead>
+                    <tbody id="table-rule">
+                        <tr><td colspan="4" style="text-align:center;">⏳ Memuat data...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-
-    <!-- FLOATING ADMIN BUTTON (POJOK KANAN BAWAH) -->
-    <div id="adminFloatingBtn" class="admin-floating-btn" onclick="openAdminModal()">
-        <span class="admin-icon">🔒</span>
-        <span class="admin-text">Admin Panel</span>
-    </div>
-
-    <!-- MODAL PASSWORD ADMIN -->
-    <div id="adminModal" class="admin-modal">
-        <div class="admin-modal-content">
-            <div class="admin-modal-header">
-                <h3>🔐 Akses Administrator</h3>
-                <span class="admin-modal-close" onclick="closeAdminModal()">&times;</span>
-            </div>
-            <div class="admin-modal-body">
-                <p>Masukkan kata sandi untuk mengakses panel admin:</p>
-                <div class="password-wrapper">
-                    <input type="password" id="adminPassword" placeholder="Kata sandi..." onkeypress="if(event.key==='Enter') checkAdminPassword()">
-                    <span class="password-toggle" onclick="togglePassword()">
-                        <span class="eye-icon">👁️</span>
-                    </span>
-                </div>
-                <div id="adminErrorMsg" style="color: #EF4444; font-size: 0.85rem; margin-top: 10px; display: none;">❌ Kata sandi salah!</div>
-            </div>
-            <div class="admin-modal-footer">
-                <button class="modal-btn cancel" onclick="closeAdminModal()">Batal</button>
-                <button class="modal-btn confirm" onclick="checkAdminPassword()">Masuk</button>
-            </div>
-        </div>
-    </div>
-
-    <footer id="mainFooter">
-        <p>&copy; 2026 SIPARJUR - Sistem Pakar Rekomendasi Jurusan Kuliah. All Rights Reserved.</p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
+</div>
