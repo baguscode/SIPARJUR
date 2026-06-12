@@ -145,7 +145,11 @@ function resetQuiz() {
     document.getElementById('result-box').style.display = 'none';
     document.getElementById('quiz-area-box').style.display = 'block';
     renderCurrentQuestion();
-    // Scroll ke section konsultasi
+}
+
+// Fungsi terpisah untuk tombol "Ulangi Tes"
+function restartQuizWithScroll() {
+    resetQuiz();
     const consultSection = document.getElementById('consult-section');
     if (consultSection) { consultSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 }
