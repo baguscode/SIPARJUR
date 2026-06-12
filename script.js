@@ -1,9 +1,10 @@
 // ==================== KONFIGURASI ====================
+// GANTI URL INI DENGAN URL APPS SCRIPT TERBARU KAMU
 const API_URL = "https://script.google.com/macros/s/AKfycbwi0L3mUEmsvbNGGFp0ha94XJKzhnAANPGMAhZOG_GewD7NaLFKlvFQg8UMTTNbsQPt/exec";
 const ADMIN_PASSWORD = "admin123";
 
 // CORS Proxy
-const CORS_PROXY = "https://corsproxy.io/?";
+const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
 let dbGejala = [], dbJurusan = [], dbRule = [];
 let currentStep = 0;
@@ -116,6 +117,7 @@ async function loadKnowledgeBase() {
     try {
         const timestamp = Date.now();
         const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
+        console.log("Loading data from:", proxyUrl);
         let res = await fetch(proxyUrl);
         let data = await res.json();
         
@@ -133,8 +135,8 @@ async function loadKnowledgeBase() {
             document.getElementById('dynamic-question-container').innerHTML = '<p style="color: red; text-align:center;">⚠️ Belum ada data gejala di database. Silakan tambahkan melalui Admin Panel.</p>';
         }
     } catch(err) {
-        console.error(err);
-        document.getElementById('loading-kb').innerHTML = '<p style="color: red; text-align:center;">❌ Gagal konek database. Periksa URL Apps Script dan pastikan sudah di-deploy.</p>';
+        console.error("Load error:", err);
+        document.getElementById('loading-kb').innerHTML = '<p style="color: red; text-align:center;">❌ Gagal konek database. Cek console F12 untuk detail error.</p>';
     }
 }
 
@@ -268,10 +270,9 @@ function updateActiveLinkOnScroll() {
 // ==================== ADMIN FUNCTIONS ====================
 
 async function loadAdminData() {
-    // Tampilkan loading
-    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3" class="loading-row">⏳ Memuat data terbaru...</td></tr>';
-    document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="4" class="loading-row">⏳ Memuat data terbaru...</td></tr>';
-    document.getElementById('table-rule').innerHTML = '<tr><td colspan="4" class="loading-row">⏳ Memuat data terbaru...</td></tr>';
+    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3" class="loading-row">⏳ Memuat data...</td></tr>';
+    document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="4" class="loading-row">⏳ Memuat data...</td></tr>';
+    document.getElementById('table-rule').innerHTML = '<tr><td colspan="4" class="loading-row">⏳ Memuat data...</td></tr>';
     
     try {
         const timestamp = Date.now();
@@ -293,7 +294,6 @@ async function loadAdminData() {
 }
 
 function renderAdminTables() {
-    // Tabel Gejala
     let tGejala = document.getElementById('table-gejala');
     if (dbGejala.length === 0) {
         tGejala.innerHTML = '<tr><td colspan="3" style="text-align:center;">📭 Belum ada data gejala</td></tr>';
@@ -307,7 +307,6 @@ function renderAdminTables() {
         `).join('');
     }
     
-    // Tabel Jurusan
     let tJurusan = document.getElementById('table-jurusan');
     if (dbJurusan.length === 0) {
         tJurusan.innerHTML = '<tr><td colspan="4" style="text-align:center;">📭 Belum ada data jurusan</td></tr>';
@@ -322,7 +321,6 @@ function renderAdminTables() {
         `).join('');
     }
     
-    // Tabel Rule
     let tRule = document.getElementById('table-rule');
     if (dbRule.length === 0) {
         tRule.innerHTML = '<tr><td colspan="4" style="text-align:center;">📭 Belum ada data rule</td></tr>';
