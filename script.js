@@ -3,7 +3,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwFBcDnbhjBzWyYzSp3uPap
 const ADMIN_PASSWORD = "admin123";
 
 // CORS Proxy (gratis, untuk bypass CORS)
-const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+const CORS_PROXY = "https://corsproxy.io/?";
 
 let dbGejala = [], dbJurusan = [], dbRule = [];
 let currentStep = 0;
