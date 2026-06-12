@@ -21,7 +21,6 @@
                 <li><a onclick="showMainContent(); scrollToSection('home')" id="nav-home">Beranda</a></li>
                 <li><a onclick="showMainContent(); scrollToSection('consult')" id="nav-consult">Konsultasi</a></li>
                 <li><a onclick="showMainContent(); scrollToSection('about')" id="nav-about">Tentang</a></li>
-                <li><a onclick="openAdminModal()" id="nav-admin" style="color: var(--accent);">🔒 Admin</a></li>
             </ul>
         </div>
     </header>
@@ -187,6 +186,12 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- FLOATING ADMIN BUTTON (POJOK KANAN BAWAH) -->
+    <div id="adminFloatingBtn" class="admin-floating-btn" onclick="openAdminModal()">
+        <span class="admin-icon">🔒</span>
+        <span class="admin-text">Admin Panel</span>
     </div>
 
     <!-- MODAL PASSWORD ADMIN -->
