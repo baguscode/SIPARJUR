@@ -1,7 +1,6 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', sans-serif; }:root {
+:root {
     --primary: #0A3663;      
     --secondary: #00B4B4;    
     --accent: #F2A900;       
@@ -13,7 +12,7 @@
     --border-line: #E2E8F0;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', sans-serif; }
 html { scroll-behavior: smooth; }
 body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; overflow-x: hidden; }
 
@@ -153,15 +152,6 @@ header.scrolled .logo-area img { transform: scale(0.85); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .question-card h3 { font-size: 1.3rem; color: var(--text-light); font-weight: 700; margin-bottom: 25px; line-height: 1.4; }
 
-@keyframes highlightPulse {
-    0% { border-left-color: var(--secondary); box-shadow: 0 0 0 0 rgba(0, 180, 180, 0.4); }
-    50% { border-left-color: var(--accent); box-shadow: 0 0 0 8px rgba(0, 180, 180, 0); }
-    100% { border-left-color: var(--secondary); box-shadow: 0 0 0 0 rgba(0, 180, 180, 0); }
-}
-.question-highlight {
-    animation: highlightPulse 0.8s ease-in-out 2;
-}
-
 .options-vertical { display: flex; flex-direction: column; gap: 14px; }
 .choice-btn {
     width: 100%;
@@ -231,8 +221,8 @@ footer { background: #0F172A; color: #64748B; text-align: center; padding: 30px 
 /* ==================== ADMIN PANEL STYLES ==================== */
 .admin-container {
     max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .admin-header {
@@ -245,7 +235,7 @@ footer { background: #0F172A; color: #64748B; text-align: center; padding: 30px 
     margin-bottom: 30px;
     color: white;
 }
-.admin-header h1 { font-size: 1.6rem; }
+.admin-header h1 { font-size: 1.5rem; font-weight: 700; }
 
 .btn-logout {
     background: #334155;
@@ -254,8 +244,8 @@ footer { background: #0F172A; color: #64748B; text-align: center; padding: 30px 
     padding: 10px 24px;
     border-radius: 12px;
     cursor: pointer;
-    font-weight: 700;
-    transition: 0.2s;
+    font-weight: 600;
+    transition: all 0.2s;
 }
 .btn-logout:hover { background: var(--secondary); }
 
@@ -271,56 +261,71 @@ footer { background: #0F172A; color: #64748B; text-align: center; padding: 30px 
     border: none;
     background: white;
     border-radius: 14px;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    font-size: 0.9rem;
 }
-.tab-btn.active-tab {
-    background: var(--primary);
-    color: white;
-}
+.tab-btn.active-tab { background: var(--primary); color: white; }
 
 .tab-content { display: none; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 .tab-content.active { display: block; }
 
 .form-card {
     background: #F8FAFC;
-    padding: 20px;
+    padding: 25px;
     border-radius: 16px;
     margin-bottom: 25px;
+    border: 1px solid #E2E8F0;
 }
-.form-card h3 { margin-bottom: 15px; color: var(--primary); }
+.form-card h3 { margin-bottom: 20px; color: var(--primary); font-size: 1.2rem; font-weight: 700; }
+
 .form-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
-    align-items: end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
 }
-.form-row input, .form-row select, .form-row textarea {
-    padding: 12px;
+.form-group { flex: 1; min-width: 180px; }
+.form-group.full-width { flex: 100%; }
+.form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--primary); margin-bottom: 5px; }
+
+.admin-input, .admin-select, .admin-textarea {
+    width: 100%;
+    padding: 12px 14px;
     border: 1px solid #CBD5E1;
     border-radius: 10px;
     font-size: 0.9rem;
+    transition: all 0.2s;
+    background: white;
 }
-.form-row textarea { min-height: 60px; resize: vertical; }
+.admin-input:focus, .admin-select:focus, .admin-textarea:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(0, 180, 180, 0.1);
+}
+.admin-textarea { resize: vertical; font-family: inherit; }
 
 .btn-primary {
     background: var(--secondary);
     color: white;
     border: none;
-    padding: 12px 20px;
+    padding: 12px 24px;
     border-radius: 10px;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    white-space: nowrap;
 }
-.btn-primary:hover { background: var(--primary); }
+.btn-primary:hover { background: var(--primary); transform: translateY(-2px); }
 
-.table-wrapper { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid #E2E8F0; }
-th { background: #F1F5F9; font-weight: 700; color: var(--primary); }
+.table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #E2E8F0; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.admin-table th { background: #F1F5F9; padding: 12px 15px; text-align: left; font-weight: 700; color: var(--primary); border-bottom: 1px solid #E2E8F0; }
+.admin-table td { padding: 12px 15px; border-bottom: 1px solid #E2E8F0; vertical-align: middle; }
+.admin-table tr:hover { background: #F8FAFC; }
 
 .btn-delete {
     background: #EF4444;
@@ -329,87 +334,20 @@ th { background: #F1F5F9; font-weight: 700; color: var(--primary); }
     padding: 6px 14px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.2s;
 }
-.btn-delete:hover { background: #DC2626; }
+.btn-delete:hover { background: #DC2626; transform: scale(1.02); }
 
 .badge-bobot {
     background: var(--secondary);
     color: white;
     padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: bold;
     display: inline-block;
-}
-
-/* ==================== RESPONSIVE ==================== */
-@media (max-width: 992px) {
-    .navbar { flex-direction: column; gap: 12px; }
-    .hero-section { grid-template-columns: 1fr; text-align: center; }
-    .hero-text h2 { font-size: 2.2rem; }
-    .consultation-outer-box { margin: 20px 12px; padding: 30px 16px; }
-    .interactive-card { padding: 24px 16px; }
-    .steps-container { grid-template-columns: 1fr; }
-    .admin-header { flex-direction: column; gap: 15px; text-align: center; }
-    .admin-tabs { justify-content: center; }
-    .form-row { grid-template-columns: 1fr; }
-}
-/* ==================== FLOATING ADMIN BUTTON ==================== */
-.admin-floating-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(15, 23, 42, 0.3);
-    backdrop-filter: blur(4px);
-    padding: 10px 15px;
-    border-radius: 40px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    z-index: 999;
-    opacity: 0.15;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.admin-floating-btn:hover {
-    opacity: 1;
-    background: var(--primary);
-    box-shadow: 0 4px 15px rgba(10, 54, 99, 0.3);
-}
-
-.admin-floating-btn:hover .admin-icon {
-    color: white;
-}
-
-.admin-floating-btn:hover .admin-text {
-    color: white;
-    width: auto;
-    opacity: 1;
-}
-
-.admin-icon {
-    font-size: 1.2rem;
-    color: var(--secondary);
-    transition: all 0.3s;
-}
-
-.admin-text {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--secondary);
-    transition: all 0.3s;
-    width: 0;
-    overflow: hidden;
-    opacity: 0;
-    white-space: nowrap;
-}
-
-.admin-floating-btn:hover .admin-text {
-    width: 85px;
-    opacity: 1;
 }
 
 /* ==================== MODAL PASSWORD ==================== */
@@ -426,10 +364,7 @@ th { background: #F1F5F9; font-weight: 700; color: var(--primary); }
     align-items: center;
     justify-content: center;
 }
-
-.admin-modal.show {
-    display: flex;
-}
+.admin-modal.show { display: flex; }
 
 .admin-modal-content {
     background: var(--bg-boxed);
@@ -439,16 +374,9 @@ th { background: #F1F5F9; font-weight: 700; color: var(--primary); }
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     animation: modalSlideIn 0.3s ease;
 }
-
 @keyframes modalSlideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .admin-modal-header {
@@ -458,49 +386,37 @@ th { background: #F1F5F9; font-weight: 700; color: var(--primary); }
     padding: 20px 25px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+.admin-modal-header h3 { color: white; font-size: 1.3rem; font-weight: 700; }
+.admin-modal-close { color: #94A3B8; font-size: 1.8rem; cursor: pointer; transition: color 0.2s; }
+.admin-modal-close:hover { color: var(--accent); }
 
-.admin-modal-header h3 {
-    color: white;
-    font-size: 1.3rem;
-    font-weight: 700;
-}
+.admin-modal-body { padding: 25px; }
+.admin-modal-body p { color: #94A3B8; margin-bottom: 15px; font-size: 0.9rem; }
 
-.admin-modal-close {
-    color: #94A3B8;
-    font-size: 1.8rem;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.admin-modal-close:hover {
-    color: var(--accent);
-}
-
-.admin-modal-body {
-    padding: 25px;
-}
-
-.admin-modal-body p {
-    color: #94A3B8;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
-}
-
-.admin-modal-body input {
+.password-wrapper {
+    position: relative;
     width: 100%;
-    padding: 12px 16px;
+}
+.password-wrapper input {
+    width: 100%;
+    padding: 12px 45px 12px 16px;
     background: #1E293B;
     border: 2px solid #334155;
     border-radius: 12px;
     color: white;
     font-size: 1rem;
-    transition: border-color 0.2s;
 }
-
-.admin-modal-body input:focus {
-    outline: none;
-    border-color: var(--secondary);
+.password-wrapper input:focus { outline: none; border-color: var(--secondary); }
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #94A3B8;
+    font-size: 1.2rem;
 }
+.password-toggle:hover { color: var(--secondary); }
 
 .admin-modal-footer {
     display: flex;
@@ -508,7 +424,6 @@ th { background: #F1F5F9; font-weight: 700; color: var(--primary); }
     padding: 20px 25px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .modal-btn {
     flex: 1;
     padding: 12px;
@@ -518,400 +433,40 @@ th { background: #F1F5F9; font-weight: 700; color: var(--primary); }
     cursor: pointer;
     transition: all 0.2s;
 }
-
-.modal-btn.cancel {
-    background: #334155;
-    color: white;
-}
-
-.modal-btn.cancel:hover {
-    background: #475569;
-}
-
-.modal-btn.confirm {
-    background: var(--secondary);
-    color: white;
-}
-
-.modal-btn.confirm:hover {
-    background: var(--primary);
-}
+.modal-btn.cancel { background: #334155; color: white; }
+.modal-btn.cancel:hover { background: #475569; }
+.modal-btn.confirm { background: var(--secondary); color: white; }
+.modal-btn.confirm:hover { background: var(--primary); }
 
 /* ==================== RESPONSIVE ==================== */
+@media (max-width: 992px) {
+    .navbar { flex-direction: column; gap: 12px; }
+    .hero-section { grid-template-columns: 1fr; text-align: center; }
+    .hero-text h2 { font-size: 2.2rem; }
+    .consultation-outer-box { margin: 20px 12px; padding: 30px 16px; }
+    .interactive-card { padding: 24px 16px; }
+    .steps-container { grid-template-columns: 1fr; }
+    .admin-header { flex-direction: column; gap: 15px; text-align: center; }
+    .admin-tabs { justify-content: center; }
+    .form-row { flex-direction: column; }
+    .btn-primary { width: 100%; text-align: center; }
+}
+
 @media (max-width: 768px) {
-    .admin-floating-btn {
-        bottom: 15px;
-        right: 15px;
-        padding: 8px 12px;
-    }
-    
-    .admin-floating-btn:hover .admin-text {
-        width: 75px;
-    }
-    
-    .admin-text {
-        font-size: 0.75rem;
-    }
-}
-/* ==================== PASSWORD TOGGLE ==================== */
-.password-wrapper {
-    position: relative;
-    width: 100%;
+    .logo-title h1 { font-size: 1.1rem; }
+    .logo-title p { font-size: 0.55rem; }
+    .nav-links { gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .nav-links a { font-size: 0.8rem; }
+    .hero-text h2 { font-size: 1.5rem; }
+    .consultation-header-label h2 { font-size: 1.4rem; }
+    .question-card h3 { font-size: 1rem; }
+    .choice-btn { padding: 12px 16px; font-size: 0.85rem; }
+    .admin-table th, .admin-table td { padding: 8px 10px; font-size: 0.75rem; }
 }
 
-.password-wrapper input {
-    width: 100%;
-    padding: 12px 45px 12px 16px;
-    background: #1E293B;
-    border: 2px solid #334155;
-    border-radius: 12px;
-    color: white;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-}
-
-.password-wrapper input:focus {
-    outline: none;
-    border-color: var(--secondary);
-}
-
-.password-toggle {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #94A3B8;
-    font-size: 1.2rem;
-    transition: color 0.2s;
-}
-
-.password-toggle:hover {
-    color: var(--secondary);
-}
-
-.eye-icon {
-    display: inline-block;
-    font-size: 1.1rem;
-}
-/* ==================== RESPONSIVE UNTUK HP ==================== */
-
-/* Untuk HP ukuran sedang (max 768px) */
-@media (max-width: 768px) {
-    /* Navbar */
-    .navbar {
-        flex-direction: column;
-        padding: 12px 15px;
-        gap: 10px;
-    }
-    
-    .logo-area {
-        justify-content: center;
-    }
-    
-    .logo-title h1 {
-        font-size: 1.1rem;
-    }
-    
-    .logo-title p {
-        font-size: 0.55rem;
-    }
-    
-    .nav-links {
-        gap: 12px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .nav-links a {
-        font-size: 0.8rem;
-        padding: 5px 0;
-    }
-    
-    /* Hero Section */
-    .hero-section {
-        grid-template-columns: 1fr;
-        text-align: center;
-        padding: 30px 16px;
-        min-height: auto;
-    }
-    
-    .hero-text h2 {
-        font-size: 1.8rem;
-    }
-    
-    .hero-text p {
-        font-size: 0.9rem;
-        margin-bottom: 20px;
-    }
-    
-    .btn-start {
-        padding: 12px 28px;
-        font-size: 0.9rem;
-    }
-    
-    .hero-image {
-        order: -1;
-        margin-bottom: 20px;
-    }
-    
-    .hero-image img {
-        max-width: 60%;
-    }
-    
-    /* Konsultasi Section */
-    .consultation-outer-box {
-        margin: 20px 12px;
-        padding: 25px 16px;
-        border-radius: 24px;
-    }
-    
-    .consultation-header-label h2 {
-        font-size: 1.4rem;
-    }
-    
-    .consultation-header-label p {
-        font-size: 0.8rem;
-    }
-    
-    .interactive-card {
-        padding: 20px 16px;
-        min-height: auto;
-    }
-    
-    /* Progress Bar */
-    .progress-container {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-        margin-bottom: 25px;
-    }
-    
-    .progress-bar-bg {
-        width: 100%;
-    }
-    
-    /* Pertanyaan */
-    .question-card h3 {
-        font-size: 1rem;
-        margin-bottom: 20px;
-    }
-    
-    .choice-btn {
-        padding: 12px 16px;
-        font-size: 0.85rem;
-    }
-    
-    .choice-btn:hover {
-        transform: none;
-    }
-    
-    /* Hasil */
-    .result-item {
-        padding: 15px;
-    }
-    
-    .res-title {
-        font-size: 1rem;
-    }
-    
-    .res-desc {
-        font-size: 0.85rem;
-    }
-    
-    .rank-number {
-        font-size: 1.2rem;
-        right: 12px;
-        top: 10px;
-    }
-    
-    .reset-btn {
-        padding: 12px;
-        font-size: 0.9rem;
-    }
-    
-    /* Tentang */
-    .how-it-works {
-        margin: 50px auto;
-        padding: 0 16px;
-    }
-    
-    .how-it-works h3 {
-        font-size: 1.3rem;
-        margin-bottom: 30px;
-    }
-    
-    .steps-container {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .step-card {
-        padding: 20px 16px;
-    }
-    
-    .step-card h4 {
-        font-size: 1rem;
-    }
-    
-    .step-card p {
-        font-size: 0.8rem;
-    }
-    
-    /* Footer */
-    footer {
-        padding: 20px 16px;
-        font-size: 0.75rem;
-    }
-}
-
-/* Untuk HP kecil (max 480px) */
 @media (max-width: 480px) {
-    .hero-text h2 {
-        font-size: 1.5rem;
-    }
-    
-    .consultation-header-label h2 {
-        font-size: 1.2rem;
-    }
-    
-    .question-card h3 {
-        font-size: 0.9rem;
-    }
-    
-    .choice-btn {
-        padding: 10px 14px;
-        font-size: 0.8rem;
-    }
-    
-    .res-title {
-        font-size: 0.9rem;
-    }
-    
-    .res-desc {
-        font-size: 0.8rem;
-    }
-    
-    .badge-bobot {
-        font-size: 0.7rem;
-        padding: 2px 8px;
-    }
-}
-
-/* ==================== RESPONSIVE UNTUK ADMIN PANEL ==================== */
-@media (max-width: 768px) {
-    .admin-container {
-        padding: 10px;
-    }
-    
-    .admin-header {
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
-        padding: 15px 20px;
-    }
-    
-    .admin-header h1 {
-        font-size: 1.2rem;
-    }
-    
-    .btn-logout {
-        padding: 8px 20px;
-        font-size: 0.85rem;
-    }
-    
-    .admin-tabs {
-        justify-content: center;
-        gap: 8px;
-    }
-    
-    .tab-btn {
-        padding: 8px 16px;
-        font-size: 0.75rem;
-    }
-    
-    .form-card {
-        padding: 15px;
-    }
-    
-    .form-card h3 {
-        font-size: 1rem;
-    }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .form-group {
-        width: 100%;
-    }
-    
-    .admin-input, .admin-select, .admin-textarea {
-        padding: 10px 12px;
-        font-size: 0.85rem;
-    }
-    
-    .btn-primary {
-        width: 100%;
-        padding: 10px;
-        font-size: 0.85rem;
-    }
-    
-    .admin-table th, .admin-table td {
-        padding: 8px 10px;
-        font-size: 0.75rem;
-    }
-    
-    .btn-delete {
-        padding: 4px 10px;
-        font-size: 0.7rem;
-    }
-}
-
-/* ==================== FLOATING ADMIN BUTTON DI HP ==================== */
-@media (max-width: 768px) {
-    .admin-floating-btn {
-        bottom: 15px;
-        right: 15px;
-        padding: 8px 12px;
-    }
-    
-    .admin-icon {
-        font-size: 1rem;
-    }
-    
-    .admin-text {
-        font-size: 0.7rem;
-    }
-    
-    .admin-floating-btn:hover .admin-text {
-        width: 70px;
-    }
-}
-
-/* ==================== MODAL PASSWORD DI HP ==================== */
-@media (max-width: 480px) {
-    .admin-modal-content {
-        width: 90%;
-        margin: 0 10px;
-    }
-    
-    .admin-modal-header h3 {
-        font-size: 1.1rem;
-    }
-    
-    .admin-modal-body p {
-        font-size: 0.8rem;
-    }
-    
-    .admin-modal-body input {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-    }
-    
-    .modal-btn {
-        padding: 10px;
-        font-size: 0.85rem;
-    }
+    .hero-text h2 { font-size: 1.3rem; }
+    .consultation-header-label h2 { font-size: 1.2rem; }
+    .question-card h3 { font-size: 0.9rem; }
+    .choice-btn { padding: 10px 14px; font-size: 0.8rem; }
 }
