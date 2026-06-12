@@ -21,6 +21,7 @@
                 <li><a onclick="showMainContent(); scrollToSection('home')" id="nav-home">Beranda</a></li>
                 <li><a onclick="showMainContent(); scrollToSection('consult')" id="nav-consult">Konsultasi</a></li>
                 <li><a onclick="showMainContent(); scrollToSection('about')" id="nav-about">Tentang</a></li>
+                <li><a onclick="openAdminModal()" id="nav-admin">🔒 Admin</a></li>
             </ul>
         </div>
     </header>
@@ -98,21 +99,15 @@
                 <div class="form-card">
                     <h3>Tambah Gejala Baru</h3>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Kode Gejala</label>
-                            <input type="text" id="g-kode" placeholder="Contoh: G01" class="admin-input">
-                        </div>
-                        <div class="form-group">
-                            <label>Pertanyaan Indikator Minat</label>
-                            <input type="text" id="g-teks" placeholder="Apakah Anda tertarik..." class="admin-input">
-                        </div>
-                        <button class="btn-primary" onclick="addGejala()">+ Tambah Gejala</button>
+                        <div class="form-group"><label>Kode Gejala</label><input type="text" id="g-kode" placeholder="Contoh: G01" class="admin-input"></div>
+                        <div class="form-group"><label>Pertanyaan</label><input type="text" id="g-teks" placeholder="Apakah Anda tertarik..." class="admin-input"></div>
+                        <button class="btn-primary" onclick="addGejala()">+ Tambah</button>
                     </div>
                 </div>
                 <div class="table-wrapper">
                     <table class="admin-table">
                         <thead><tr><th>Kode</th><th>Pertanyaan</th><th>Aksi</th></tr></thead>
-                        <tbody id="table-gejala"><tr><td colspan="3">⏳ Memuat data...</td></tr></tbody>
+                        <tbody id="table-gejala"><tr><td colspan="3">⏳ Memuat...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -121,25 +116,16 @@
                 <div class="form-card">
                     <h3>Tambah Jurusan Baru</h3>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Kode Jurusan</label>
-                            <input type="text" id="j-kode" placeholder="Contoh: J01" class="admin-input">
-                        </div>
-                        <div class="form-group">
-                            <label>Nama Jurusan</label>
-                            <input type="text" id="j-nama" placeholder="Teknik Informatika" class="admin-input">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Deskripsi Jurusan</label>
-                            <textarea id="j-desc" placeholder="Deskripsi lengkap..." rows="2" class="admin-textarea"></textarea>
-                        </div>
-                        <button class="btn-primary" onclick="addJurusan()">+ Tambah Jurusan</button>
+                        <div class="form-group"><label>Kode</label><input type="text" id="j-kode" placeholder="J01" class="admin-input"></div>
+                        <div class="form-group"><label>Nama Jurusan</label><input type="text" id="j-nama" placeholder="Teknik Informatika" class="admin-input"></div>
+                        <div class="form-group full-width"><label>Deskripsi</label><textarea id="j-desc" rows="2" class="admin-textarea"></textarea></div>
+                        <button class="btn-primary" onclick="addJurusan()">+ Tambah</button>
                     </div>
                 </div>
                 <div class="table-wrapper">
                     <table class="admin-table">
                         <thead><tr><th>Kode</th><th>Nama</th><th>Deskripsi</th><th>Aksi</th></tr></thead>
-                        <tbody id="table-jurusan"><tr><td colspan="4">⏳ Memuat data...</td></tr></tbody>
+                        <tbody id="table-jurusan"><tr><td colspan="4">⏳ Memuat...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -148,33 +134,22 @@
                 <div class="form-card">
                     <h3>Hubungkan Gejala ke Jurusan</h3>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Pilih Gejala</label>
-                            <select id="rule-gejala" class="admin-select"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Pilih Jurusan</label>
-                            <select id="rule-jurusan" class="admin-select"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Bobot</label>
-                            <select id="rule-bobot" class="admin-select">
-                                <option value="3">🔥 Bobot 3 (Utama)</option>
-                                <option value="1">📌 Bobot 1 (Pendukung)</option>
-                            </select>
-                        </div>
+                        <div class="form-group"><label>Gejala</label><select id="rule-gejala" class="admin-select"></select></div>
+                        <div class="form-group"><label>Jurusan</label><select id="rule-jurusan" class="admin-select"></select></div>
+                        <div class="form-group"><label>Bobot</label><select id="rule-bobot" class="admin-select"><option value="3">🔥 Bobot 3</option><option value="1">📌 Bobot 1</option></select></div>
                         <button class="btn-primary" onclick="addRule()">+ Hubungkan</button>
                     </div>
                 </div>
                 <div class="table-wrapper">
                     <table class="admin-table">
-                        <thead><tr><th>Kode Gejala</th><th>Jurusan</th><th>Bobot</th><th>Aksi</th></tr></thead>
-                        <tbody id="table-rule"><tr><td colspan="4">⏳ Memuat data...</td></tr></tbody>
+                        <thead><tr><th>Gejala</th><th>Jurusan</th><th>Bobot</th><th>Aksi</th></tr></thead>
+                        <tbody id="table-rule"><tr><td colspan="4">⏳ Memuat...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- MODAL PASSWORD -->
     <div id="adminModal" class="admin-modal">
         <div class="admin-modal-content">
@@ -186,11 +161,9 @@
                 <p>Masukkan kata sandi:</p>
                 <div class="password-wrapper">
                     <input type="password" id="adminPassword" placeholder="Kata sandi..." onkeypress="if(event.key==='Enter') checkAdminPassword()">
-                    <span class="password-toggle" onclick="togglePassword()">
-                        <span class="eye-icon">👁️</span>
-                    </span>
+                    <span class="password-toggle" onclick="togglePassword()">👁️</span>
                 </div>
-                <div id="adminErrorMsg" style="color: #EF4444; font-size: 0.85rem; margin-top: 10px; display: none;">❌ Kata sandi salah!</div>
+                <div id="adminErrorMsg" style="color:#EF4444;font-size:0.85rem;margin-top:10px;display:none;">❌ Salah!</div>
             </div>
             <div class="admin-modal-footer">
                 <button class="modal-btn cancel" onclick="closeAdminModal()">Batal</button>
