@@ -56,8 +56,8 @@ function showAdminPanel() {
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
     document.getElementById('mainFooter').style.display = 'none';
-    document.getElementById('adminFloatingBtn').style.display = 'none';
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
+    document.getElementById('nav-admin').classList.add('active-link'); // Admin jadi active
     loadAdminData();
 }
 
@@ -65,12 +65,10 @@ function hideAdminPanel() {
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('adminPanel').style.display = 'none';
     document.getElementById('mainFooter').style.display = 'block';
-    document.getElementById('adminFloatingBtn').style.display = 'flex';
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
     document.getElementById('nav-home').classList.add('active-link');
     scrollToSection('home');
 }
-
 function showMainContent() {
     if (document.getElementById('adminPanel').style.display === 'block') return;
     document.getElementById('mainContent').style.display = 'block';
@@ -155,6 +153,12 @@ function resetQuiz() {
     document.getElementById('result-box').style.display = 'none';
     document.getElementById('quiz-area-box').style.display = 'block';
     renderCurrentQuestion();
+    
+    // Scroll ke section konsultasi
+    const consultSection = document.getElementById('consult-section');
+    if (consultSection) {
+        consultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function escapeHtml(str) {
@@ -170,30 +174,40 @@ function escapeHtml(str) {
 // ==================== SCROLL SPY ====================
 function updateActiveLinkOnScroll() {
     if (document.getElementById('adminPanel').style.display === 'block') return;
+    
     const sections = [
         { id: 'home-section', navId: 'nav-home' },
         { id: 'consult-section', navId: 'nav-consult' },
         { id: 'about-section', navId: 'nav-about' }
+        // Admin tidak masuk scroll spy
     ];
+    
     let currentSection = '';
     const scrollPosition = window.scrollY + 150;
+    
     for (let section of sections) {
         const element = document.getElementById(section.id);
         if (element) {
             const offsetTop = element.offsetTop;
             const offsetBottom = offsetTop + element.offsetHeight;
-            if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) { currentSection = section.id; break; }
+            if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+                currentSection = section.id;
+                break;
+            }
         }
     }
+    
     sections.forEach(section => {
         const navLink = document.getElementById(section.navId);
         if (navLink) {
-            if (currentSection === section.id) { navLink.classList.add('active-link'); }
-            else { navLink.classList.remove('active-link'); }
+            if (currentSection === section.id) {
+                navLink.classList.add('active-link');
+            } else {
+                navLink.classList.remove('active-link');
+            }
         }
     });
 }
-
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
     document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
