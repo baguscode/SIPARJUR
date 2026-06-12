@@ -430,7 +430,7 @@ footer { background: #0F172A; color: #64748B; text-align: center; padding: 30px 
     }
     
     .logo-area img {
-        height: 45px;
+        height: none;
     }
     
     .logo-title h1 {
@@ -697,6 +697,7 @@ footer { background: #0F172A; color: #64748B; text-align: center; padding: 30px 
 }
 
 /* Tooltip untuk admin link (hover) */
+/* Tooltip untuk admin link (hover) */
 #nav-admin {
     position: relative;
     transition: all 0.3s ease;
@@ -710,20 +711,33 @@ footer { background: #0F172A; color: #64748B; text-align: center; padding: 30px 
     transform: translateX(-50%);
     background: var(--primary);
     color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.6rem;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.7rem;
     font-weight: 500;
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    margin-top: 5px;
-    z-index: 100;
+    margin-top: 8px;
+    z-index: 1000;
     pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 #nav-admin:hover::after {
     opacity: 1;
     visibility: visible;
+}
+/* Tooltip di HP - posisi lebih aman */
+@media (max-width: 768px) {
+    #nav-admin::after {
+        left: auto;
+        right: 0;
+        transform: none;
+        white-space: nowrap;
+        font-size: 0.65rem;
+        padding: 4px 10px;
+        margin-top: 8px;
+    }
 }
