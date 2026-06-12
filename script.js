@@ -1,7 +1,7 @@
 // ==================== KONFIGURASI ====================
 const API_URL = "https://script.google.com/macros/s/AKfycbwi0L3mUEmsvbNGGFp0ha94XJKzhnAANPGMAhZOG_GewD7NaLFKlvFQg8UMTTNbsQPt/exec";
 const ADMIN_PASSWORD = "admin123";
-const CORS_PROXY = "https://corsproxy.io/?";
+const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 
 let dbGejala = [], dbJurusan = [], dbRule = [];
 let currentStep = 0;
