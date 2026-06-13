@@ -29,7 +29,7 @@ body {
     line-height: 1.6;
 }
 
-/* ==================== HEADER & NAVBAR ==================== */
+/* ==================== HEADER & NAVBAR (PERBAIKAN ANIMASI) ==================== */
 header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -37,112 +37,71 @@ header {
     top: 0;
     z-index: 1000;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    /* Transisi untuk animasi mengecil smooth */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
 }
 
-header.scrolled {
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
+/* Struktur Navbar Default (Saat di Atas Beranda) */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 15px 20px;
+    padding: 20px 20px; /* Padding awal agak longgar */
+    transition: all 0.4s ease; /* Efek transisi mengecil */
 }
 
-.logo-area {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+/* Saat di-scroll ke bawah, kelas .scrolled ini akan dipicu oleh JS */
+header.scrolled {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.98);
 }
 
-.logo-area img {
-    height: 45px;
-    width: auto;
+/* Mengurangi padding navbar saat di-scroll sehingga memberikan efek mengecil */
+header.scrolled .navbar {
+    padding: 10px 20px; 
 }
 
-.logo-title h1 {
-    font-size: 1.3rem;
-    color: var(--primary);
-    font-weight: 800;
-    line-height: 1.2;
+/* Mengecilkan sedikit ukuran logo saat di-scroll agar seimbang */
+header.scrolled .logo-area img {
+    height: 38px;
+    transition: all 0.4s ease;
 }
 
-.logo-title p {
-    font-size: 0.65rem;
-    color: var(--secondary);
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
 
-.nav-links {
-    display: flex;
-    gap: 25px;
-    list-style: none;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--primary);
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    padding: 5px 0;
-    position: relative;
-    transition: color 0.3s ease;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--secondary);
-    transition: width 0.3s ease;
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-.nav-links a.active-link {
-    color: var(--secondary);
-}
-
-.nav-links a.active-link::after {
-    width: 100%;
-}
-
-/* Cari bagian Tombol Admin di CSS kamu, lalu ganti dengan ini: */
+/* ==================== TOMBOL ADMIN & TOOLTIP (PERBAIKAN KEPOTONG) ==================== */
 #nav-admin {
     position: relative;
     cursor: pointer;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #nav-admin:hover::after {
     content: "Admin Panel";
     position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--primary);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 8px;
+    /* Kita geser posisi munculnya agar tidak mentok batas bawah header */
+    top: 130%; 
+    right: 0; /* Rata kanan agar aman dari tepi layar */
+    background: #0F172A; /* Warna gelap agar kontras dengan header putih */
+    color: #FFFFFF;
+    padding: 6px 14px;
+    border-radius: 6px;
     font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
-    margin-top: 10px;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    opacity: 1;
-    pointer-events: none; /* Mencegah kedip saat kursor menyentuh tooltip */
+    z-index: 9999; /* Pastikan berada di atas semua elemen */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    animation: tooltipFadeIn 0.2s ease forwards;
+}
+
+/* Animasi muncul halus untuk tooltip */
+@keyframes tooltipFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 /* ==================== REVEAL ANIMATION ==================== */
 .reveal {
