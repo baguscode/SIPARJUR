@@ -118,10 +118,11 @@ header.scrolled {
     width: 100%;
 }
 
-/* Tombol Admin dengan Tooltip */
+/* Cari bagian Tombol Admin di CSS kamu, lalu ganti dengan ini: */
 #nav-admin {
     position: relative;
     cursor: pointer;
+    display: inline-block;
 }
 
 #nav-admin:hover::after {
@@ -132,16 +133,17 @@ header.scrolled {
     transform: translateX(-50%);
     background: var(--primary);
     color: white;
-    padding: 5px 12px;
+    padding: 6px 12px;
     border-radius: 8px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
-    margin-top: 8px;
+    margin-top: 10px;
     z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 1;
+    pointer-events: none; /* Mencegah kedip saat kursor menyentuh tooltip */
 }
-
 /* ==================== REVEAL ANIMATION ==================== */
 .reveal {
     opacity: 0;
