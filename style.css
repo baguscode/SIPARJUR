@@ -29,7 +29,7 @@ body {
     line-height: 1.6;
 }
 
-/* ==================== HEADER & NAVBAR (PERBAIKAN ANIMASI) ==================== */
+/* ==================== HEADER & NAVBAR ==================== */
 header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -37,39 +37,48 @@ header {
     top: 0;
     z-index: 1000;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    /* Transisi untuk animasi mengecil smooth */
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    /* PENTING: Transisi agar saat mengecil gerakannya halus/smooth */
+    transition: padding 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
-/* Struktur Navbar Default (Saat di Atas Beranda) */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px 20px; /* Padding awal agak longgar */
-    transition: all 0.4s ease; /* Efek transisi mengecil */
+    /* Padding awal saat posisi di paling atas (Header Longgar) */
+    padding: 20px 20px; 
+    transition: padding 0.3s ease;
 }
 
-/* Saat di-scroll ke bawah, kelas .scrolled ini akan dipicu oleh JS */
+.logo-area img {
+    height: 45px;
+    width: auto;
+    transition: height 0.3s ease; /* Biar logonya ikut mengecil dengan halus */
+}
+
+/* ==================== EFEK SCROLLED (YANG SEBELUMNYA HILANG) ==================== */
+/* Ketika di-scroll lebih dari 60px, JS akan memicu kelas ini */
 header.scrolled {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     background: rgba(255, 255, 255, 0.98);
 }
 
-/* Mengurangi padding navbar saat di-scroll sehingga memberikan efek mengecil */
+/* Navbar mengecil dengan mengurangi padding-nya */
 header.scrolled .navbar {
     padding: 10px 20px; 
 }
 
-/* Mengecilkan sedikit ukuran logo saat di-scroll agar seimbang */
+/* Logo ikut mengecil sedikit agar seimbang dengan navbar */
 header.scrolled .logo-area img {
-    height: 38px;
-    transition: all 0.4s ease;
+    height: 35px;
 }
 
-
+/* Khusus tombol admin, matikan fungsi after bawaan agar tidak merusak layout */
+#nav-admin::after {
+    display: none !important;
+}
 /* ==================== TOMBOL ADMIN & TOOLTIP (PERBAIKAN KEPOTONG) ==================== */
 #nav-admin {
     position: relative;
