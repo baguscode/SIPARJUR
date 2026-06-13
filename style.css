@@ -29,7 +29,7 @@ body {
     line-height: 1.6;
 }
 
-/* ==================== HEADER & NAVBAR (KEMBALI KE ASLI + FIX) ==================== */
+/* ==================== HEADER & NAVBAR ==================== */
 header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -37,11 +37,8 @@ header {
     top: 0;
     z-index: 1000;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-}
-
-header.scrolled {
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    /* PENTING: Tambahkan transition agar perubahan tinggi saat di-scroll gerakannya halus (smooth) */
+    transition: padding 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .navbar {
@@ -50,75 +47,35 @@ header.scrolled {
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 15px 20px;
-}
-
-.logo-area {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    /* Ukuran padding awal saat posisi di atas (Header Longgar/Tinggi) */
+    padding: 20px 20px; 
+    transition: padding 0.3s ease;
 }
 
 .logo-area img {
     height: 45px;
     width: auto;
+    /* Transisi agar logo ikut mengecil dengan halus */
+    transition: height 0.3s ease; 
 }
 
-.logo-title h1 {
-    font-size: 1.3rem;
-    color: var(--primary);
-    font-weight: 800;
-    line-height: 1.2;
+
+/* ==================== EFEK MENGECIL SAAT DI-SCROLL ==================== */
+/* Logika dari JS kamu akan mengaktifkan kelas .scrolled ini */
+header.scrolled {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.98);
 }
 
-.logo-title p {
-    font-size: 0.65rem;
-    color: var(--secondary);
-    font-weight: 600;
-    letter-spacing: 0.5px;
+/* Ketika di-scroll, padding navbar dikurangi dari 20px menjadi 10px (Efek Mengecil) */
+header.scrolled .navbar {
+    padding: 10px 20px; 
 }
 
-.nav-links {
-    display: flex;
-    gap: 25px;
-    list-style: none;
-    align-items: center; /* Memastikan semua menu sejajar lurus secara vertikal */
+/* Ukuran tinggi logo juga dikurangi sedikit agar tetap seimbang */
+header.scrolled .logo-area img {
+    height: 35px;
 }
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--primary);
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    padding: 5px 0;
-    position: relative;
-    transition: color 0.3s ease;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--secondary);
-    transition: width 0.3s ease;
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-.nav-links a.active-link {
-    color: var(--secondary);
-}
-
-.nav-links a.active-link::after {
-    width: 100%;
-}
-
 /* ==================== TOMBOL ADMIN DENGAN TOOLTIP (AMAN & TIDAK KEPOTONG) ==================== */
 #nav-admin {
     position: relative;
