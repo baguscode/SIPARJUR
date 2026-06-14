@@ -877,10 +877,9 @@ footer {
     z-index: 1001;
 }
 
-/* ==================== MEDIA QUERIES UNTUK TAMPILAN HP ==================== */
 /* ==================== TOMBOL MENU HAMBURGER (DESKTOP) ==================== */
 .menu-toggle-btn {
-    display: none; /* Sembunyikan ikon garis tiga di laptop/monitor lebar */
+    display: none; /* Sembunyikan di laptop */
     background: none;
     border: none;
     font-size: 1.8rem;
@@ -890,55 +889,58 @@ footer {
     z-index: 1005;
 }
 
-/* ==================== PERBAIKAN RESPONSIF KHUSUS HP ==================== */
+/* ==================== PERBAIKAN RESPONSIF HP MUTLAK ==================== */
 @media (max-width: 768px) {
     
-    /* Memaksa Logo tetap di kiri dan Tombol Menu Hamburger berada di kanan mentok */
+    /* Kembalikan navbar ke pengaturan default kamu agar layout tidak pecah */
     .navbar {
-        display: flex !important;
-        flex-direction: row !important; 
-        justify-content: space-between !important;
-        align-items: center !important;
-        position: relative;
+        position: relative !important;
+        display: block !important; /* Mengembalikan sistem susunan asli web kamu */
+        padding-right: 60px !important; /* Memberi ruang di kanan agar logo tidak mentok ke tombol */
     }
 
-    /* Munculkan ikon hamburger hanya di layar gawai/HP */
+    /* Paksa tombol hamburger melayang mati di pojok kanan atas header HP */
     .menu-toggle-btn {
         display: block !important;
+        position: absolute !important;
+        top: 20px; /* Jarak dari atas bar header, sesuaikan jika kurang tengah */
+        right: 20px; /* Jarak dari kanan layar */
     }
 
-    /* Menyembunyikan deretan menu teks asli dan mengubahnya jadi tirai melayang */
+    /* Mengubah deretan menu teks menjadi tirai drop-down melayang penuh */
     .nav-links {
-        display: none; /* Sembunyi sebelum tombol dipencet */
-        position: absolute;
-        top: 100%; /* Menempel tepat di bawah bar navigasi */
-        left: 0;
-        width: 100%;
-        background: #FFFFFF; /* Latar belakang tirai menu putih bersih */
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        display: none; /* Sembunyi sebelum diklik */
+        position: absolute !important;
+        top: 100% !important; /* Jatuh tepat di bawah batas bawah header */
+        left: 0 !important;
+        width: 100% !important;
+        background: #FFFFFF !important; /* Warna latar belakang tirai putih */
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
         padding: 15px 0 !important;
-        flex-direction: column !important; /* Baris menu berderet tegak lurus ke bawah */
-        gap: 10px !important;
-        z-index: 1000;
+        flex-direction: column !important; /* Menu berderet vertikal ke bawah */
+        gap: 5px !important;
+        margin: 0 !important;
+        z-index: 1000 !important;
     }
 
-    /* Kelas pemicu aktif saat tombol hamburger di-klik lewat JavaScript */
+    /* Kelas aktif yang dipicu oleh JavaScript saat tombol ☰ diklik */
     .nav-links.mobile-active {
         display: flex !important;
         animation: slideDownNav 0.25s ease-out forwards;
     }
 
-    /* Merapikan tampilan link menu di dalam tirai HP agar pas di tengah */
+    /* Merapikan link menu di dalam tirai drop-down HP */
     .nav-links a {
         font-size: 1rem !important;
         padding: 12px 0 !important;
-        width: 100%;
-        text-align: center;
-        display: block;
+        width: 100% !important;
+        text-align: center !important;
+        display: block !important;
+        color: var(--primary) !important;
     }
 
-    /* Animasi tirai menu meluncur turun tipis dari atas */
+    /* Animasi tirai menu meluncur turun tipis */
     @keyframes slideDownNav {
         0% { opacity: 0; transform: translateY(-8px); }
         100% { opacity: 1; transform: translateY(0); }
