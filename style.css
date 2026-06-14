@@ -440,7 +440,52 @@ header.scrolled {
     background: var(--primary);
     transform: scale(1.02);
 }
+/* ==================== SECTION DAFTAR JURUSAN CARD ==================== */
+.jurusan-info-card {
+    background: #F8FAFC;
+    border: 1px solid var(--border-line);
+    border-radius: 16px;
+    padding: 25px;
+    position: relative;
+    border-top: 4px solid var(--secondary);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
 
+.jurusan-info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    border-top-color: var(--primary);
+}
+
+.jurusan-info-title {
+    color: var(--primary);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.jurusan-info-desc {
+    color: #475569;
+    font-size: 0.85rem;
+    text-align: justify;
+    line-height: 1.6;
+}
+
+.jurusan-info-badge {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: rgba(0, 180, 180, 0.1);
+    color: var(--secondary);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
 /* ==================== TENTANG SECTION ==================== */
 .how-it-works {
     max-width: 900px;
