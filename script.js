@@ -190,24 +190,6 @@ function updateActiveLinkOnScroll() {
         if (link) current === s.id ? link.classList.add('active-link') : link.classList.remove('active-link');
     });
 }
-// ====================  render jurusan ====================
-function renderDaftarJurusanUtama() {
-    const container = document.getElementById('jurusan-card-container');
-    if (!container) return;
-    
-    if (dbJurusan.length === 0) {
-        container.innerHTML = '<p style="color:#64748B; text-align:center; grid-column: 1/-1;">Belum ada data jurusan di cloud database.</p>';
-        return;
-    }
-    
-    container.innerHTML = dbJurusan.map(j => `
-        <div class="jurusan-info-card">
-            <span class="jurusan-info-badge">${escapeHtml(j.kd_jurusan)}</span>
-            <div class="jurusan-info-title">📖 ${escapeHtml(j.nama_jurusan)}</div>
-            <p class="jurusan-info-desc">${escapeHtml(j.deskripsi)}</p>
-        </div>
-    `).join('');
-}
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
     document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
@@ -333,3 +315,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('nav-home').classList.add('active-link');
     loadKnowledgeBase();
 });
+// --- TAMBAHKAN FUNGSI BARU INI DI BAGIAN BAWAH SCRIPT.JS ---
+function renderDaftarJurusanUtama() {
+    const container = document.getElementById('jurusan-card-container');
+    if (!container) return;
+    
+    if (dbJurusan.length === 0) {
+        container.innerHTML = '<p style="color:#64748B; text-align:center; grid-column: 1/-1;">Belum ada data jurusan di cloud database.</p>';
+        return;
+    }
+    
+    container.innerHTML = dbJurusan.map(j => `
+        <div class="jurusan-info-card">
+            <span class="jurusan-info-badge">${escapeHtml(j.kd_jurusan)}</span>
+            <div class="jurusan-info-title">📖 ${escapeHtml(j.nama_jurusan)}</div>
+            <p class="jurusan-info-desc">${escapeHtml(j.deskripsi)}</p>
+        </div>
+    `).join('');
+}
