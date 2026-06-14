@@ -106,16 +106,7 @@ async function loadKnowledgeBase() {
         // Memanggil fungsi untuk merender daftar jurusan di halaman depan
         renderDaftarJurusanUtama(); 
         
-        // Evaluasi data gejala
-        if (dbGejala.length > 0) { 
-            resetQuiz(); 
-        } else { 
-            document.getElementById('dynamic-question-container').innerHTML = '<p style="color:red;text-align:center;">⚠️ Belum ada data. Tambah di Admin Panel.</p>'; 
-        }
-    } catch(err) { 
-        console.error("Gagal memuat basis pengetahuan:", err); 
-        document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal koneksi ke cloud database.</p>'; 
-    }
+        
 }
 function renderCurrentQuestion() {
     if (dbGejala.length === 0 || currentStep >= dbGejala.length) return;
