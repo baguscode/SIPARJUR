@@ -22,6 +22,9 @@ function togglePassword() {
 
 // ==================== ADMIN  ====================
 function openAdminModal() {
+    if (document.getElementById('adminPanel').style.display === 'block') {
+        return; 
+    }
     document.getElementById('adminModal').classList.add('show');
     document.getElementById('adminPassword').value = '';
     document.getElementById('adminPassword').type = 'password';
@@ -75,6 +78,11 @@ function showMainContent() {
 function scrollToSection(section) {
     let element;
     if (section === 'home') element = document.getElementById('home-section');
+        if (element) {
+            element.classList.remove('slide-down-animation');
+            void element.offsetWidth; // Mengatur ulang trigger animasi (trick reflow)
+            element.classList.add('slide-down-animation');
+        }
     else if (section === 'consult') element = document.getElementById('consult-section');
     else if (section === 'program-studi') element = document.getElementById('program-studi-section');
     else if (section === 'about') element = document.getElementById('about-section');
