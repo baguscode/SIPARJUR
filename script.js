@@ -94,19 +94,26 @@ async function loadKnowledgeBase() {
         let res = await fetch(proxyUrl);
         let data = await res.json();
         
-        // Memasukkan data ke variabel lokal
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
         
-        // Menyembunyikan spinner loading dan memunculkan box utama kuesioner
         document.getElementById('loading-kb').style.display = 'none';
         document.getElementById('quiz-area-box').style.display = 'block';
         
         // Memanggil fungsi untuk merender daftar jurusan di halaman depan
         renderDaftarJurusanUtama(); 
         
-        
+        if (dbGejala.length > 0) { 
+            resetQuiz(); 
+        } else { 
+            document.getElementById('dynamic-question-container').innerHTML = '<p style="color:red;text-align:center;">⚠️ Belum ada data. Tambah di Admin Panel.</p>'; 
+        }
+    } catch(err) { 
+        console.error("Gagal memuat basis pengetahuan:", err); 
+        document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal koneksi ke cloud database.</p>'; 
+    }
+}       
 }
 function renderCurrentQuestion() {
     if (dbGejala.length === 0 || currentStep >= dbGejala.length) return;
@@ -319,23 +326,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('nav-home').classList.add('active-link');
     loadKnowledgeBase();
 });
-// --- TAMBAHKAN FUNGSI BARU INI DI BAGIAN BAWAH SCRIPT.JS ---
+// ---  FUNGSI render ---
 function renderDaftarJurusanUtama() {
     const container = document.getElementById('jurusan-card-container');
-    if (!container) {
-        console.error("Elemen 'jurusan-card-container' tidak ditemukan di HTML.");
-        return;
-    }
+    if (!container) return;
     
-    // Jika data jurusan memang belum ditarik dari database cloud
     if (!dbJurusan || dbJurusan.length === 0) {
         container.innerHTML = '<p style="color:#64748B; text-align:center; grid-column: 1/-1;">⏳ Memuat daftar jurusan dari database cloud...</p>';
         return;
     }
     
-    // Melakukan loop mapping data dengan fitur fallback pengaman huruf besar/kecil
     container.innerHTML = dbJurusan.map(j => {
-        // Amankan properti objek dari variasi penulisan nama kolom di Google Sheets
+        // Pengaman pembacaan nama kolom spreadsheet (bisa huruf besar/kecil)
         const kode = j.kd_jurusan || j.Kd_Jurusan || j.id || "KODE";
         const nama = j.nama_jurusan || j.Nama_Jurusan || j.nama || j.Nama || "Nama Jurusan";
         const deskripsi = j.deskripsi || j.Deskripsi || j.ket || j.Keterangan || "Tidak ada deskripsi.";
