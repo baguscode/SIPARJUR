@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header id="main-header">
         <div class="navbar">
             <div class="logo-area">
@@ -26,7 +25,6 @@
 </ul>
         </div>
     </header>
-
     <!-- MAIN CONTENT -->
     <div id="mainContent">
         <!-- HOME -->
@@ -40,7 +38,6 @@
                 <img src="siparjur.png" alt="Siparjur Visual" onerror="this.src='https://via.placeholder.com/400?text=SIPARJUR'">
             </div>
         </section>
-
         <!-- KONSULTASI -->
         <section id="consult-section" class="consultation-outer-box reveal">
             <div class="consultation-header-label">
@@ -82,7 +79,6 @@
         <!-- Akan diisi otomatis oleh JavaScript -->
     </div>
 </section>
-
         <!-- TENTANG -->
         <section id="about-section" class="how-it-works reveal">
             <h3>⚙️ Bagaimana Sistem Ini Bekerja?</h3>
@@ -93,7 +89,6 @@
             </div>
         </section>
     </div>
-
     <!-- ADMIN PANEL -->
     <div id="adminPanel" style="display: none;">
         <div class="admin-container">
@@ -101,13 +96,11 @@
                 <h1>⚙️ SIPARJUR - Panel Administrator</h1>
                 <button class="btn-logout" onclick="hideAdminPanel()">← Kembali ke Beranda</button>
             </div>
-            
             <div class="admin-tabs">
                 <button class="tab-btn active-tab" onclick="switchTab('gejala')">📋 Data Gejala</button>
                 <button class="tab-btn" onclick="switchTab('jurusan')">🎓 Data Jurusan</button>
                 <button class="tab-btn" onclick="switchTab('rule')">🔗 Matriks Rule</button>
             </div>
-
             <div id="tab-gejala" class="tab-content active">
                 <div class="form-card">
                     <h3>Tambah Gejala Baru</h3>
@@ -124,7 +117,6 @@
                     </table>
                 </div>
             </div>
-
             <div id="tab-jurusan" class="tab-content">
                 <div class="form-card">
                     <h3>Tambah Jurusan Baru</h3>
@@ -142,7 +134,6 @@
                     </table>
                 </div>
             </div>
-
             <div id="tab-rule" class="tab-content">
                 <div class="form-card">
                     <h3>Hubungkan Gejala ke Jurusan</h3>
@@ -162,7 +153,6 @@
             </div>
         </div>
     </div>
-
     <!-- MODAL PASSWORD -->
     <div id="adminModal" class="admin-modal">
         <div class="admin-modal-content">
@@ -184,11 +174,9 @@
             </div>
         </div>
     </div>
-
     <footer id="mainFooter">
         <p>&copy; 2026 SIPARJUR - Sistem Pakar Rekomendasi Jurusan Kuliah.</p>
     </footer>
-
     <script src="script.js"></script>
 </body>
 </html>
