@@ -77,12 +77,14 @@ function showMainContent() {
 // ==================== SMOOTH SCROLL ====================
 function scrollToSection(section) {
     let element;
-    if (section === 'home') element = document.getElementById('home-section');
+    if (section === 'home') {
+        element = document.getElementById('home-section');
         if (element) {
             element.classList.remove('slide-down-animation');
-            void element.offsetWidth; // Mengatur ulang trigger animasi (trick reflow)
+            void element.offsetWidth; // Trik reflow untuk me-reset animasi
             element.classList.add('slide-down-animation');
         }
+    }
     else if (section === 'consult') element = document.getElementById('consult-section');
     else if (section === 'program-studi') element = document.getElementById('program-studi-section');
     else if (section === 'about') element = document.getElementById('about-section');
@@ -94,8 +96,11 @@ function scrollToSection(section) {
     if (section === 'consult') document.getElementById('nav-consult').classList.add('active-link');
     if (section === 'program-studi') document.getElementById('nav-program-studi').classList.add('active-link');
     if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
-}
 
+    // Otomatis menutup kembali tirai menu drop-down setelah user memilih salah satu menu di HP
+    const navLinks = document.getElementById('navLinksContainer');
+    if (navLinks) navLinks.classList.remove('mobile-active');
+}
 // ====================  DATABASE ====================
 async function loadKnowledgeBase() {
     try {
@@ -376,5 +381,11 @@ function renderDaftarJurusanUtama() {
     100% {
         opacity: 1;
         transform: translateY(0); /* Turun ke posisi asli */
+    }
+}
+function toggleMobileMenu() {
+    const navLinks = document.getElementById('navLinksContainer');
+    if (navLinks) {
+        navLinks.classList.toggle('mobile-active');
     }
 }
