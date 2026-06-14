@@ -101,6 +101,7 @@ function scrollToSection(section) {
     const navLinks = document.getElementById('navLinksContainer');
     if (navLinks) navLinks.classList.remove('mobile-active');
 }
+
 // ====================  DATABASE ====================
 async function loadKnowledgeBase() {
     try {
@@ -207,6 +208,7 @@ function updateActiveLinkOnScroll() {
         if (link) current === s.id ? link.classList.add('active-link') : link.classList.remove('active-link');
     });
 }
+
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
     document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
@@ -367,21 +369,8 @@ function renderDaftarJurusanUtama() {
         `;
     }).join('');
 }
-/* ==================== ANIMASI SLIDE DOWN BERANDA ==================== */
-.slide-down-animation {
-    animation: slideDownFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
 
-@keyframes slideDownFade {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px); /* Memulai dari agak atas */
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0); /* Turun ke posisi asli */
-    }
-}
+// ==================== TOGGLE MENU MOBILE (HP) ====================
 function toggleMobileMenu() {
     const navLinks = document.getElementById('navLinksContainer');
     if (navLinks) {
