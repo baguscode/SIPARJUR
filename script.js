@@ -2,11 +2,9 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbwi0L3mUEmsvbNGGFp0ha94XJKzhnAANPGMAhZOG_GewD7NaLFKlvFQg8UMTTNbsQPt/exec";
 const ADMIN_PASSWORD = "admin123";
 const CORS_PROXY = "https://corsproxy.io/";
-
 let dbGejala = [], dbJurusan = [], dbRule = [];
 let currentStep = 0;
 let skorJurusan = {};
-
 // ==================== PASSWORD TOGGLE ====================
 function togglePassword() {
     const input = document.getElementById('adminPassword');
@@ -19,7 +17,6 @@ function togglePassword() {
         icon.innerHTML = '👁️';
     }
 }
-
 // ==================== ADMIN  ====================
 function openAdminModal() {
     if (document.getElementById('adminPanel').style.display === 'block') {
@@ -31,11 +28,9 @@ function openAdminModal() {
     document.getElementById('adminErrorMsg').style.display = 'none';
     setTimeout(() => document.getElementById('adminPassword').focus(), 100);
 }
-
 function closeAdminModal() {
     document.getElementById('adminModal').classList.remove('show');
 }
-
 function checkAdminPassword() {
     let password = document.getElementById('adminPassword').value;
     if (password === ADMIN_PASSWORD) {
@@ -48,7 +43,6 @@ function checkAdminPassword() {
         setTimeout(() => document.getElementById('adminErrorMsg').style.display = 'none', 2000);
     }
 }
-
 // ==================== SHOW/HIDE ADMIN PANEL ====================
 function showAdminPanel() {
     document.getElementById('mainContent').style.display = 'none';
@@ -58,7 +52,6 @@ function showAdminPanel() {
     document.getElementById('nav-admin').classList.add('active-link');
     loadAdminData();
 }
-
 function hideAdminPanel() {
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('adminPanel').style.display = 'none';
@@ -67,13 +60,11 @@ function hideAdminPanel() {
     document.getElementById('nav-home').classList.add('active-link');
     scrollToSection('home');
 }
-
 function showMainContent() {
     if (document.getElementById('adminPanel').style.display === 'block') return;
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('mainFooter').style.display = 'block';
 }
-
 // ==================== SMOOTH SCROLL ====================
 function scrollToSection(section) {
     let element;
@@ -88,20 +79,16 @@ function scrollToSection(section) {
     else if (section === 'consult') element = document.getElementById('consult-section');
     else if (section === 'program-studi') element = document.getElementById('program-studi-section');
     else if (section === 'about') element = document.getElementById('about-section');
-    
     if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
     if (section === 'home') document.getElementById('nav-home').classList.add('active-link');
     if (section === 'consult') document.getElementById('nav-consult').classList.add('active-link');
     if (section === 'program-studi') document.getElementById('nav-program-studi').classList.add('active-link');
     if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
-
     // Otomatis menutup kembali tirai menu drop-down setelah user memilih salah satu menu di HP
     const navLinks = document.getElementById('navLinksContainer');
     if (navLinks) navLinks.classList.remove('mobile-active');
 }
-
 // ====================  DATABASE ====================
 async function loadKnowledgeBase() {
     try {
@@ -109,17 +96,13 @@ async function loadKnowledgeBase() {
         const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
         let res = await fetch(proxyUrl);
         let data = await res.json();
-        
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
-        
         document.getElementById('loading-kb').style.display = 'none';
         document.getElementById('quiz-area-box').style.display = 'block';
-        
         // Memanggil fungsi untuk merender daftar jurusan di halaman depan
         renderDaftarJurusanUtama(); 
-        
         if (dbGejala.length > 0) { 
             resetQuiz(); 
         } else { 
@@ -129,8 +112,7 @@ async function loadKnowledgeBase() {
         console.error("Gagal memuat basis pengetahuan:", err); 
         document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal koneksi ke cloud database.</p>'; 
     }
-}       
-
+} 
 function renderCurrentQuestion() {
     if (dbGejala.length === 0 || currentStep >= dbGejala.length) return;
     let item = dbGejala[currentStep];
@@ -139,7 +121,6 @@ function renderCurrentQuestion() {
     let container = document.getElementById('dynamic-question-container');
     container.innerHTML = `<div class="question-card active"><h3>${currentStep+1}. ${escapeHtml(item.indikator)}</h3><div class="options-vertical"><button class="choice-btn" onclick="answerQuestion('${escapeHtml(item.kd_gejala)}', 3)"><span>✅ Ya</span><span>➔</span></button><button class="choice-btn" onclick="answerQuestion('${escapeHtml(item.kd_gejala)}', 0)"><span>❌ Tidak</span><span>➔</span></button></div></div>`;
 }
-
 function answerQuestion(kdGejala, points) {
     if (points > 0) {
         let matchedRules = dbRule.filter(r => r.kd_gejala === kdGejala);
@@ -152,7 +133,6 @@ function answerQuestion(kdGejala, points) {
     if (currentStep < dbGejala.length) { renderCurrentQuestion(); }
     else { showResults(); }
 }
-
 function showResults() {
     document.getElementById('quiz-area-box').style.display = 'none';
     document.getElementById('loading-view').style.display = 'block';
@@ -168,7 +148,6 @@ function showResults() {
         document.getElementById('result-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 1200);
 }
-
 function resetQuiz() {
     currentStep = 0;
     skorJurusan = {};
@@ -176,18 +155,15 @@ function resetQuiz() {
     document.getElementById('quiz-area-box').style.display = 'block';
     renderCurrentQuestion();
 }
-
 function restartQuizWithScroll() {
     resetQuiz();
     const consultSection = document.getElementById('consult-section');
     if (consultSection) { consultSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 }
-
 function escapeHtml(str) {
     if (!str) return '';
     return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
 }
-
 // ==================== SCROLL SPY ====================
 function updateActiveLinkOnScroll() {
     if (document.getElementById('adminPanel').style.display === 'block') return;
@@ -208,7 +184,6 @@ function updateActiveLinkOnScroll() {
         if (link) current === s.id ? link.classList.add('active-link') : link.classList.remove('active-link');
     });
 }
-
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
     document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
@@ -222,18 +197,15 @@ async function loadAdminData() {
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
-        
         renderAdminTables();
         populateAdminSelects();
         renderDaftarJurusanUtama(); 
-        
         document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (e) { 
         console.error(e); 
         document.getElementById('table-gejala').innerHTML = `<tr><td colspan="3">❌ Error</td></tr>`; 
     }
 }
-
 function renderAdminTables() {
     const tg = document.getElementById('table-gejala');
     if (tg) tg.innerHTML = dbGejala.length ? dbGejala.map(g => `<tr><td><strong>${escapeHtml(g.kd_gejala)}</strong></td><td>${escapeHtml(g.indikator)}</td><td><button class="btn-delete" onclick="deleteAdminItem('gejala','${escapeHtml(g.kd_gejala)}')">🗑 Hapus</button></td></tr>`).join('') : '<tr><td colspan="3">📭 Belum ada data</td></tr>';
@@ -242,7 +214,6 @@ function renderAdminTables() {
     const tr = document.getElementById('table-rule');
     if (tr) tr.innerHTML = dbRule.length ? dbRule.map(r => `<tr><td>${escapeHtml(r.kd_gejala)}</td><td>${escapeHtml(r.kd_jurusan)}</td><td><span class="badge-bobot">${r.bobot}</span></td><td><button class="btn-delete" onclick="deleteAdminItem('rule','${escapeHtml(r.kd_gejala)}|${escapeHtml(r.kd_jurusan)}')">🗑 Hapus</button></td></tr>`).join('') : '<tr><td colspan="4">📭 Belum ada data</td></tr>';
 }
-
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
     const sj = document.getElementById('rule-jurusan');
@@ -252,7 +223,6 @@ function populateAdminSelects() {
     dbGejala.forEach(g => sg.innerHTML += `<option value="${escapeHtml(g.kd_gejala)}">${escapeHtml(g.kd_gejala)} - ${escapeHtml(g.indikator.substring(0, 50))}...</option>`);
     dbJurusan.forEach(j => sj.innerHTML += `<option value="${escapeHtml(j.kd_jurusan)}">${escapeHtml(j.kd_jurusan)} - ${escapeHtml(j.nama_jurusan)}</option>`);
 }
-
 async function sendPostRequest(payload) {
     try {
         const res = await fetch(CORS_PROXY + API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -261,7 +231,6 @@ async function sendPostRequest(payload) {
         else { alert("❌ Gagal"); return false; }
     } catch (err) { console.error(err); alert("❌ Error"); return false; }
 }
-
 async function addGejala() {
     let kode = document.getElementById('g-kode').value.trim();
     let teks = document.getElementById('g-teks').value.trim();
@@ -275,7 +244,6 @@ async function addGejala() {
     }
     btn.innerHTML = txt; btn.disabled = false;
 }
-
 async function addJurusan() {
     let kode = document.getElementById('j-kode').value.trim();
     let nama = document.getElementById('j-nama').value.trim();
@@ -290,7 +258,6 @@ async function addJurusan() {
     }
     btn.innerHTML = txt; btn.disabled = false;
 }
-
 async function addRule() {
     let gejala = document.getElementById('rule-gejala').value;
     let jurusan = document.getElementById('rule-jurusan').value;
@@ -304,7 +271,6 @@ async function addRule() {
     }
     btn.innerHTML = txt; btn.disabled = false;
 }
-
 async function deleteAdminItem(type, id) {
     if (!confirm(`Hapus data ${type}?`)) return;
     let payload = {};
@@ -317,7 +283,6 @@ async function deleteAdminItem(type, id) {
     if (await sendPostRequest(payload)) { await loadAdminData(); await loadKnowledgeBase(); }
     btn.innerHTML = txt; btn.disabled = false;
 }
-
 function switchTab(tab) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -325,7 +290,6 @@ function switchTab(tab) {
     else if (tab === 'jurusan') { document.getElementById('tab-jurusan').classList.add('active'); document.querySelector('.tab-btn:nth-child(2)').classList.add('active-tab'); }
     else if (tab === 'rule') { document.getElementById('tab-rule').classList.add('active'); document.querySelector('.tab-btn:nth-child(3)').classList.add('active-tab'); }
 }
-
 // ==================== EVENT LISTENER ====================
 window.addEventListener('scroll', () => {
     const h = document.getElementById('main-header');
@@ -333,33 +297,26 @@ window.addEventListener('scroll', () => {
     else if (h) h.classList.remove('scrolled');
     updateActiveLinkOnScroll();
 });
-
 document.addEventListener('click', e => { if (e.target && e.target.id === 'resetQuizBtn') resetQuiz(); });
-
 const observer = new IntersectionObserver(e => e.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }), { threshold: 0.05 });
-
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     const navHome = document.getElementById('nav-home');
     if (navHome) navHome.classList.add('active-link');
     loadKnowledgeBase();
 });
-
 // ==================== FUNGSI RENDER JURUSAN HOMEPAGE ====================
 function renderDaftarJurusanUtama() {
     const container = document.getElementById('jurusan-card-container');
     if (!container) return;
-    
     if (!dbJurusan || dbJurusan.length === 0) {
         container.innerHTML = '<p style="color:#64748B; text-align:center; grid-column: 1/-1;">⏳ Memuat daftar jurusan dari database cloud...</p>';
         return;
     }
-    
     container.innerHTML = dbJurusan.map(j => {
         const kode = j.kd_jurusan || j.Kd_Jurusan || j.id || "KODE";
         const nama = j.nama_jurusan || j.Nama_Jurusan || j.nama || j.Nama || "Nama Jurusan";
         const deskripsi = j.deskripsi || j.Deskripsi || j.ket || j.Keterangan || "Tidak ada deskripsi.";
-        
         return `
             <div class="jurusan-info-card">
                 <span class="jurusan-info-badge">${escapeHtml(String(kode))}</span>
@@ -369,7 +326,6 @@ function renderDaftarJurusanUtama() {
         `;
     }).join('');
 }
-
 // ==================== TOGGLE MENU MOBILE (HP) ====================
 function toggleMobileMenu() {
     const navLinks = document.getElementById('navLinksContainer');
