@@ -76,12 +76,14 @@ function scrollToSection(section) {
     let element;
     if (section === 'home') element = document.getElementById('home-section');
     else if (section === 'consult') element = document.getElementById('consult-section');
+    else if (section === 'program-studi') element = document.getElementById('program-studi-section');
     else if (section === 'about') element = document.getElementById('about-section');
+    
     if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
     if (section === 'home') document.getElementById('nav-home').classList.add('active-link');
     if (section === 'consult') document.getElementById('nav-consult').classList.add('active-link');
-    if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
     if (section === 'program-studi') document.getElementById('nav-program-studi').classList.add('active-link');
     if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
 }
@@ -114,7 +116,7 @@ async function loadKnowledgeBase() {
         document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal koneksi ke cloud database.</p>'; 
     }
 }       
-}
+
 function renderCurrentQuestion() {
     if (dbGejala.length === 0 || currentStep >= dbGejala.length) return;
     let item = dbGejala[currentStep];
@@ -161,7 +163,6 @@ function resetQuiz() {
     renderCurrentQuestion();
 }
 
-// Fungsi terpisah untuk tombol "Ulangi Tes"
 function restartQuizWithScroll() {
     resetQuiz();
     const consultSection = document.getElementById('consult-section');
@@ -179,7 +180,6 @@ function updateActiveLinkOnScroll() {
     const sections = [
         { id: 'home-section', navId: 'nav-home' },
         { id: 'consult-section', navId: 'nav-consult' },
-        { id: 'about-section', navId: 'nav-about' }
         { id: 'program-studi-section', navId: 'nav-program-studi' },
         { id: 'about-section', navId: 'nav-about' }
     ];
@@ -194,11 +194,12 @@ function updateActiveLinkOnScroll() {
         if (link) current === s.id ? link.classList.add('active-link') : link.classList.remove('active-link');
     });
 }
+
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
-    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="2">⏳ Memuat...</td></tr>';
-    document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="2">⏳ Memuat...</td></tr>';
-    document.getElementById('table-rule').innerHTML = '<tr><td colspan="2">⏳ Memuat...</td></tr>';
+    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
+    document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="4">⏳ Memuat...</td></tr>';
+    document.getElementById('table-rule').innerHTML = '<tr><td colspan="4">⏳ Memuat...</td></tr>';
     try {
         const timestamp = Date.now();
         const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
@@ -207,6 +208,7 @@ async function loadAdminData() {
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
+        
         renderAdminTables();
         populateAdminSelects();
         renderDaftarJurusanUtama(); 
@@ -216,8 +218,6 @@ async function loadAdminData() {
         console.error(e); 
         document.getElementById('table-gejala').innerHTML = `<tr><td colspan="3">❌ Error</td></tr>`; 
     }
-        document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } catch (e) { console.error(e); document.getElementById('table-gejala').innerHTML = `<td><td colspan="3">❌ Error</td></tr>`; }
 }
 
 function renderAdminTables() {
@@ -315,18 +315,23 @@ function switchTab(tab) {
 // ==================== EVENT LISTENER ====================
 window.addEventListener('scroll', () => {
     const h = document.getElementById('main-header');
-    if (window.scrollY > 60) h.classList.add('scrolled');
-    else h.classList.remove('scrolled');
+    if (h && window.scrollY > 60) h.classList.add('scrolled');
+    else if (h) h.classList.remove('scrolled');
     updateActiveLinkOnScroll();
 });
+
 document.addEventListener('click', e => { if (e.target && e.target.id === 'resetQuizBtn') resetQuiz(); });
+
 const observer = new IntersectionObserver(e => e.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }), { threshold: 0.05 });
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    document.getElementById('nav-home').classList.add('active-link');
+    const navHome = document.getElementById('nav-home');
+    if (navHome) navHome.classList.add('active-link');
     loadKnowledgeBase();
 });
-// ---  FUNGSI render ---
+
+// ==================== FUNGSI RENDER JURUSAN HOMEPAGE ====================
 function renderDaftarJurusanUtama() {
     const container = document.getElementById('jurusan-card-container');
     if (!container) return;
@@ -337,7 +342,6 @@ function renderDaftarJurusanUtama() {
     }
     
     container.innerHTML = dbJurusan.map(j => {
-        // Pengaman pembacaan nama kolom spreadsheet (bisa huruf besar/kecil)
         const kode = j.kd_jurusan || j.Kd_Jurusan || j.id || "KODE";
         const nama = j.nama_jurusan || j.Nama_Jurusan || j.nama || j.Nama || "Nama Jurusan";
         const deskripsi = j.deskripsi || j.Deskripsi || j.ket || j.Keterangan || "Tidak ada deskripsi.";
