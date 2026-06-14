@@ -889,81 +889,125 @@ footer {
     z-index: 1005;
 }
 
-/* ==================== PERBAIKAN RESPONSIF HP MUTLAK ==================== */
+/* ==================== TOMBOL MENU HAMBURGER (DESKTOP) ==================== */
+.menu-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1005;
+}
+
+/* ==================== PERBAIKAN TOTAL LAYAR HP (RESPONSIF & RAPI) ==================== */
 @media (max-width: 768px) {
     
-    /* Kembalikan navbar ke pengaturan default kamu agar layout tidak pecah */
-    .navbar {
-        position: relative !important;
-        display: block !important; /* Mengembalikan sistem susunan asli web kamu */
-        padding-right: 60px !important; /* Memberi ruang di kanan agar logo tidak mentok ke tombol */
+    /* 1. Reset Skala Global di HP agar tidak kebesaran */
+    html {
+        font-size: 14px; /* Mengecilkan basis ukuran huruf global */
     }
 
-    /* Paksa tombol hamburger melayang mati di pojok kanan atas header HP */
+    body {
+        overflow-x: hidden; /* Mencegah layar bisa digeser ke kanan-kiri (anti-lebar) */
+    }
+
+    /* 2. Merapikan Bar Navigasi Atas */
+    .navbar {
+        position: relative !important;
+        display: block !important;
+        padding: 10px 15px !important;
+        padding-right: 50px !important; /* Ruang aman agar logo tidak menabrak ikon menu */
+    }
+
+    /* Menyesuaikan skala area logo di HP agar lebih proporsional */
+    .logo-area img {
+        height: 35px !important; /* Mengecilkan logo sedikit */
+    }
+    
+    .logo-title h1 {
+        font-size: 1.2rem !important;
+    }
+    
+    .logo-title p {
+        font-size: 0.65rem !important;
+    }
+
+    /* Tombol Hamburger di pojok kanan atas */
     .menu-toggle-btn {
         display: block !important;
         position: absolute !important;
-        top: 20px; /* Jarak dari atas bar header, sesuaikan jika kurang tengah */
-        right: 20px; /* Jarak dari kanan layar */
+        top: 12px;
+        right: 15px;
+        font-size: 1.6rem;
     }
 
-    /* Mengubah deretan menu teks menjadi tirai drop-down melayang penuh */
+    /* Tirai menu teks drop-down */
     .nav-links {
-        display: none; /* Sembunyi sebelum diklik */
+        display: none;
         position: absolute !important;
-        top: 100% !important; /* Jatuh tepat di bawah batas bawah header */
+        top: 100% !important;
         left: 0 !important;
         width: 100% !important;
-        background: #FFFFFF !important; /* Warna latar belakang tirai putih */
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
+        background: #FFFFFF !important;
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1) !important;
         border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
-        padding: 15px 0 !important;
-        flex-direction: column !important; /* Menu berderet vertikal ke bawah */
-        gap: 5px !important;
+        padding: 10px 0 !important;
+        flex-direction: column !important;
+        gap: 0 !important;
         margin: 0 !important;
         z-index: 1000 !important;
     }
 
-    /* Kelas aktif yang dipicu oleh JavaScript saat tombol ☰ diklik */
     .nav-links.mobile-active {
         display: flex !important;
-        animation: slideDownNav 0.25s ease-out forwards;
+        animation: slideDownNav 0.2s ease-out forwards;
     }
 
-    /* Merapikan link menu di dalam tirai drop-down HP */
     .nav-links a {
-        font-size: 1rem !important;
+        font-size: 0.95rem !important;
         padding: 12px 0 !important;
         width: 100% !important;
         text-align: center !important;
         display: block !important;
-        color: var(--primary) !important;
-    }
-
-    /* Animasi tirai menu meluncur turun tipis */
-    @keyframes slideDownNav {
-        0% { opacity: 0; transform: translateY(-8px); }
-        100% { opacity: 1; transform: translateY(0); }
-    }
-}
-/* Penyesuaian khusus untuk HP layar sangat kecil (di bawah 480px) */
-@media (max-width: 480px) {
-    .hero-text h2 {
-        font-size: 1.5rem;
-    }
-    .consultation-header-label h2 {
-        font-size: 1.1rem;
-    }
-    .nav-links a {
-        font-size: 0.75rem;
-        gap: 10px;
-    }
-    .question-card h3 {
-        font-size: 0.9rem;
+        border-bottom: 1px solid #F1F5F9;
     }
     
-    .choice-btn {
-        font-size: 0.75rem;
-        padding: 8px 12px;
+    .nav-links li:last-child a {
+        border-bottom: none; /* Menghilangkan garis pembatas di menu terakhir (admin) */
+    }
+
+    /* 3. MEMAKSA BAGIAN ALUR SISTEM (TENTANG) JADI RUNTUH KE BAWAH */
+    .steps-container {
+        flex-direction: column !important; /* Mengubah susunan ke bawah (vertikal) */
+        gap: 20px !important;
+        padding: 0 10px !important;
+    }
+
+    .step-card {
+        width: 100% !important; /* Lebar kartu memenuhi layar HP */
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* 4. Optimasi Kontainer Pertanyaan & Jurusan agar Tidak Kebesaran di HP */
+    .interactive-card, .consultation-outer-box, #program-studi-section {
+        padding: 15px !important;
+        margin: 20px auto !important;
+    }
+
+    #jurusan-card-container {
+        grid-template-columns: 1fr !important; /* Di HP, kartu jurusan dipaksa 1 baris 1 kartu */
+        gap: 15px !important;
+    }
+
+    h2 {
+        font-size: 1.5rem !important; /* Mengecilkan ukuran judul section */
+    }
+
+    @keyframes slideDownNav {
+        0% { opacity: 0; transform: translateY(-5px); }
+        100% { opacity: 1; transform: translateY(0); }
     }
 }
