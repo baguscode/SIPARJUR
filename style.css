@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
 :root {
     --primary: #0A3663;
     --secondary: #00B4B4;
@@ -11,24 +10,20 @@
     --text-light: #F8FAFC;
     --border-line: #E2E8F0;
 }
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-
 html {
     scroll-behavior: smooth;
 }
-
 body {
     background-color: var(--bg-light);
     color: var(--text-dark);
     line-height: 1.6;
 }
-
 /* ==================== HEADER & NAVBAR (KEMBALI KE ASLI + FIX) ==================== */
 header {
     background: rgba(255, 255, 255, 0.95);
@@ -39,11 +34,9 @@ header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
 }
-
 header.scrolled {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 }
-
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -52,39 +45,33 @@ header.scrolled {
     margin: 0 auto;
     padding: 15px 20px;
 }
-
 .logo-area {
     display: flex;
     align-items: center;
     gap: 12px;
 }
-
 .logo-area img {
     height: 45px;
     width: auto;
 }
-
 .logo-title h1 {
     font-size: 1.3rem;
     color: var(--primary);
     font-weight: 800;
     line-height: 1.2;
 }
-
 .logo-title p {
     font-size: 0.65rem;
     color: var(--secondary);
     font-weight: 600;
     letter-spacing: 0.5px;
 }
-
 .nav-links {
     display: flex;
     gap: 25px;
     list-style: none;
     align-items: center; /* Memastikan semua menu sejajar lurus secara vertikal */
 }
-
 .nav-links a {
     text-decoration: none;
     color: var(--primary);
@@ -95,7 +82,6 @@ header.scrolled {
     position: relative;
     transition: color 0.3s ease;
 }
-
 .nav-links a::after {
     content: '';
     position: absolute;
@@ -106,30 +92,24 @@ header.scrolled {
     background: var(--secondary);
     transition: width 0.3s ease;
 }
-
 .nav-links a:hover::after {
     width: 100%;
 }
-
 .nav-links a.active-link {
     color: var(--secondary);
 }
-
 .nav-links a.active-link::after {
     width: 100%;
 }
-
 /* ==================== TOMBOL ADMIN DENGAN TOOLTIP (AMAN & TIDAK KEPOTONG) ==================== */
 #nav-admin {
     position: relative;
     cursor: pointer;
 }
-
 /* Matikan garis bawah khusus untuk ikon admin */
 #nav-admin:hover::after {
     display: none !important;
 }
-
 /* Kita buat selektor baru khusus untuk memunculkan teks melayang */
 #nav-admin:hover::before {
     content: "Admin Panel";
@@ -154,12 +134,10 @@ header.scrolled {
     transform: translateY(30px);
     transition: all 0.8s ease;
 }
-
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
 }
-
 /* ==================== HERO SECTION ==================== */
 .hero-section {
     max-width: 1200px;
@@ -171,7 +149,6 @@ header.scrolled {
     align-items: center;
     min-height: calc(100vh - 80px);
 }
-
 .hero-text h2 {
     font-size: 3rem;
     color: var(--primary);
@@ -179,17 +156,14 @@ header.scrolled {
     line-height: 1.2;
     margin-bottom: 20px;
 }
-
 .hero-text h2 span {
     color: var(--secondary);
 }
-
 .hero-text p {
     font-size: 1.1rem;
     color: #475569;
     margin-bottom: 30px;
 }
-
 .btn-start {
     display: inline-block;
     padding: 14px 35px;
@@ -203,27 +177,22 @@ header.scrolled {
     transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 180, 180, 0.3);
 }
-
 .btn-start:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(0, 180, 180, 0.4);
 }
-
 .hero-image {
     display: flex;
     justify-content: center;
 }
-
 .hero-image img {
     max-width: 90%;
     animation: float 4s ease-in-out infinite;
 }
-
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-15px); }
 }
-
 /* ==================== KONSULTASI SECTION ==================== */
 .consultation-outer-box {
     max-width: 1000px;
@@ -233,24 +202,20 @@ header.scrolled {
     border-radius: 30px;
     scroll-margin-top: 100px;
 }
-
 .consultation-header-label {
     text-align: center;
     margin-bottom: 35px;
 }
-
 .consultation-header-label h2 {
     color: white;
     font-size: 2rem;
     font-weight: 700;
 }
-
 .consultation-header-label p {
     color: #94A3B8;
     margin-top: 8px;
     font-size: 0.9rem;
 }
-
 .interactive-card {
     background: var(--card-inner);
     border-radius: 20px;
@@ -258,7 +223,6 @@ header.scrolled {
     max-width: 800px;
     margin: 0 auto;
 }
-
 /* Progress Bar */
 .progress-container {
     display: flex;
@@ -268,13 +232,11 @@ header.scrolled {
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .progress-text {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--secondary);
 }
-
 .progress-bar-bg {
     background: #334155;
     height: 6px;
@@ -282,14 +244,12 @@ header.scrolled {
     border-radius: 10px;
     overflow: hidden;
 }
-
 .progress-bar-fill {
     background: var(--secondary);
     height: 100%;
     width: 0%;
     transition: width 0.3s ease;
 }
-
 /* Loading Spinner */
 .spinner {
     width: 45px;
@@ -300,37 +260,30 @@ header.scrolled {
     animation: spin 1s linear infinite;
     margin: 0 auto 15px;
 }
-
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
-
 #loading-view {
     text-align: center;
     padding: 30px 0;
     display: none;
 }
-
 #loading-view p {
     color: #94A3B8;
     font-size: 0.9rem;
 }
-
 /* Questions */
 .question-card {
     display: none;
     animation: fadeIn 0.4s ease;
 }
-
 .question-card.active {
     display: block;
 }
-
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
 .question-card h3 {
     font-size: 1.2rem;
     color: var(--text-light);
@@ -338,13 +291,11 @@ header.scrolled {
     margin-bottom: 25px;
     line-height: 1.4;
 }
-
 .options-vertical {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-
 .choice-btn {
     width: 100%;
     padding: 14px 20px;
@@ -361,20 +312,17 @@ header.scrolled {
     align-items: center;
     transition: all 0.2s ease;
 }
-
 .choice-btn:hover {
     border-color: var(--secondary);
     background: #273549;
     color: var(--accent);
     transform: translateX(5px);
 }
-
 /* Results */
 .result-card {
     display: none;
     animation: fadeIn 0.5s ease;
 }
-
 .res-badge {
     display: inline-block;
     background: rgba(242, 169, 0, 0.15);
@@ -385,14 +333,12 @@ header.scrolled {
     font-weight: 600;
     margin-bottom: 20px;
 }
-
 .result-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-bottom: 25px;
 }
-
 .result-item {
     background: #111827;
     border: 1px solid #1E293B;
@@ -401,7 +347,6 @@ header.scrolled {
     position: relative;
     border-left: 4px solid var(--secondary);
 }
-
 .rank-number {
     position: absolute;
     right: 15px;
@@ -410,20 +355,17 @@ header.scrolled {
     font-weight: 800;
     color: rgba(255, 255, 255, 0.1);
 }
-
 .res-title {
     font-size: 1.1rem;
     color: white;
     font-weight: 700;
     margin-bottom: 8px;
 }
-
 .res-desc {
     font-size: 0.85rem;
     color: #CBD5E1;
     text-align: justify;
 }
-
 .reset-btn {
     width: 100%;
     padding: 12px;
@@ -435,7 +377,6 @@ header.scrolled {
     cursor: pointer;
     transition: all 0.3s ease;
 }
-
 .reset-btn:hover {
     background: var(--primary);
     transform: scale(1.02);
@@ -451,13 +392,11 @@ header.scrolled {
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
 }
-
 .jurusan-info-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
     border-top-color: var(--primary);
 }
-
 .jurusan-info-title {
     color: var(--primary);
     font-size: 1.15rem;
@@ -467,14 +406,12 @@ header.scrolled {
     align-items: center;
     gap: 8px;
 }
-
 .jurusan-info-desc {
     color: #475569;
     font-size: 0.85rem;
     text-align: justify;
     line-height: 1.6;
 }
-
 .jurusan-info-badge {
     position: absolute;
     right: 20px;
@@ -494,20 +431,17 @@ header.scrolled {
     text-align: center;
     scroll-margin-top: 100px;
 }
-
 .how-it-works h3 {
     font-size: 1.8rem;
     color: var(--primary);
     font-weight: 700;
     margin-bottom: 40px;
 }
-
 .steps-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 25px;
 }
-
 .step-card {
     background: #F8FAFC;
     border-radius: 16px;
@@ -515,28 +449,23 @@ header.scrolled {
     border: 1px solid var(--border-line);
     transition: transform 0.3s ease;
 }
-
 .step-card:hover {
     transform: translateY(-5px);
 }
-
 .step-icon {
     font-size: 2rem;
     margin-bottom: 12px;
 }
-
 .step-card h4 {
     color: var(--primary);
     font-weight: 700;
     margin-bottom: 10px;
     font-size: 1rem;
 }
-
 .step-card p {
     font-size: 0.85rem;
     color: #64748B;
 }
-
 /* ==================== FOOTER ==================== */
 footer {
     background: #0F172A;
@@ -546,14 +475,12 @@ footer {
     margin-top: 50px;
     font-size: 0.8rem;
 }
-
 /* ==================== ADMIN PANEL ==================== */
 .admin-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
-
 .admin-header {
     display: flex;
     justify-content: space-between;
@@ -564,12 +491,10 @@ footer {
     margin-bottom: 25px;
     color: white;
 }
-
 .admin-header h1 {
     font-size: 1.3rem;
     font-weight: 700;
 }
-
 .btn-logout {
     background: #334155;
     color: white;
@@ -580,18 +505,15 @@ footer {
     font-weight: 600;
     transition: all 0.2s;
 }
-
 .btn-logout:hover {
     background: var(--secondary);
 }
-
 .admin-tabs {
     display: flex;
     gap: 10px;
     margin-bottom: 25px;
     flex-wrap: wrap;
 }
-
 .tab-btn {
     padding: 10px 22px;
     border: none;
@@ -603,12 +525,10 @@ footer {
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     font-size: 0.85rem;
 }
-
 .tab-btn.active-tab {
     background: var(--primary);
     color: white;
 }
-
 .tab-content {
     display: none;
     background: white;
@@ -616,11 +536,9 @@ footer {
     padding: 20px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
 }
-
 .tab-content.active {
     display: block;
 }
-
 .form-card {
     background: #F8FAFC;
     padding: 20px;
@@ -628,30 +546,25 @@ footer {
     margin-bottom: 20px;
     border: 1px solid #E2E8F0;
 }
-
 .form-card h3 {
     margin-bottom: 15px;
     color: var(--primary);
     font-size: 1rem;
     font-weight: 700;
 }
-
 .form-row {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
     align-items: flex-end;
 }
-
 .form-group {
     flex: 1;
     min-width: 160px;
 }
-
 .form-group.full-width {
     flex: 100%;
 }
-
 .form-group label {
     display: block;
     font-size: 0.75rem;
@@ -659,7 +572,6 @@ footer {
     color: var(--primary);
     margin-bottom: 4px;
 }
-
 .admin-input, .admin-select, .admin-textarea {
     width: 100%;
     padding: 10px 12px;
@@ -668,12 +580,10 @@ footer {
     font-size: 0.85rem;
     background: white;
 }
-
 .admin-input:focus, .admin-select:focus, .admin-textarea:focus {
     outline: none;
     border-color: var(--secondary);
 }
-
 .btn-primary {
     background: var(--secondary);
     color: white;
@@ -685,21 +595,17 @@ footer {
     transition: all 0.2s;
     font-size: 0.85rem;
 }
-
 .btn-primary:hover {
     background: var(--primary);
 }
-
 .table-wrapper {
     overflow-x: auto;
 }
-
 .admin-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.8rem;
 }
-
 .admin-table th {
     background: #F1F5F9;
     padding: 10px 12px;
@@ -707,12 +613,10 @@ footer {
     font-weight: 700;
     color: var(--primary);
 }
-
 .admin-table td {
     padding: 10px 12px;
     border-bottom: 1px solid #E2E8F0;
 }
-
 .btn-delete {
     background: #EF4444;
     color: white;
@@ -722,11 +626,9 @@ footer {
     cursor: pointer;
     font-size: 0.7rem;
 }
-
 .btn-delete:hover {
     background: #DC2626;
 }
-
 .badge-bobot {
     background: var(--secondary);
     color: white;
@@ -735,7 +637,6 @@ footer {
     font-size: 0.7rem;
     display: inline-block;
 }
-
 /* ==================== MODAL PASSWORD ==================== */
 .admin-modal {
     display: none;
@@ -750,11 +651,9 @@ footer {
     align-items: center;
     justify-content: center;
 }
-
 .admin-modal.show {
     display: flex;
 }
-
 .admin-modal-content {
     background: var(--bg-boxed);
     border-radius: 20px;
@@ -762,12 +661,10 @@ footer {
     max-width: 380px;
     animation: modalIn 0.3s ease;
 }
-
 @keyframes modalIn {
     from { transform: scale(0.9); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
-
 .admin-modal-header {
     display: flex;
     justify-content: space-between;
@@ -775,36 +672,29 @@ footer {
     padding: 18px 22px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-
 .admin-modal-header h3 {
     color: white;
     font-size: 1.2rem;
 }
-
 .admin-modal-close {
     color: #94A3B8;
     font-size: 1.5rem;
     cursor: pointer;
 }
-
 .admin-modal-close:hover {
     color: var(--accent);
 }
-
 .admin-modal-body {
     padding: 22px;
 }
-
 .admin-modal-body p {
     color: #94A3B8;
     margin-bottom: 12px;
     font-size: 0.85rem;
 }
-
 .password-wrapper {
     position: relative;
 }
-
 .password-wrapper input {
     width: 100%;
     padding: 10px 40px 10px 14px;
@@ -814,7 +704,6 @@ footer {
     color: white;
     font-size: 0.9rem;
 }
-
 .password-toggle {
     position: absolute;
     right: 12px;
@@ -823,14 +712,12 @@ footer {
     cursor: pointer;
     color: #94A3B8;
 }
-
 .admin-modal-footer {
     display: flex;
     gap: 12px;
     padding: 18px 22px;
     border-top: 1px solid rgba(255,255,255,0.1);
 }
-
 .modal-btn {
     flex: 1;
     padding: 10px;
@@ -839,32 +726,26 @@ footer {
     font-weight: 600;
     cursor: pointer;
 }
-
 .modal-btn.cancel {
     background: #334155;
     color: white;
 }
-
 .modal-btn.confirm {
     background: var(--secondary);
     color: white;
 }
-
 .modal-btn.confirm:hover {
     background: var(--primary);
 }
-
 /* ==================== RESPONSIVE HP ==================== */
 @media (max-width: 992px) {
     .hero-text h2 {
         font-size: 2.5rem;
     }
-    
     .steps-container {
         gap: 20px;
     }
 }
-
 @media (max-width: 768px) {
     /* 1. Navbar & Layout Dasar */
     .navbar { flex-direction: column !important; padding: 15px !important; gap: 10px !important; }
@@ -879,31 +760,25 @@ footer {
         padding: 30px 15px !important; 
         gap: 15px !important;
     }
-    
     /* Memastikan urutan normal (Logo dulu, baru Teks) */
     .hero-image { 
         order: -1 !important; /* Memaksa gambar logo lompat ke posisi paling atas */
         margin-bottom: 5px !important; 
     }
-    
     .hero-text { 
         order: 1 !important; /* Memaksa teks berada di bawah logo */
     }
-    
     .hero-image img { 
         max-width: 120px !important; /* Ukuran pas di HP */
     }
-    
     .hero-text h2 { 
         font-size: 1.6rem !important; 
         margin-bottom: 10px !important; 
     }
-    
     /* 3. Konsultasi & Jurusan (Anti-Luber) */
     .consultation-outer-box { padding: 20px !important; margin: 10px !important; border-radius: 20px !important; }
     .steps-container { grid-template-columns: 1fr !important; gap: 15px !important; }
     #jurusan-card-container { grid-template-columns: 1fr !important; gap: 15px !important; }
-    
     /* Tombol Konsultasi tidak meluber */
     .btn-start { padding: 10px 20px !important; font-size: 0.9rem !important; }
 }
