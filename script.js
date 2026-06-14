@@ -94,7 +94,7 @@ async function loadKnowledgeBase() {
         let res = await fetch(proxyUrl);
         let data = await res.json();
         
-        // Memasukkan data dari cloud ke variabel lokal web
+        // Memasukkan data ke variabel lokal
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
@@ -103,10 +103,10 @@ async function loadKnowledgeBase() {
         document.getElementById('loading-kb').style.display = 'none';
         document.getElementById('quiz-area-box').style.display = 'block';
         
-        // MEMANGGIL FUNGSI RENDER JURUSAN UTAMA
+        // Memanggil fungsi untuk merender daftar jurusan di halaman depan
         renderDaftarJurusanUtama(); 
         
-        // Evaluasi apakah data gejala berhasil dimuat
+        // Evaluasi data gejala
         if (dbGejala.length > 0) { 
             resetQuiz(); 
         } else { 
@@ -117,7 +117,6 @@ async function loadKnowledgeBase() {
         document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal koneksi ke cloud database.</p>'; 
     }
 }
-
 function renderCurrentQuestion() {
     if (dbGejala.length === 0 || currentStep >= dbGejala.length) return;
     let item = dbGejala[currentStep];
