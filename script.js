@@ -20,7 +20,7 @@ function togglePassword() {
     }
 }
 
-// ==================== ADMIN MODAL ====================
+// ==================== ADMIN  ====================
 function openAdminModal() {
     document.getElementById('adminModal').classList.add('show');
     document.getElementById('adminPassword').value = '';
@@ -82,9 +82,11 @@ function scrollToSection(section) {
     if (section === 'home') document.getElementById('nav-home').classList.add('active-link');
     if (section === 'consult') document.getElementById('nav-consult').classList.add('active-link');
     if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
+    if (section === 'program-studi') document.getElementById('nav-program-studi').classList.add('active-link');
+    if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
 }
 
-// ==================== LOAD DATABASE ====================
+// ====================  DATABASE ====================
 async function loadKnowledgeBase() {
     try {
         const timestamp = Date.now();
@@ -96,6 +98,14 @@ async function loadKnowledgeBase() {
         dbRule = data.rule || [];
         document.getElementById('loading-kb').style.display = 'none';
         document.getElementById('quiz-area-box').style.display = 'block';
+        renderDaftarJurusanUtama(); 
+        
+        if (dbGejala.length > 0) { resetQuiz(); }
+        else { document.getElementById('dynamic-question-container').innerHTML = '<p style="color:red;text-align:center;">⚠️ Belum ada data. Tambah di Admin Panel.</p>'; }
+    } catch(err) { 
+        console.error(err); 
+        document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal konek database.</p>'; 
+    }
         if (dbGejala.length > 0) { resetQuiz(); }
         else { document.getElementById('dynamic-question-container').innerHTML = '<p style="color:red;text-align:center;">⚠️ Belum ada data. Tambah di Admin Panel.</p>'; }
     } catch(err) { console.error(err); document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal konek database.</p>'; }
@@ -166,6 +176,8 @@ function updateActiveLinkOnScroll() {
         { id: 'home-section', navId: 'nav-home' },
         { id: 'consult-section', navId: 'nav-consult' },
         { id: 'about-section', navId: 'nav-about' }
+        { id: 'program-studi-section', navId: 'nav-program-studi' },
+        { id: 'about-section', navId: 'nav-about' }
     ];
     let current = '';
     const pos = window.scrollY + 150;
@@ -178,7 +190,24 @@ function updateActiveLinkOnScroll() {
         if (link) current === s.id ? link.classList.add('active-link') : link.classList.remove('active-link');
     });
 }
-
+// ====================  render jurusan ====================
+function renderDaftarJurusanUtama() {
+    const container = document.getElementById('jurusan-card-container');
+    if (!container) return;
+    
+    if (dbJurusan.length === 0) {
+        container.innerHTML = '<p style="color:#64748B; text-align:center; grid-column: 1/-1;">Belum ada data jurusan di cloud database.</p>';
+        return;
+    }
+    
+    container.innerHTML = dbJurusan.map(j => `
+        <div class="jurusan-info-card">
+            <span class="jurusan-info-badge">${escapeHtml(j.kd_jurusan)}</span>
+            <div class="jurusan-info-title">📖 ${escapeHtml(j.nama_jurusan)}</div>
+            <p class="jurusan-info-desc">${escapeHtml(j.deskripsi)}</p>
+        </div>
+    `).join('');
+}
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
     document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
