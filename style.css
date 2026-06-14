@@ -865,28 +865,39 @@ footer {
     }
 }
 
-/* ==================== RESPONSIVE HP (PADAT & RAPI) ==================== */
 @media (max-width: 768px) {
-    /* 1. Navbar */
+    /* 1. Navbar & Layout Dasar */
     .navbar { flex-direction: column !important; padding: 15px !important; gap: 10px !important; }
     .nav-links { gap: 10px !important; flex-wrap: wrap !important; justify-content: center !important; }
     .nav-links a { font-size: 0.85rem !important; }
 
-    /* 2. Hero Section: Teks Di Atas, Logo Di Bawah */
+    /* 2. Beranda: Logo (Atas) dan Tulisan (Bawah) */
     .hero-section { 
         display: flex !important; 
-        flex-direction: column !important; /* Teks atas, Logo bawah */
+        flex-direction: column !important; /* Susunan vertikal alami */
         text-align: center; 
         padding: 30px 15px !important; 
         gap: 15px !important;
     }
     
-    /* Memaksa Teks muncul lebih dulu */
-    .hero-text { order: 1 !important; }
-    .hero-image { order: 2 !important; }
+    /* Memastikan urutan normal (Logo dulu, baru Teks) */
+    .hero-image { 
+        order: -1 !important; /* Memaksa gambar logo lompat ke posisi paling atas */
+        margin-bottom: 5px !important; 
+    }
     
-    .hero-image img { max-width: 120px !important; margin-top: 10px; }
-    .hero-text h2 { font-size: 1.6rem !important; margin-bottom: 10px; }
+    .hero-text { 
+        order: 1 !important; /* Memaksa teks berada di bawah logo */
+    }
+    
+    .hero-image img { 
+        max-width: 120px !important; /* Ukuran pas di HP */
+    }
+    
+    .hero-text h2 { 
+        font-size: 1.6rem !important; 
+        margin-bottom: 10px !important; 
+    }
     
     /* 3. Konsultasi & Jurusan (Anti-Luber) */
     .consultation-outer-box { padding: 20px !important; margin: 10px !important; border-radius: 20px !important; }
