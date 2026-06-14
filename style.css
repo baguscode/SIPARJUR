@@ -865,149 +865,68 @@ footer {
     }
 }
 
-/* ==================== SCREEN RESPONSIVE UNTUK HP & TABLET ==================== */
+/* ==================== TOMBOL HAMBURGER (TAMPILAN DESKTOP) ==================== */
+.menu-toggle-btn {
+    display: none; /* Disembunyikan saat layar monitor laptop/PC lebar */
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1001;
+}
+
+/* ==================== MEDIA QUERIES UNTUK TAMPILAN HP ==================== */
 @media (max-width: 768px) {
     
-    /* 1. Pengaturan Header & Navbar di HP */
     .navbar {
-        flex-direction: column; /* Mengubah susunan logo dan menu menjadi atas-bawah */
-        gap: 15px;
-        padding: 15px 10px !important; /* Padding lebih ramping di HP */
+        flex-direction: row !important; /* Mencegah logo dan menu menumpuk vertikal */
+        justify-content: space-between; /* Logo di kiri mentok, tombol menu di kanan mentok */
+        align-items: center;
+        padding: 12px 20px !important;
+        position: relative;
     }
 
-    .logo-area {
-        justify-content: center;
-        text-align: center;
+    .menu-toggle-btn {
+        display: block; /* Tombol garis tiga resmi dimunculkan di HP */
     }
 
-    .logo-area img {
-        height: none; /* Logo lebih kecil di HP */
-    }
-
-    .logo-title h1 {
-        font-size: 1.1rem;
-    }
-
-    .logo-title p {
-        font-size: 0.55rem;
-    }
-
-    /* 2. Menu Navigasi Berjajar Rapi di HP */
     .nav-links {
-        gap: 15px;
-        flex-wrap: wrap; /* Jika menu terlalu panjang, otomatis turun ke bawahnya dengan rapi */
-        justify-content: center;
-        padding: 0;
+        display: none; /* Menu disembunyikan secara default sebelum diklik */
+        position: absolute;
+        top: 100%; /* Menempel pas di batas bawah navbar */
+        left: 0;
+        width: 100%;
+        background: #FFFFFF;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 20px 0 !important;
+        flex-direction: column !important; /* Menyusun tautan menu berderet ke bawah */
+        gap: 15px !important;
+        z-index: 1000;
+    }
+
+    /* Kelas aktif yang dipicu oleh JavaScript saat tombol ☰ diklik */
+    .nav-links.mobile-active {
+        display: flex !important;
+        animation: slideDownNav 0.3s ease forwards;
     }
 
     .nav-links a {
-        font-size: 0.85rem;
-        padding: 4px 8px;
-    }
-
-    /* Matikan efek mengecil saat scroll khusus di HP agar tidak terlalu sensitif */
-    header.scrolled .navbar {
-        padding: 15px 10px !important; 
-    }
-    header.scrolled .logo-area img {
-        height: 35px !important;
-    }
-
-    /* 3. Penyesuaian Tooltip Admin di HP (Dibuat statis di bawah ikon agar tidak keluar layar) */
-    .nav-links #nav-admin:hover::before {
-        top: 35px !important;
-        font-size: 0.65rem;
-        padding: 4px 8px;
-    }
-
-    /* 4. Bagian Hero Section (Halaman Utama) */
-    .hero-section {
-        grid-template-columns: 1fr; /* Mengubah 2 kolom menjadi 1 kolom vertikal */
+        font-size: 0.95rem !important;
+        padding: 10px 0 !important;
+        width: 100%;
         text-align: center;
-        padding: 40px 16px;
-        min-height: auto;
-        gap: 30px;
+        display: block;
     }
 
-    .hero-image {
-        order: -1; /* Memindahkan gambar SIPARJUR ke atas teks saat di HP */
-    }
-
-    .hero-image img {
-        max-width: 50%; /* Ukuran gambar disesuaikan agar tidak memenuhi layar HP */
-    }
-
-    .hero-text h2 {
-        font-size: 1.8rem;
-        line-height: 1.3;
-    }
-
-    .hero-text p {
-        font-size: 0.9rem;
-        margin-bottom: 25px;
-    }
-
-    .btn-start {
-        padding: 12px 28px;
-        font-size: 0.9rem;
-        width: 100%; /* Tombol dibuat penuh selebar layar HP agar mudah diklik */
-    }
-
-    /* 5. Area Kuesioner Konsultasi & Hasil */
-    .consultation-outer-box {
-        margin: 20px 10px;
-        padding: 25px 15px;
-        border-radius: 20px;
-    }
-
-    .consultation-header-label h2 {
-        font-size: 1.3rem;
-    }
-
-    .interactive-card {
-        padding: 20px 15px;
-    }
-
-    .progress-container {
-        flex-direction: column; /* Indikator progress bertumpuk vertikal */
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .progress-bar-bg {
-        width: 100%; /* Progress bar memenuhi lebar layar */
-    }
-
-    .question-card h3 {
-        font-size: 1rem;
-        line-height: 1.5;
-    }
-
-    .choice-btn {
-        padding: 12px 16px;
-        font-size: 0.85rem;
-    }
-
-    .choice-btn:hover {
-        transform: none; /* Matikan efek geser ke kanan saat hover di HP agar tidak aneh saat disentuh */
-    }
-
-    /* 6. Halaman Tentang / Cara Kerja */
-    .how-it-works {
-        margin: 50px auto;
-    }
-
-    .how-it-works h3 {
-        font-size: 1.4rem;
-        margin-bottom: 30px;
-    }
-
-    .steps-container {
-        grid-template-columns: 1fr; /* 3 Kotak cara kerja menjadi berurutan ke bawah */
-        gap: 15px;
+    /* Animasi tirai menu meluncur turun halus dari atas */
+    @keyframes slideDownNav {
+        0% { opacity: 0; transform: translateY(-10px); }
+        100% { opacity: 1; transform: translateY(0); }
     }
 }
-
 /* Penyesuaian khusus untuk HP layar sangat kecil (di bawah 480px) */
 @media (max-width: 480px) {
     .hero-text h2 {
