@@ -18,11 +18,12 @@
                 </div>
             </div>
             <ul class="nav-links">
-                <li><a onclick="showMainContent(); scrollToSection('home')" id="nav-home">Beranda</a></li>
-                <li><a onclick="showMainContent(); scrollToSection('consult')" id="nav-consult">Konsultasi</a></li>
-                <li><a onclick="showMainContent(); scrollToSection('about')" id="nav-about">Tentang</a></li>
-              <li><a onclick="openAdminModal()" id="nav-admin">👤</a></li>
-            </ul>
+            <li><a onclick="showMainContent(); scrollToSection('home')" id="nav-home">Beranda</a></li>
+            <li><a onclick="showMainContent(); scrollToSection('consult')" id="nav-consult">Konsultasi</a></li>
+            <li><a onclick="showMainContent(); scrollToSection('program-studi')" id="nav-program-studi">Daftar Jurusan</a></li>
+            <li><a onclick="showMainContent(); scrollToSection('about')" id="nav-about">Tentang</a></li>
+            <li><a onclick="openAdminModal()" id="nav-admin">👤</a></li>
+</ul>
         </div>
     </header>
 
@@ -69,6 +70,18 @@
                 </div>
             </main>
         </section>
+                <!-- Daftar Jurusan -->
+<section id="program-studi-section" class="reveal" style="max-width: 1000px; margin: 60px auto; padding: 0 20px; scroll-margin-top: 100px;">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="color: var(--primary); font-size: 2rem; font-weight: 700;">🎓 Daftar Jurusan yang Tersedia</h2>
+        <p style="color: #64748B; margin-top: 8px; font-size: 0.95rem;">Berikut adalah rumpun program studi kuliah yang dipetakan dalam sistem pakar SIPARJUR</p>
+    </div>
+    
+    <!-- Tempat menampung kotak-kotak jurusan dinamis dari database -->
+    <div id="jurusan-card-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+        <!-- Akan diisi otomatis oleh JavaScript -->
+    </div>
+</section>
 
         <!-- TENTANG -->
         <section id="about-section" class="how-it-works reveal">
