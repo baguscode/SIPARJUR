@@ -207,7 +207,6 @@ function updateActiveLinkOnScroll() {
         if (link) current === s.id ? link.classList.add('active-link') : link.classList.remove('active-link');
     });
 }
-
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
     document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
