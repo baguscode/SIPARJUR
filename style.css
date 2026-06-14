@@ -865,157 +865,123 @@ footer {
     }
 }
 
-/* ==================== TOMBOL MENU HAMBURGER (DESKTOP) ==================== */
-.menu-toggle-btn {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 1.6rem;
-    color: var(--primary);
-    cursor: pointer;
-    padding: 5px;
-    z-index: 1005;
-}
-
-/* ==================== PERBAIKAN TOTAL LAYAR HP (RESPONSIF & RAPI) ==================== */
+/* ==================== PERBAIKAN STRUKTUR HP RESPONSIF TOTAL ==================== */
 @media (max-width: 768px) {
     
-    /* 1. Reset Skala Global di HP */
-    html {
-        font-size: 14px; 
+    /* 1. Reset Skala & Batas Layar (Anti Luber) */
+    html, body {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important; /* Mengunci agar layar tidak bisa digeser ke kanan-kiri */
+        box-sizing: border-box;
     }
 
-    body {
-        overflow-x: hidden; /* Mencegah halaman bisa digeser ke kanan-kiri */
-    }
-
-    /* 2. Navigasi Atas (Sesuai Screenshot yang Sudah Berhasil) */
+    /* 2. Susunan Header Navbar: Logo di Atas, Menu di Bawah */
     .navbar {
-        position: relative !important;
-        display: block !important;
-        padding: 10px 15px !important;
-        padding-right: 50px !important; 
+        display: flex !important;
+        flex-direction: column !important; /* Memaksa susunan tegak lurus ke bawah */
+        align-items: center !important;
+        text-align: center !important;
+        padding: 15px 10px !important;
+        gap: 15px !important;
+    }
+
+    .logo-area {
+        flex-direction: column !important; /* Logo gambar di atas, teks nama di bawahnya */
+        align-items: center !important;
+        gap: 8px !important;
     }
 
     .logo-area img {
-        height: 35px !important; 
+        height: 45px !important; /* Ukuran logo disesuaikan */
     }
-    
+
     .logo-title h1 {
-        font-size: 1.1rem !important;
+        font-size: 1.3rem !important;
     }
-    
+
     .logo-title p {
-        font-size: 0.6rem !important;
+        font-size: 0.65rem !important;
     }
 
-    .menu-toggle-btn {
-        display: block !important;
-        position: absolute !important;
-        top: 14px;
-        right: 15px;
-        font-size: 1.5rem;
-    }
-
-    /* Tirai Menu Dropdown */
+    /* Deretan Menu Teks Berjajar Rapi di Bawah Logo */
     .nav-links {
-        display: none;
-        position: absolute !important;
-        top: 100% !important;
-        left: 0 !important;
-        width: 100% !important;
-        background: #FFFFFF !important;
-        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1) !important;
-        border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
-        padding: 10px 0 !important;
-        flex-direction: column !important;
-        gap: 0 !important;
-        margin: 0 !important;
-        z-index: 1000 !important;
-    }
-
-    .nav-links.mobile-active {
         display: flex !important;
-        animation: slideDownNav 0.2s ease-out forwards;
+        flex-direction: row !important; /* Tetap berjajar ke samping agar mudah diklik */
+        flex-wrap: wrap !important; /* Jika tidak muat, otomatis turun ke baris baru */
+        justify-content: center !important;
+        gap: 12px !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     .nav-links a {
-        font-size: 0.95rem !important;
-        padding: 12px 0 !important;
-        width: 100% !important;
-        text-align: center !important;
-        display: block !important;
-        border-bottom: 1px solid #F1F5F9;
-    }
-    
-    .nav-links li:last-child a {
-        border-bottom: none;
+        font-size: 0.85rem !important; /* Ukuran font menu teks sedikit dikecilkan agar muat semata */
+        padding: 5px 8px !important;
     }
 
-    /* 3. PERBAIKAN LANDING UTAMA (HERO SECTION) AGAR TIDAK MEMANJANG ATAU RUSAK */
-    /* Menargetkan kontainer utama pembungkus teks dan logo besar di beranda */
-    .hero-container, .home-section, main.hero, section#home-section {
+    /* Sembunyikan tombol hamburger sementara agar tidak merusak posisi */
+    .menu-toggle-btn {
+        display: none !important;
+    }
+
+    /* 3. Penataan Halaman Landing Beranda */
+    /* Menargetkan selektor selektif pembungkus halaman depan */
+    .home-section, main.hero, .hero, section[id*="home"] {
         display: flex !important;
-        flex-direction: column !important; /* Susun logo besar di bawah teks */
+        flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
-        padding: 40px 20px !important;
-        gap: 20px !important;
+        padding: 30px 15px !important;
     }
 
-    /* Mengecilkan judul teks utama agar proporsional di HP */
-    .hero-container h2, .home-section h2, .interactive-card h2 {
-        font-size: 1.8rem !important;
-        line-height: 1.3 !important;
-    }
-
-    /* Merapikan teks deskripsi di bawah judul */
-    .hero-container p, .home-section p {
-        font-size: 0.95rem !important;
-        line-height: 1.5 !important;
-        max-width: 100% !important;
-    }
-
-    /* Mengatur skala ukuran logo besar SIPARJUR di tengah halaman HP */
-    .hero-container img, .home-section img, section#home-section img {
-        max-width: 140px !important; /* Membatasi agar gambar logo tidak kebesaran */
-        height: auto !important;
-        margin-top: 10px !important;
-    }
-
-    /* 4. MEMAKSA ALUR SISTEM (STEPS) RUNTUH KE BAWAH */
-    .steps-container {
-        display: flex !important;
-        flex-direction: column !important; /* Kotak 1, 2, 3 berurutan ke bawah */
-        gap: 15px !important;
-        padding: 0 10px !important;
-    }
-
-    .step-card {
+    /* 4. PENGAMAT KOTAK KONSULTASI (ANTI MELUBER) */
+    .consultation-outer-box, .interactive-card, section[id*="consult"] {
         width: 100% !important;
         max-width: 100% !important;
-        box-sizing: border-box;
         padding: 15px !important;
+        margin: 20px auto !important;
+        box-sizing: border-box !important; /* Memaksa padding dihitung di dalam kotak */
     }
 
-    /* 5. Optimasi Kontainer Pertanyaan, Daftar Jurusan, & Tombol */
-    .interactive-card, .consultation-outer-box, #program-studi-section {
-        padding: 15px !important;
-        margin: 30px auto !important;
-    }
-
-    #jurusan-card-container {
-        grid-template-columns: 1fr !important; /* Kartu jurusan berderet 1 baris saja */
-        gap: 15px !important;
+    /* Tombol Pilihan Ya/Tidak di Kuesioner */
+    .options-vertical {
+        display: flex !important;
+        flex-direction: column !important; /* Tombol Ya di atas, tombol Tidak di bawah */
+        gap: 10px !important;
+        width: 100% !important;
     }
 
     .choice-btn {
-        width: 100% !important; /* Tombol Ya/Tidak kuesioner memenuhi lebar layar HP */
-        padding: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
-    @keyframes slideDownNav {
-        0% { opacity: 0; transform: translateY(-5px); }
-        100% { opacity: 1; transform: translateY(0); }
+    /* 5. MEMAKSA BAGIAN TENTANG (3 KOTAK ALUR) RUNTUH KE BAWAH */
+    .steps-container {
+        display: flex !important;
+        flex-direction: column !important; /* Kotak 1, 2, dan 3 dipaksa berurutan ke bawah */
+        gap: 15px !important;
+        padding: 0 5px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .step-card {
+        width: 100% !important; /* Mengisi penuh lebar layar HP */
+        max-width: 100% !important;
+        margin: 0 0 10px 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 6. Kotak Informasi Rumpun Jurusan */
+    #program-studi-section {
+        padding: 0 15px !important;
+        margin: 40px auto !important;
+    }
+
+    #jurusan-card-container {
+        grid-template-columns: 1fr !important; /* Kartu jurusan vertikal 1 kolom */
+        gap: 15px !important;
     }
 }
