@@ -192,9 +192,9 @@ function updateActiveLinkOnScroll() {
 }
 // ==================== ADMIN FUNCTIONS ====================
 async function loadAdminData() {
-    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
-    document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="4">⏳ Memuat...</td></tr>';
-    document.getElementById('table-rule').innerHTML = '<tr><td colspan="4">⏳ Memuat...</td></tr>';
+    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="2">⏳ Memuat...</td></tr>';
+    document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="2">⏳ Memuat...</td></tr>';
+    document.getElementById('table-rule').innerHTML = '<tr><td colspan="2">⏳ Memuat...</td></tr>';
     try {
         const timestamp = Date.now();
         const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
@@ -205,6 +205,13 @@ async function loadAdminData() {
         dbRule = data.rule || [];
         renderAdminTables();
         populateAdminSelects();
+        renderDaftarJurusanUtama(); 
+        
+        document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) { 
+        console.error(e); 
+        document.getElementById('table-gejala').innerHTML = `<tr><td colspan="3">❌ Error</td></tr>`; 
+    }
         document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (e) { console.error(e); document.getElementById('table-gejala').innerHTML = `<td><td colspan="3">❌ Error</td></tr>`; }
 }
