@@ -878,52 +878,69 @@ footer {
 }
 
 /* ==================== MEDIA QUERIES UNTUK TAMPILAN HP ==================== */
+/* ==================== TOMBOL MENU HAMBURGER (DESKTOP) ==================== */
+.menu-toggle-btn {
+    display: none; /* Sembunyikan ikon garis tiga di laptop/monitor lebar */
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1005;
+}
+
+/* ==================== PERBAIKAN RESPONSIF KHUSUS HP ==================== */
 @media (max-width: 768px) {
     
+    /* Memaksa Logo tetap di kiri dan Tombol Menu Hamburger berada di kanan mentok */
     .navbar {
-        flex-direction: row !important; /* Mencegah logo dan menu menumpuk vertikal */
-        justify-content: space-between; /* Logo di kiri mentok, tombol menu di kanan mentok */
-        align-items: center;
-        padding: 12px 20px !important;
+        display: flex !important;
+        flex-direction: row !important; 
+        justify-content: space-between !important;
+        align-items: center !important;
         position: relative;
     }
 
+    /* Munculkan ikon hamburger hanya di layar gawai/HP */
     .menu-toggle-btn {
-        display: block; /* Tombol garis tiga resmi dimunculkan di HP */
+        display: block !important;
     }
 
+    /* Menyembunyikan deretan menu teks asli dan mengubahnya jadi tirai melayang */
     .nav-links {
-        display: none; /* Menu disembunyikan secara default sebelum diklik */
+        display: none; /* Sembunyi sebelum tombol dipencet */
         position: absolute;
-        top: 100%; /* Menempel pas di batas bawah navbar */
+        top: 100%; /* Menempel tepat di bawah bar navigasi */
         left: 0;
         width: 100%;
-        background: #FFFFFF;
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+        background: #FFFFFF; /* Latar belakang tirai menu putih bersih */
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
         border-top: 1px solid rgba(0, 0, 0, 0.05);
-        padding: 20px 0 !important;
-        flex-direction: column !important; /* Menyusun tautan menu berderet ke bawah */
-        gap: 15px !important;
+        padding: 15px 0 !important;
+        flex-direction: column !important; /* Baris menu berderet tegak lurus ke bawah */
+        gap: 10px !important;
         z-index: 1000;
     }
 
-    /* Kelas aktif yang dipicu oleh JavaScript saat tombol ☰ diklik */
+    /* Kelas pemicu aktif saat tombol hamburger di-klik lewat JavaScript */
     .nav-links.mobile-active {
         display: flex !important;
-        animation: slideDownNav 0.3s ease forwards;
+        animation: slideDownNav 0.25s ease-out forwards;
     }
 
+    /* Merapikan tampilan link menu di dalam tirai HP agar pas di tengah */
     .nav-links a {
-        font-size: 0.95rem !important;
-        padding: 10px 0 !important;
+        font-size: 1rem !important;
+        padding: 12px 0 !important;
         width: 100%;
         text-align: center;
         display: block;
     }
 
-    /* Animasi tirai menu meluncur turun halus dari atas */
+    /* Animasi tirai menu meluncur turun tipis dari atas */
     @keyframes slideDownNav {
-        0% { opacity: 0; transform: translateY(-10px); }
+        0% { opacity: 0; transform: translateY(-8px); }
         100% { opacity: 1; transform: translateY(0); }
     }
 }
