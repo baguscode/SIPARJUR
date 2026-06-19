@@ -61,23 +61,27 @@
                     <p>Mesin Inferensi Forward Chaining Sedang Melakukan Penalaran...</p>
                 </div>
                 <div class="result-card" id="result-box">
-                    <span class="res-badge">🎯 Top 3 Rekomendasi Jurusan Terbaik Anda</span>
-                    <div class="result-list" id="result-list-container"></div>
-                    <button class="reset-btn" onclick="restartQuizWithScroll()">🔄 Ulangi Tes Konsultasi</button>
-                </div>
+    <div id="result-explanation" style="margin-bottom: 20px; color: #94A3B8; text-align: justify; font-size: 0.9rem;">
+        Berdasarkan hasil analisis mendalam terhadap instrumen peminatan yang telah Anda pilih, sistem telah melakukan pemrosesan data untuk memetakan kecenderungan minat Anda. Berikut adalah 3 rekomendasi program studi terbaik yang paling sesuai dengan profil Anda:
+    </div>
+
+    <span class="res-badge">🎯 Top 3 Rekomendasi Jurusan Terbaik Anda</span>
+    <div class="result-list" id="result-list-container"></div>
+    
+    <div class="button-group" style="display: flex; gap: 15px; margin-top: 20px;">
+        <button class="reset-btn-side" style="flex: 1; padding: 12px; border-radius: 40px; border: none; background: #334155; color: white; cursor: pointer;" onclick="restartQuizWithScroll()">🔄 Ulangi Tes</button>
+        <button class="print-btn-side" style="flex: 1; padding: 12px; border-radius: 40px; border: none; background: var(--secondary); color: white; cursor: pointer;" onclick="window.print()">🖨️ Cetak/Save PDF</button>
+    </div>
+</div>
             </main>
         </section>
                 <!-- Daftar Jurusan -->
-<section id="program-studi-section" class="reveal" style="max-width: 1000px; margin: 60px auto; padding: 0 20px; scroll-margin-top: 100px;">
+<section id="program-studi-section" class="reveal" style="max-width: 1000px; margin: 60px auto; padding: 0 20px;">
     <div style="text-align: center; margin-bottom: 40px;">
-        <h2 style="color: var(--primary); font-size: 2rem; font-weight: 700;">🎓 Daftar Jurusan yang Tersedia</h2>
-        <p style="color: #64748B; margin-top: 8px; font-size: 0.95rem;">Berikut adalah rumpun program studi kuliah yang dipetakan dalam sistem pakar SIPARJUR</p>
+        <h2 style="color: var(--primary); font-size: 2rem; font-weight: 700;">🎓 Daftar Fakultas dan Jurusan  </h2>
     </div>
-    
-    <!-- Tempat menampung kotak-kotak jurusan dinamis dari database -->
-    <div id="jurusan-card-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
-        <!-- Akan diisi otomatis oleh JavaScript -->
-    </div>
+    <div id="jurusan-card-container">
+        </div>
 </section>
         <!-- TENTANG -->
         <section id="about-section" class="how-it-works reveal">
@@ -135,22 +139,26 @@
                 </div>
             </div>
             <div id="tab-rule" class="tab-content">
-                <div class="form-card">
-                    <h3>Hubungkan Gejala ke Jurusan</h3>
-                    <div class="form-row">
-                        <div class="form-group"><label>Gejala</label><select id="rule-gejala" class="admin-select"></select></div>
-                        <div class="form-group"><label>Jurusan</label><select id="rule-jurusan" class="admin-select"></select></div>
-                        <div class="form-group"><label>Bobot</label><select id="rule-bobot" class="admin-select"><option value="3">🔥 Bobot 3</option><option value="1">📌 Bobot 1</option></select></div>
-                        <button class="btn-primary" onclick="addRule()">+ Hubungkan</button>
-                    </div>
-                </div>
-                <div class="table-wrapper">
-                    <table class="admin-table">
-                        <thead><tr><th>Gejala</th><th>Jurusan</th><th>Bobot</th><th>Aksi</th></tr></thead>
-                        <tbody id="table-rule"><tr><td colspan="4">⏳ Memuat...</td></tr></tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="form-card">
+        <h3>Hubungkan Gejala ke Jurusan</h3>
+        <div class="form-row">
+            <div class="form-group"><label>Gejala</label><select id="rule-gejala" class="admin-select"></select></div>
+            <div class="form-group"><label>Jurusan</label><select id="rule-jurusan" class="admin-select"></select></div>
+            <button class="btn-primary" onclick="addRule()">+ Hubungkan</button>
+        </div>
+    </div>
+    <div class="table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Gejala</th>
+                    <th>Jurusan</th>
+                    <th>Aksi</th> </tr>
+            </thead>
+            <tbody id="table-rule"><tr><td colspan="3">⏳ Memuat...</td></tr></tbody>
+        </table>
+    </div>
+</div>
         </div>
     </div>
     <!-- MODAL PASSWORD -->
