@@ -1,8 +1,7 @@
 // ==================== KONFIGURASI ====================
-const API_URL = "https://script.google.com/macros/s/AKfycbwi0L3mUEmsvbNGGFp0ha94XJKzhnAANPGMAhZOG_GewD7NaLFKlvFQg8UMTTNbsQPt/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxKACumXHPXl10fzoSNTnoXzp3EtgiBnUyLBetKpmxzp26PU2xbHuQ5AZ1eEbUnPcRi/exec";
 const ADMIN_PASSWORD = "admin123";
-const CORS_PROXY = "https://corsproxy.io/";
-let dbGejala = [], dbJurusan = [], dbRule = [];
+let dbGejala = [], dbJurusan = [], dbRule = [],dbFakultas = [];
 let currentStep = 0;
 let skorJurusan = {};
 // ==================== PASSWORD TOGGLE ====================
@@ -90,19 +89,25 @@ function scrollToSection(section) {
     if (navLinks) navLinks.classList.remove('mobile-active');
 }
 // ====================  DATABASE ====================
+// ==================== DATABASE ====================
 async function loadKnowledgeBase() {
     try {
         const timestamp = Date.now();
-        const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
-        let res = await fetch(proxyUrl);
+        // Hapus CORS_PROXY, gunakan API_URL langsung
+        const url = API_URL + "?action=getKnowledgeBase&_=" + timestamp;
+        let res = await fetch(url);
         let data = await res.json();
+        
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
+        dbFakultas = data.fakultas || [];
+        
         document.getElementById('loading-kb').style.display = 'none';
         document.getElementById('quiz-area-box').style.display = 'block';
-        // Memanggil fungsi untuk merender daftar jurusan di halaman depan
+        
         renderDaftarJurusanUtama(); 
+        
         if (dbGejala.length > 0) { 
             resetQuiz(); 
         } else { 
@@ -112,7 +117,7 @@ async function loadKnowledgeBase() {
         console.error("Gagal memuat basis pengetahuan:", err); 
         document.getElementById('loading-kb').innerHTML = '<p style="color:red;text-align:center;">❌ Gagal koneksi ke cloud database.</p>'; 
     }
-} 
+}
 function renderCurrentQuestion() {
     if (dbGejala.length === 0 || currentStep >= dbGejala.length) return;
     let item = dbGejala[currentStep];
@@ -121,31 +126,77 @@ function renderCurrentQuestion() {
     let container = document.getElementById('dynamic-question-container');
     container.innerHTML = `<div class="question-card active"><h3>${currentStep+1}. ${escapeHtml(item.indikator)}</h3><div class="options-vertical"><button class="choice-btn" onclick="answerQuestion('${escapeHtml(item.kd_gejala)}', 3)"><span>✅ Ya</span><span>➔</span></button><button class="choice-btn" onclick="answerQuestion('${escapeHtml(item.kd_gejala)}', 0)"><span>❌ Tidak</span><span>➔</span></button></div></div>`;
 }
-function answerQuestion(kdGejala, points) {
-    if (points > 0) {
+function answerQuestion(kdGejala, isSelected) {
+    if (isSelected) {
+        // Cari semua aturan yang berkaitan dengan gejala ini
         let matchedRules = dbRule.filter(r => r.kd_gejala === kdGejala);
+        
         matchedRules.forEach(rule => {
-            if (!skorJurusan[rule.kd_jurusan]) skorJurusan[rule.kd_jurusan] = 0;
-            skorJurusan[rule.kd_jurusan] += parseInt(rule.bobot) || 0;
+            // Langsung tambah 1 untuk setiap kecocokan (frekuensi)
+            skorJurusan[rule.kd_jurusan] = (skorJurusan[rule.kd_jurusan] || 0) + 1;
         });
     }
+    
     currentStep++;
-    if (currentStep < dbGejala.length) { renderCurrentQuestion(); }
-    else { showResults(); }
+    if (currentStep < dbGejala.length) {
+        renderCurrentQuestion();
+    } else {
+        showResults();
+    }
 }
 function showResults() {
+    // 1. CEK VALIDASI DI PALING ATAS
+    const totalSkor = Object.values(skorJurusan).reduce((a, b) => a + b, 0);
+    
+    if (totalSkor === 0) {
+        alert("⚠️ Mohon maaf, Anda belum memilih minat apapun. Silakan isi pertanyaan minat Anda dengan benar terlebih dahulu.");
+        resetQuiz(); 
+        return; // Hentikan fungsi di sini, jangan lanjut ke bawah!
+    }
+
+    // 2. JIKA LULUS VALIDASI, BARU JALANKAN PROSES TAMPILAN
     document.getElementById('quiz-area-box').style.display = 'none';
     document.getElementById('loading-view').style.display = 'block';
+
     setTimeout(() => {
         document.getElementById('loading-view').style.display = 'none';
         document.getElementById('result-box').style.display = 'block';
-        let hasil = dbJurusan.map(j => ({ nama: j.nama_jurusan, deskripsi: j.deskripsi, skor: skorJurusan[j.kd_jurusan] || 0 })).sort((a, b) => b.skor - a.skor).slice(0, 3);
+
+        // 3. Logika sortir dan filter
+        let semuaJurusan = dbJurusan.map(j => ({ 
+            nama: j.nama_jurusan, 
+            deskripsi: j.deskripsi, 
+            kd_fakultas: j.kd_fakultas,
+            skor: skorJurusan[j.kd_jurusan] || 0 
+        })).sort((a, b) => b.skor - a.skor);
+
+        let hasil = []; 
+        let fakultasTerpakai = [];
+
+        for (let j of semuaJurusan) {
+            if (!fakultasTerpakai.includes(j.kd_fakultas)) {
+                hasil.push(j);
+                fakultasTerpakai.push(j.kd_fakultas);
+            }
+            if (hasil.length === 3) break;
+        }
+
+        // 4. Render ke HTML
         let container = document.getElementById('result-list-container');
         container.innerHTML = '';
-        let totalSkor = hasil.reduce((sum, h) => sum + h.skor, 0);
-        if (totalSkor === 0) { container.innerHTML = '<div class="result-item"><div class="res-title">📭 Hasil Kurang Valid</div><div class="res-desc">Silakan ulangi tes.</div></div>'; }
-        else { hasil.forEach((h, idx) => { container.innerHTML += `<div class="result-item"><div class="rank-number">#${idx+1}</div><div class="res-title">🏆 ${escapeHtml(h.nama)}</div><div class="res-desc">${escapeHtml(h.deskripsi)}</div><div style="margin-top:8px;font-size:0.8rem;color:var(--secondary);">🎯 Skor: ${h.skor} poin</div></div>`; }); }
-        document.getElementById('result-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        hasil.forEach((h, idx) => {
+            let fakultas = dbFakultas.find(f => String(f.kd_fakultas).trim() === String(h.kd_fakultas).trim());
+            let namaFak = fakultas ? fakultas.nama_fakultas : "Fakultas Tidak Ditemukan";
+
+            container.innerHTML += `
+                <div class="result-item">
+                    <div class="rank-number">#${idx + 1}</div>
+                    <div style="font-size: 1.1rem; color: var(--secondary); font-weight: 800; margin-bottom: 5px; text-transform: uppercase;">${namaFak}</div>
+                    <div class="res-title">🏆 ${escapeHtml(h.nama)}</div>
+                    <div class="res-desc">${escapeHtml(h.deskripsi)}</div>
+                </div>`;
+        });
     }, 1200);
 }
 function resetQuiz() {
@@ -185,34 +236,55 @@ function updateActiveLinkOnScroll() {
     });
 }
 // ==================== ADMIN FUNCTIONS ====================
+
 async function loadAdminData() {
-    document.getElementById('table-gejala').innerHTML = '<tr><td colspan="3">⏳ Memuat...</td></tr>';
-    document.getElementById('table-jurusan').innerHTML = '<tr><td colspan="4">⏳ Memuat...</td></tr>';
-    document.getElementById('table-rule').innerHTML = '<tr><td colspan="4">⏳ Memuat...</td></tr>';
     try {
-        const timestamp = Date.now();
-        const proxyUrl = CORS_PROXY + API_URL + "?action=getKnowledgeBase&_=" + timestamp;
-        let res = await fetch(proxyUrl);
-        let data = await res.json();
+        console.log("Mencoba memuat data admin...");
+        // Gunakan 'res' agar tidak tertukar dengan 'response' yang tidak terdefinisi
+        const res = await fetch(API_URL); 
+        
+        if (!res.ok) throw new Error("Gagal mengambil data, status: " + res.status);
+        
+        const data = await res.json();
+        
+        // Pastikan variabel global terisi
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
-        renderAdminTables();
+        dbFakultas = data.fakultas || [];
+        
+        console.log("Data Admin berhasil dimuat:", data);
+        
+        // Panggil fungsi render
+        renderAdminTables(); 
         populateAdminSelects();
-        renderDaftarJurusanUtama(); 
-        document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } catch (e) { 
-        console.error(e); 
-        document.getElementById('table-gejala').innerHTML = `<tr><td colspan="3">❌ Error</td></tr>`; 
+        
+    } catch (err) {
+        console.error("Gagal load data:", err);
+        alert("Gagal memuat data admin. Cek Console (F12) untuk detail.");
     }
 }
 function renderAdminTables() {
     const tg = document.getElementById('table-gejala');
-    if (tg) tg.innerHTML = dbGejala.length ? dbGejala.map(g => `<tr><td><strong>${escapeHtml(g.kd_gejala)}</strong></td><td>${escapeHtml(g.indikator)}</td><td><button class="btn-delete" onclick="deleteAdminItem('gejala','${escapeHtml(g.kd_gejala)}')">🗑 Hapus</button></td></tr>`).join('') : '<tr><td colspan="3">📭 Belum ada data</td></tr>';
+    if (tg) tg.innerHTML = dbGejala.map(g => `<tr><td>${g.kd_gejala}</td><td>${g.indikator}</td><td><button onclick="deleteAdminItem('gejala','${g.kd_gejala}')">🗑 Hapus</button></td></tr>`).join('');
+
     const tj = document.getElementById('table-jurusan');
-    if (tj) tj.innerHTML = dbJurusan.length ? dbJurusan.map(j => `<tr><td><strong>${escapeHtml(j.kd_jurusan)}</strong></td><td>${escapeHtml(j.nama_jurusan)}</td><td>${escapeHtml(j.deskripsi)}</td><td><button class="btn-delete" onclick="deleteAdminItem('jurusan','${escapeHtml(j.kd_jurusan)}')">🗑 Hapus</button></td></tr>`).join('') : '<tr><td colspan="4">📭 Belum ada data</td></tr>';
+    if (tj) tj.innerHTML = dbJurusan.map(j => `<tr><td>${j.kd_jurusan}</td><td>${j.nama_jurusan}</td><td>${j.kd_fakultas}</td><td><button onclick="deleteAdminItem('jurusan','${j.kd_jurusan}')">🗑 Hapus</button></td></tr>`).join('');
+
     const tr = document.getElementById('table-rule');
-    if (tr) tr.innerHTML = dbRule.length ? dbRule.map(r => `<tr><td>${escapeHtml(r.kd_gejala)}</td><td>${escapeHtml(r.kd_jurusan)}</td><td><span class="badge-bobot">${r.bobot}</span></td><td><button class="btn-delete" onclick="deleteAdminItem('rule','${escapeHtml(r.kd_gejala)}|${escapeHtml(r.kd_jurusan)}')">🗑 Hapus</button></td></tr>`).join('') : '<tr><td colspan="4">📭 Belum ada data</td></tr>';
+    if (tr) {
+        tr.innerHTML = dbRule.map(r => {
+            // Gunakan .find() yang aman
+            let jrs = dbJurusan.find(item => String(item.kd_jurusan).trim() === String(r.kd_jurusan).trim());
+            let namaJur = jrs ? jrs.nama_jurusan : "Jurusan Tidak Ditemukan";
+            
+            return `<tr>
+                <td>${r.kd_gejala}</td>
+                <td>${namaJur}</td>
+                <td><button onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_jurusan}')">🗑 Hapus</button></td>
+            </tr>`;
+        }).join('');
+    }
 }
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
@@ -225,11 +297,30 @@ function populateAdminSelects() {
 }
 async function sendPostRequest(payload) {
     try {
-        const res = await fetch(CORS_PROXY + API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const res = await fetch(API_URL, { 
+            method: 'POST', 
+            // Jangan tambahkan 'mode: no-cors' jika ingin membaca response JSON
+            headers: { 
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(payload) 
+        });
+        
         const result = await res.json();
-        if (result.status === 'success') { alert("✅ Berhasil!"); await new Promise(r => setTimeout(r, 1000)); return true; }
-        else { alert("❌ Gagal"); return false; }
-    } catch (err) { console.error(err); alert("❌ Error"); return false; }
+        
+        if (result.status === 'success') { 
+            alert("✅ Data berhasil diproses!"); 
+            return true; 
+        } else { 
+            console.error("Server error:", result);
+            alert("❌ Gagal: " + result.message); 
+            return false; 
+        }
+    } catch (err) { 
+        console.error("Network error:", err); 
+        alert("❌ Error: Pastikan Google Apps Script sudah di-deploy dengan benar."); 
+        return false; 
+    }
 }
 async function addGejala() {
     let kode = document.getElementById('g-kode').value.trim();
@@ -261,13 +352,13 @@ async function addJurusan() {
 async function addRule() {
     let gejala = document.getElementById('rule-gejala').value;
     let jurusan = document.getElementById('rule-jurusan').value;
-    let bobot = document.getElementById('rule-bobot').value;
     if (!gejala || !jurusan) return alert("Pilih gejala dan jurusan!");
     const btn = event.target;
     const txt = btn.innerHTML;
     btn.innerHTML = '⏳...'; btn.disabled = true;
-    if (await sendPostRequest({ action: 'addRule', kd_gejala: gejala, kd_jurusan: jurusan, bobot: bobot })) {
-        await loadAdminData(); await loadKnowledgeBase();
+   if (await sendPostRequest({ action: 'addRule', kd_gejala: gejala, kd_jurusan: jurusan })) {
+        await loadAdminData();
+        await loadKnowledgeBase();
     }
     btn.innerHTML = txt; btn.disabled = false;
 }
@@ -305,26 +396,48 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navHome) navHome.classList.add('active-link');
     loadKnowledgeBase();
 });
-// ==================== FUNGSI RENDER JURUSAN HOMEPAGE ====================
+
+// ==================== FUNGSI RENDER JURUSAN PER FAKULTAS ====================
 function renderDaftarJurusanUtama() {
     const container = document.getElementById('jurusan-card-container');
     if (!container) return;
-    if (!dbJurusan || dbJurusan.length === 0) {
-        container.innerHTML = '<p style="color:#64748B; text-align:center; grid-column: 1/-1;">⏳ Memuat daftar jurusan dari database cloud...</p>';
+
+    if (!dbFakultas || dbFakultas.length === 0 || !dbJurusan || dbJurusan.length === 0) {
+        container.innerHTML = '<p style="color:#64748B; text-align:center;">⏳ Memuat data dari database cloud...</p>';
         return;
     }
-    container.innerHTML = dbJurusan.map(j => {
-        const kode = j.kd_jurusan || j.Kd_Jurusan || j.id || "KODE";
-        const nama = j.nama_jurusan || j.Nama_Jurusan || j.nama || j.Nama || "Nama Jurusan";
-        const deskripsi = j.deskripsi || j.Deskripsi || j.ket || j.Keterangan || "Tidak ada deskripsi.";
-        return `
-            <div class="jurusan-info-card">
-                <span class="jurusan-info-badge">${escapeHtml(String(kode))}</span>
-                <div class="jurusan-info-title">📖 ${escapeHtml(String(nama))}</div>
-                <p class="jurusan-info-desc">${escapeHtml(String(deskripsi))}</p>
-            </div>
-        `;
-    }).join('');
+
+    let html = '';
+
+    // Loop setiap fakultas yang ada di dbFakultas
+    dbFakultas.forEach(f => {
+        // Cari jurusan yang memiliki kd_fakultas yang sama dengan fakultas saat ini
+        let jurusanDiFakultas = dbJurusan.filter(j => 
+            String(j.kd_fakultas).trim() === String(f.kd_fakultas).trim()
+        );
+
+        // Hanya tampilkan judul fakultas jika ada jurusannya
+        if (jurusanDiFakultas.length > 0) {
+            html += `
+                <div class="fakultas-group" style="margin-bottom: 40px;">
+                    <h3 style="color: var(--primary); font-size: 1.5rem; margin-bottom: 20px; border-bottom: 2px solid var(--secondary); padding-bottom: 10px;">
+                        ${f.nama_fakultas}
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        ${jurusanDiFakultas.map(j => `
+                            <div class="jurusan-info-card">
+                                <span class="jurusan-info-badge">${escapeHtml(String(j.kd_jurusan))}</span>
+                                <div class="jurusan-info-title">📖 ${escapeHtml(String(j.nama_jurusan))}</div>
+                                <p class="jurusan-info-desc">${escapeHtml(String(j.deskripsi))}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    container.innerHTML = html;
 }
 // ==================== TOGGLE MENU MOBILE (HP) ====================
 function toggleMobileMenu() {
