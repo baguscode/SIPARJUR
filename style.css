@@ -781,4 +781,75 @@ footer {
     #jurusan-card-container { grid-template-columns: 1fr !important; gap: 15px !important; }
     /* Tombol Konsultasi tidak meluber */
     .btn-start { padding: 10px 20px !important; font-size: 0.9rem !important; }
+}.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+.reset-btn-side, .print-btn-side {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.reset-btn-side { background: #334155; color: white; }
+.print-btn-side { background: var(--secondary); color: white; }
+
+/* Agar saat dicetak, tampilan rapi */
+@media print {
+    header, .nav-links, .reset-btn-side, .print-btn-side, #mainFooter, .admin-modal {
+        display: none !important;
+    }
+    .result-card {
+        display: block !important;
+        border: none !important;
+        background: white !important;
+        color: black !important;
+    }
+    body { background: white !important; }
+}
+@media print {
+    /* Sembunyikan semua elemen selain bagian hasil */
+    body > *:not(#mainContent) { display: none !important; }
+    #mainContent > *:not(#consult-section) { display: none !important; }
+    
+    /* Tampilkan hanya bagian konsultasi dan box hasil */
+    #consult-section { display: block !important; }
+    #result-box { display: block !important; border: none !important; }
+    
+    /* Sembunyikan tombol saat dicetak */
+    .button-group { display: none !important; }
+    
+    /* Opsional: Tambahkan judul di hasil cetak */
+    #result-box::before {
+        content: "LAPORAN HASIL REKOMENDASI JURUSAN - SIPARJUR";
+        display: block;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}
+.fakultas-title {
+    font-size: 1.5rem;
+    color: #2563eb;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-left: 5px solid #2563eb;
+    padding-left: 10px;
+}
+
+.jurusan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.jurusan-card {
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
 }
