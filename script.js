@@ -1,5 +1,5 @@
 // ==================== KONFIGURASI ====================
-const API_URL = "https://script.google.com/macros/s/AKfycbwRPNxDpdo0ViJ5vfiypP-2Vk8lOmFvlKBysfW1RaLbHUlac6ws921gEDQ8_s-qj89d/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyFs3NR-3zCMUy1mvuqm_lFB3Or7osIahkFudKVcO7HkIu0XCS6RXZUX_ntSGRBIxoz/exec";
 const ADMIN_PASSWORD = "admin123";
 let dbGejala = [], dbJurusan = [], dbRule = [],dbFakultas = [];
 let currentStep = 0;
@@ -297,19 +297,23 @@ function populateAdminSelects() {
 }
 async function sendPostRequest(payload) {
     try {
+        // Menggunakan URLSearchParams agar Google Apps Script menangkapnya sebagai POST biasa
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(payload));
+
         const res = await fetch(API_URL, { 
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            method: 'POST',
+            // Kita kirim sebagai 'no-cors' agar browser tidak melakukan preflight
+            mode: 'no-cors',
+            body: JSON.stringify(payload) 
         });
         
-        // Karena kita tidak pakai setHeader, kita langsung terima responnya
-        const result = await res.json();
-        alert("✅ Data berhasil ditambah!");
+        // Peringatan: dalam mode 'no-cors', kita tidak bisa membaca response.json()
+        // Jadi kita anggap sukses jika tidak ada error
+        alert("✅ Data dikirim (Silakan refresh halaman untuk melihat hasil)");
         return true;
     } catch (err) {
-        console.error("Gagal:", err);
-        alert("Terjadi masalah saat menambah data. Pastikan Apps Script sudah di-deploy.");
+        alert("❌ Error: " + err);
         return false;
     }
 }
