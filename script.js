@@ -1,5 +1,5 @@
 // ==================== KONFIGURASI ====================
-const API_URL = "https://script.google.com/macros/s/AKfycbwyQ8Z8jDeM58Qh70Tes8__CjDmNRpRT_bekghRvC73IpVTzyuOB2DXJ6tnVE5NngGo/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz_FkY_r1D9r61qZ2UFs2CfY3aFC7afFFjAHXpW14ZSMlAErtEjf5xKuaMQd2Q1LM7c/exec";
 const ADMIN_PASSWORD = "admin123";
 let dbGejala = [], dbJurusan = [], dbRule = [],dbFakultas = [];
 let currentStep = 0;
