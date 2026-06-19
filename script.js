@@ -1,5 +1,5 @@
 // ==================== KONFIGURASI ====================
-const API_URL = "https://script.google.com/macros/s/AKfycbz_FkY_r1D9r61qZ2UFs2CfY3aFC7afFFjAHXpW14ZSMlAErtEjf5xKuaMQd2Q1LM7c/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwRPNxDpdo0ViJ5vfiypP-2Vk8lOmFvlKBysfW1RaLbHUlac6ws921gEDQ8_s-qj89d/exec";
 const ADMIN_PASSWORD = "admin123";
 let dbGejala = [], dbJurusan = [], dbRule = [],dbFakultas = [];
 let currentStep = 0;
@@ -299,33 +299,18 @@ async function sendPostRequest(payload) {
     try {
         const res = await fetch(API_URL, { 
             method: 'POST', 
-            // Coba gunakan 'no-cors' jika JSON gagal, tapi sebaiknya gunakan 'cors'
-            // Kita pastikan payload dikirim sebagai string JSON yang bersih
-            headers: { 
-                'Content-Type': 'application/json' 
-            }, 
-            body: JSON.stringify(payload) 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
         
-        // PENTING: Jika menggunakan mode 'cors', Google Apps Script WAJIB mengirim balik header
-        // Jika server Google tidak merespon, kita coba tangkap error-nya dengan lebih detail
-        if (!res.ok) {
-            throw new Error('Server merespon dengan status: ' + res.status);
-        }
-
+        // Karena kita tidak pakai setHeader, kita langsung terima responnya
         const result = await res.json();
-        
-        if (result.status === 'success') { 
-            alert("✅ Berhasil!"); 
-            return true; 
-        } else { 
-            alert("❌ Gagal: " + (result.message || "Kesalahan tidak diketahui")); 
-            return false; 
-        }
-    } catch (err) { 
-        console.error("Detail Error:", err);
-        alert("❌ Error: Tidak dapat mengirim data. Pastikan Apps Script di-deploy dengan opsi 'Anyone'.");
-        return false; 
+        alert("✅ Data berhasil ditambah!");
+        return true;
+    } catch (err) {
+        console.error("Gagal:", err);
+        alert("Terjadi masalah saat menambah data. Pastikan Apps Script sudah di-deploy.");
+        return false;
     }
 }
 async function addGejala() {
