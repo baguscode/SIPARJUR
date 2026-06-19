@@ -299,26 +299,32 @@ async function sendPostRequest(payload) {
     try {
         const res = await fetch(API_URL, { 
             method: 'POST', 
-            // Jangan tambahkan 'mode: no-cors' jika ingin membaca response JSON
+            // Coba gunakan 'no-cors' jika JSON gagal, tapi sebaiknya gunakan 'cors'
+            // Kita pastikan payload dikirim sebagai string JSON yang bersih
             headers: { 
                 'Content-Type': 'application/json' 
-            },
+            }, 
             body: JSON.stringify(payload) 
         });
         
+        // PENTING: Jika menggunakan mode 'cors', Google Apps Script WAJIB mengirim balik header
+        // Jika server Google tidak merespon, kita coba tangkap error-nya dengan lebih detail
+        if (!res.ok) {
+            throw new Error('Server merespon dengan status: ' + res.status);
+        }
+
         const result = await res.json();
         
         if (result.status === 'success') { 
-            alert("✅ Data berhasil diproses!"); 
+            alert("✅ Berhasil!"); 
             return true; 
         } else { 
-            console.error("Server error:", result);
-            alert("❌ Gagal: " + result.message); 
+            alert("❌ Gagal: " + (result.message || "Kesalahan tidak diketahui")); 
             return false; 
         }
     } catch (err) { 
-        console.error("Network error:", err); 
-        alert("❌ Error: Pastikan Google Apps Script sudah di-deploy dengan benar."); 
+        console.error("Detail Error:", err);
+        alert("❌ Error: Tidak dapat mengirim data. Pastikan Apps Script di-deploy dengan opsi 'Anyone'.");
         return false; 
     }
 }
