@@ -1,7 +1,6 @@
 // ==================== KONFIGURASI ====================
 const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQo4tnH2zfAKnYkfRL34iYZX470jql6o9UMcaZRxhHFHvhSYGrMcXhODYeBMTDYtaiBLJ-kV5TlMe6-5bT1pIphvlUVQOqzlGka5dLGIItBfLL2mV9odVHzY3-GtApDl63yuZk30T9srJ5cjISERTndLYSKbDdPEBdv_bEUV_c0qQaOfFICu0LTbtP4ac6XtfS2W9sM7A8-UDwa0c6d5cOk-ClsqOAad5y-MvXVE1E-nx4sYs_MdzmZrzdDG5hCznL9UCVwbz_JwBcvAVNr8fEtfYnAQg&lib=M-RGlPzmNOdGodpBebu7G-ENU_4rYfvDw";
 const PROXY_URL = "https://corsproxy.io/?";
-const API_URL = PROXY_URL + encodeURIComponent(SCRIPT_URL);
 const ADMIN_PASSWORD = "admin123";
 let dbGejala = [], dbJurusan = [], dbRule = [],dbFakultas = [];
 let currentStep = 0;
