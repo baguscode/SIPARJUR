@@ -321,12 +321,17 @@ function renderAdminTables() {
 }
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
-    const sj = document.getElementById('rule-jurusan');
-    if (!sg || !sj) return;
+    const sf = document.getElementById('rule-fakultas'); // ID baru
+    
+    if (!sg || !sf) return;
+    
     sg.innerHTML = '<option value="">-- Pilih Gejala --</option>';
-    sj.innerHTML = '<option value="">-- Pilih Jurusan --</option>';
+    sf.innerHTML = '<option value="">-- Pilih Fakultas --</option>';
+    
     dbGejala.forEach(g => sg.innerHTML += `<option value="${escapeHtml(g.kd_gejala)}">${escapeHtml(g.kd_gejala)} - ${escapeHtml(g.indikator.substring(0, 50))}...</option>`);
-    dbJurusan.forEach(j => sj.innerHTML += `<option value="${escapeHtml(j.kd_jurusan)}">${escapeHtml(j.kd_jurusan)} - ${escapeHtml(j.nama_jurusan)}</option>`);
+    
+    // Pastikan mengisi dengan dbFakultas
+    dbFakultas.forEach(f => sf.innerHTML += `<option value="${escapeHtml(f.kd_fakultas)}">${escapeHtml(f.kd_fakultas)} - ${escapeHtml(f.nama_fakultas)}</option>`);
 }
 async function sendPostRequest(payload) {
     try {
@@ -387,12 +392,16 @@ async function addJurusan() {
 }
 async function addRule() {
     let gejala = document.getElementById('rule-gejala').value;
-    let jurusan = document.getElementById('rule-jurusan').value;
-    if (!gejala || !jurusan) return alert("Pilih gejala dan jurusan!");
+    let fakultas = document.getElementById('rule-fakultas').value; // Mengambil dari ID baru
+    
+    if (!gejala || !fakultas) return alert("Pilih gejala dan fakultas!");
+    
     const btn = event.target;
     const txt = btn.innerHTML;
     btn.innerHTML = '⏳...'; btn.disabled = true;
-   if (await sendPostRequest({ action: 'addRule', kd_gejala: gejala, kd_jurusan: jurusan })) {
+    
+    // Pastikan mengirim kd_fakultas ke server
+    if (await sendPostRequest({ action: 'addRule', kd_gejala: gejala, kd_fakultas: fakultas })) {
         await loadAdminData();
         await loadKnowledgeBase();
     }
