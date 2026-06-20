@@ -8,7 +8,7 @@ const ADMIN_PASSWORD = "admin123";
 
 let dbGejala = [], dbJurusan = [], dbRule = [], dbFakultas = [];
 let currentStep = 0;
-let Fakultas = {};
+let skorFakultas = {}; // Diperbaiki dari 'Fakultas' menjadi 'skorFakultas' agar konsisten
 // =====================================================
 // ==================== PASSWORD TOGGLE ====================
 function togglePassword() {
@@ -132,17 +132,13 @@ function renderCurrentQuestion() {
 }
 function answerQuestion(kdGejala, isSelected) {
     if (isSelected) {
-        // Cari semua aturan yang berkaitan dengan gejala ini
         let matchedRules = dbRule.filter(r => r.kd_gejala === kdGejala);
-        
         matchedRules.forEach(rule => {
-            // Pastikan rule.kd_fakultas tersedia dan tambahkan skor ke objek skorFakultas
             if (rule.kd_fakultas) {
                 skorFakultas[rule.kd_fakultas] = (skorFakultas[rule.kd_fakultas] || 0) + 1;
             }
         });
     }
-    
     currentStep++;
     if (currentStep < dbGejala.length) {
         renderCurrentQuestion();
@@ -151,36 +147,26 @@ function answerQuestion(kdGejala, isSelected) {
     }
 }
 function showResults() {
-    // 1. Validasi
     const totalSkor = Object.values(skorFakultas).reduce((a, b) => a + b, 0);
     if (totalSkor === 0) {
         alert("⚠️ Mohon pilih gejala terlebih dahulu.");
         resetQuiz(); return;
     }
-
     document.getElementById('quiz-area-box').style.display = 'none';
     document.getElementById('loading-view').style.display = 'block';
-
     setTimeout(() => {
         document.getElementById('loading-view').style.display = 'none';
         document.getElementById('result-box').style.display = 'block';
-
-        // 2. Map skorFakultas ke array agar bisa diurutkan
         let rankingFakultas = Object.keys(skorFakultas).map(kd => ({
             kd_fakultas: kd,
             skor: skorFakultas[kd]
-        })).sort((a, b) => b.skor - a.skor); // Urutkan dari skor tertinggi
-
-        // 3. Ambil 3 Teratas
+        })).sort((a, b) => b.skor - a.skor); 
         let top3 = rankingFakultas.slice(0, 3);
-
         let container = document.getElementById('result-list-container');
         container.innerHTML = '';
-
         top3.forEach((item, idx) => {
             let fak = dbFakultas.find(f => String(f.kd_fakultas).trim() === String(item.kd_fakultas).trim());
             let namaFak = fak ? fak.nama_fakultas : "Fakultas Tidak Ditemukan";
-
             container.innerHTML += `
                 <div class="result-item">
                     <div class="rank-number">#${idx + 1}</div>
@@ -270,15 +256,10 @@ function renderAdminTables() {
             </tr>
         `).join('');
     }
-   if (tr) {
+    if (tr) {
         tr.innerHTML = dbRule.map(r => {
-            // Kita cari nama fakultas berdasarkan kd_fakultas yang tersimpan di rule
-            let fak = dbFakultas.find(item => 
-                String(item.kd_fakultas).trim().toLowerCase() === String(r.kd_fakultas).trim().toLowerCase()
-            );
-            
+            let fak = dbFakultas.find(item => String(item.kd_fakultas).trim().toLowerCase() === String(r.kd_fakultas).trim().toLowerCase());
             let namaFak = fak ? fak.nama_fakultas : `<span style="color:red;">Fakultas Tidak Ditemukan (${r.kd_fakultas})</span>`;
-            
             return `<tr>
                 <td>${r.kd_gejala}</td>
                 <td>${namaFak}</td>
@@ -288,6 +269,7 @@ function renderAdminTables() {
             </tr>`;
         }).join('');
     }
+} // <--- KURUNG TUTUP TAMBAHAN
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
     const sf = document.getElementById('rule-fakultas'); 
