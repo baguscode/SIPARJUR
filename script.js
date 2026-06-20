@@ -266,10 +266,15 @@ function renderAdminTables() {
             </tr>
         `).join('');
     }
-    if (tr) {
+   if (tr) {
         tr.innerHTML = dbRule.map(r => {
-            let fak = dbFakultas.find(item => String(item.kd_fakultas).trim() === String(r.kd_fakultas).trim());
+            // Kita cari nama fakultas berdasarkan kd_fakultas yang tersimpan di rule
+            let fak = dbFakultas.find(item => 
+                String(item.kd_fakultas).trim().toLowerCase() === String(r.kd_fakultas).trim().toLowerCase()
+            );
+            
             let namaFak = fak ? fak.nama_fakultas : `<span style="color:red;">Fakultas Tidak Ditemukan (${r.kd_fakultas})</span>`;
+            
             return `<tr>
                 <td>${r.kd_gejala}</td>
                 <td>${namaFak}</td>
@@ -279,7 +284,6 @@ function renderAdminTables() {
             </tr>`;
         }).join('');
     }
-}
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
     const sf = document.getElementById('rule-fakultas'); 
