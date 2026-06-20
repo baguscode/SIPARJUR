@@ -270,7 +270,7 @@ function renderAdminTables() {
             </tr>`;
         }).join('');
     }
-} // <--- KURUNG TUTUP TAMBAHAN
+} 
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
     const sf = document.getElementById('rule-fakultas'); 
