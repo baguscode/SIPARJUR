@@ -95,11 +95,9 @@ function scrollToSection(section) {
     if (navLinks) navLinks.classList.remove('mobile-active');
 }
 // ====================  DATABASE ====================
-// ==================== DATABASE ====================
 async function loadKnowledgeBase() {
     try {
         const timestamp = Date.now();
-        // Hapus CORS_PROXY, gunakan API_URL langsung
         const url = API_URL + encodeURIComponent("?action=getKnowledgeBase&_=" + timestamp);
         let res = await fetch(url);
         let data = await res.json();
@@ -134,15 +132,11 @@ function renderCurrentQuestion() {
 }
 function answerQuestion(kdGejala, isSelected) {
     if (isSelected) {
-        // Cari semua aturan yang berkaitan dengan gejala ini
         let matchedRules = dbRule.filter(r => r.kd_gejala === kdGejala);
-        
         matchedRules.forEach(rule => {
-            // Langsung tambah 1 untuk setiap kecocokan (frekuensi)
             skorJurusan[rule.kd_jurusan] = (skorJurusan[rule.kd_jurusan] || 0) + 1;
         });
     }
-    
     currentStep++;
     if (currentStep < dbGejala.length) {
         renderCurrentQuestion();
@@ -151,34 +145,25 @@ function answerQuestion(kdGejala, isSelected) {
     }
 }
 function showResults() {
-    // 1. CEK VALIDASI DI PALING ATAS
     const totalSkor = Object.values(skorJurusan).reduce((a, b) => a + b, 0);
-    
     if (totalSkor === 0) {
         alert("⚠️ Mohon maaf, Anda belum memilih minat apapun. Silakan isi pertanyaan minat Anda dengan benar terlebih dahulu.");
         resetQuiz(); 
-        return; // Hentikan fungsi di sini, jangan lanjut ke bawah!
+        return; 
     }
-
-    // 2. JIKA LULUS VALIDASI, BARU JALANKAN PROSES TAMPILAN
     document.getElementById('quiz-area-box').style.display = 'none';
     document.getElementById('loading-view').style.display = 'block';
-
     setTimeout(() => {
         document.getElementById('loading-view').style.display = 'none';
         document.getElementById('result-box').style.display = 'block';
-
-        // 3. Logika sortir dan filter
         let semuaJurusan = dbJurusan.map(j => ({ 
             nama: j.nama_jurusan, 
             deskripsi: j.deskripsi, 
             kd_fakultas: j.kd_fakultas,
             skor: skorJurusan[j.kd_jurusan] || 0 
         })).sort((a, b) => b.skor - a.skor);
-
         let hasil = []; 
         let fakultasTerpakai = [];
-
         for (let j of semuaJurusan) {
             if (!fakultasTerpakai.includes(j.kd_fakultas)) {
                 hasil.push(j);
@@ -186,15 +171,11 @@ function showResults() {
             }
             if (hasil.length === 3) break;
         }
-
-        // 4. Render ke HTML
         let container = document.getElementById('result-list-container');
         container.innerHTML = '';
-
         hasil.forEach((h, idx) => {
             let fakultas = dbFakultas.find(f => String(f.kd_fakultas).trim() === String(h.kd_fakultas).trim());
             let namaFak = fakultas ? fakultas.nama_fakultas : "Fakultas Tidak Ditemukan";
-
             container.innerHTML += `
                 <div class="result-item">
                     <div class="rank-number">#${idx + 1}</div>
@@ -221,7 +202,6 @@ function escapeHtml(str) {
     if (!str) return '';
     return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
 }
-// ==================== SCROLL SPY ====================
 function updateActiveLinkOnScroll() {
     if (document.getElementById('adminPanel').style.display === 'block') return;
     const sections = [
@@ -241,42 +221,28 @@ function updateActiveLinkOnScroll() {
         if (link) current === s.id ? link.classList.add('active-link') : link.classList.remove('active-link');
     });
 }
-// ==================== ADMIN FUNCTIONS ====================
-
 async function loadAdminData() {
     try {
         console.log("Mencoba memuat data admin...");
-        // Gunakan 'res' agar tidak tertukar dengan 'response' yang tidak terdefinisi
         const res = await fetch(API_URL); 
-        
         if (!res.ok) throw new Error("Gagal mengambil data, status: " + res.status);
-        
         const data = await res.json();
-        
-        // Pastikan variabel global terisi
         dbGejala = data.gejala || [];
         dbJurusan = data.jurusan || [];
         dbRule = data.rule || [];
         dbFakultas = data.fakultas || [];
-        
         console.log("Data Admin berhasil dimuat:", data);
-        
-        // Panggil fungsi render
         renderAdminTables(); 
         populateAdminSelects();
-        
     } catch (err) {
         console.error("Gagal load data:", err);
         alert("Gagal memuat data admin. Cek Console (F12) untuk detail.");
     }
 }
 function renderAdminTables() {
-    // 1. Definisikan semua variabel tabel di awal
     const tg = document.getElementById('table-gejala');
     const tj = document.getElementById('table-jurusan');
-    const tr = document.getElementById('table-rule'); // <-- Ini yang sering terlewat
-
-    // 2. Render Gejala
+    const tr = document.getElementById('table-rule'); 
     if (tg) {
         tg.innerHTML = dbGejala.map(g => `
             <tr>
@@ -288,8 +254,6 @@ function renderAdminTables() {
             </tr>
         `).join('');
     }
-
-    // 3. Render Jurusan
     if (tj) {
         tj.innerHTML = dbJurusan.map(j => `
             <tr>
@@ -302,35 +266,27 @@ function renderAdminTables() {
             </tr>
         `).join('');
     }
-
-if (tr) {
-    tr.innerHTML = dbRule.map(r => {
-        // Cari nama fakultas berdasarkan kd_fakultas
-        let fak = dbFakultas.find(item => String(item.kd_fakultas).trim() === String(r.kd_fakultas).trim());
-        let namaFak = fak ? fak.nama_fakultas : `<span style="color:red;">Fakultas Tidak Ditemukan (${r.kd_fakultas})</span>`;
-        
-        return `<tr>
-            <td>${r.kd_gejala}</td>
-            <td>${namaFak}</td> <!-- Ini akan menampilkan Nama Fakultas -->
-            <td style="text-align: center;">
-                <button class="btn-hapus" onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_fakultas}')">🗑 Hapus</button>
-            </td>
-        </tr>`;
-    }).join('');
-}
+    if (tr) {
+        tr.innerHTML = dbRule.map(r => {
+            let fak = dbFakultas.find(item => String(item.kd_fakultas).trim() === String(r.kd_fakultas).trim());
+            let namaFak = fak ? fak.nama_fakultas : `<span style="color:red;">Fakultas Tidak Ditemukan (${r.kd_fakultas})</span>`;
+            return `<tr>
+                <td>${r.kd_gejala}</td>
+                <td>${namaFak}</td>
+                <td style="text-align: center;">
+                    <button class="btn-hapus" onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_fakultas}')">🗑 Hapus</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
 }
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
-    const sf = document.getElementById('rule-fakultas'); // ID baru
-    
+    const sf = document.getElementById('rule-fakultas'); 
     if (!sg || !sf) return;
-    
     sg.innerHTML = '<option value="">-- Pilih Gejala --</option>';
     sf.innerHTML = '<option value="">-- Pilih Fakultas --</option>';
-    
     dbGejala.forEach(g => sg.innerHTML += `<option value="${escapeHtml(g.kd_gejala)}">${escapeHtml(g.kd_gejala)} - ${escapeHtml(g.indikator.substring(0, 50))}...</option>`);
-    
-    // Pastikan mengisi dengan dbFakultas
     dbFakultas.forEach(f => sf.innerHTML += `<option value="${escapeHtml(f.kd_fakultas)}">${escapeHtml(f.kd_fakultas)} - ${escapeHtml(f.nama_fakultas)}</option>`);
 }
 async function sendPostRequest(payload) {
@@ -340,19 +296,13 @@ async function sendPostRequest(payload) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload) 
         });
-        
         const result = await res.json();
-        
         if (result.status === 'success') {
-            // Tampilkan notifikasi sukses
             console.log("Data berhasil diproses!");
-            
-            // Logika Reset & Refresh (Otomatis setelah 2 detik)
             setTimeout(async () => {
-                await loadAdminData(); // Memuat ulang data dari database
+                await loadAdminData();
                 alert("Data berhasil diupdate!");
             }, 2000);
-            
             return true;
         } else {
             alert("❌ Gagal: " + result.message);
@@ -392,15 +342,11 @@ async function addJurusan() {
 }
 async function addRule() {
     let gejala = document.getElementById('rule-gejala').value;
-    let fakultas = document.getElementById('rule-fakultas').value; // Mengambil dari ID baru
-    
+    let fakultas = document.getElementById('rule-fakultas').value; 
     if (!gejala || !fakultas) return alert("Pilih gejala dan fakultas!");
-    
     const btn = event.target;
     const txt = btn.innerHTML;
     btn.innerHTML = '⏳...'; btn.disabled = true;
-    
-    // Pastikan mengirim kd_fakultas ke server
     if (await sendPostRequest({ action: 'addRule', kd_gejala: gejala, kd_fakultas: fakultas })) {
         await loadAdminData();
         await loadKnowledgeBase();
@@ -413,7 +359,6 @@ async function deleteAdminItem(type, id) {
     if (type === 'gejala') payload = { action: 'deleteGejala', kd_gejala: id };
     else if (type === 'jurusan') payload = { action: 'deleteJurusan', kd_jurusan: id };
     else if (type === 'rule') { 
-        // id dikirim sebagai "kd_gejala|kd_fakultas"
         let [g, f] = id.split('|'); 
         payload = { action: 'deleteRule', kd_gejala: g, kd_fakultas: f }; }
     const btn = event.target;
@@ -429,7 +374,6 @@ function switchTab(tab) {
     else if (tab === 'jurusan') { document.getElementById('tab-jurusan').classList.add('active'); document.querySelector('.tab-btn:nth-child(2)').classList.add('active-tab'); }
     else if (tab === 'rule') { document.getElementById('tab-rule').classList.add('active'); document.querySelector('.tab-btn:nth-child(3)').classList.add('active-tab'); }
 }
-// ==================== EVENT LISTENER ====================
 window.addEventListener('scroll', () => {
     const h = document.getElementById('main-header');
     if (h && window.scrollY > 60) h.classList.add('scrolled');
@@ -444,27 +388,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navHome) navHome.classList.add('active-link');
     loadKnowledgeBase();
 });
-
-// ==================== FUNGSI RENDER JURUSAN PER FAKULTAS ====================
 function renderDaftarJurusanUtama() {
     const container = document.getElementById('jurusan-card-container');
     if (!container) return;
-
     if (!dbFakultas || dbFakultas.length === 0 || !dbJurusan || dbJurusan.length === 0) {
         container.innerHTML = '<p style="color:#64748B; text-align:center;">⏳ Memuat data dari database cloud...</p>';
         return;
     }
-
     let html = '';
-
-    // Loop setiap fakultas yang ada di dbFakultas
     dbFakultas.forEach(f => {
-        // Cari jurusan yang memiliki kd_fakultas yang sama dengan fakultas saat ini
-        let jurusanDiFakultas = dbJurusan.filter(j => 
-            String(j.kd_fakultas).trim() === String(f.kd_fakultas).trim()
-        );
-
-        // Hanya tampilkan judul fakultas jika ada jurusannya
+        let jurusanDiFakultas = dbJurusan.filter(j => String(j.kd_fakultas).trim() === String(f.kd_fakultas).trim());
         if (jurusanDiFakultas.length > 0) {
             html += `
                 <div class="fakultas-group" style="margin-bottom: 40px;">
@@ -484,10 +417,8 @@ function renderDaftarJurusanUtama() {
             `;
         }
     });
-
     container.innerHTML = html;
 }
-// ==================== TOGGLE MENU MOBILE (HP) ====================
 function toggleMobileMenu() {
     const navLinks = document.getElementById('navLinksContainer');
     if (navLinks) {
