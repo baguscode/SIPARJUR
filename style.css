@@ -811,30 +811,36 @@ footer {
     }
     body { background: white !important; }
 }
-
 @media print {
-    /* Sembunyikan elemen yang tidak perlu dicetak */
-    .btn-hapus, #quiz-area-box, #loading-view, .nav-links, .mobile-menu-btn, .footer {
-        display: none !important;
-    }
-
-    /* Paksa container hasil agar muat dalam 1 halaman */
-    #result-box {
-        display: block !important;
-        width: 100%;
+    /* 1. Sembunyikan semua elemen di halaman */
+    body * {
+        visibility: hidden;
         margin: 0;
         padding: 0;
     }
 
-    .result-item {
-        page-break-inside: avoid; /* Mencegah item terpotong di tengah */
-        margin-bottom: 10px;
+    /* 2. Tampilkan hanya box hasil */
+    #result-box, #result-box * {
+        visibility: visible;
     }
 
-    /* Atur skala agar muat di kertas A4 */
-    body {
-        transform: scale(0.9); /* Sedikit diperkecil agar pas */
-        transform-origin: top left;
+    /* 3. Posisikan ke atas kiri kertas */
+    #result-box {
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 100%;
+    }
+
+    /* 4. Hindari pemotongan antar item */
+    .result-item {
+        page-break-inside: avoid;
+        margin-bottom: 15px;
+    }
+
+    /* 5. Pastikan background warna muncul (jika ada) */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 }
