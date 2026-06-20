@@ -1,5 +1,7 @@
 // ==================== KONFIGURASI ====================
 const API_URL = "https://script.google.com/macros/s/AKfycbyFs3NR-3zCMUy1mvuqm_lFB3Or7osIahkFudKVcO7HkIu0XCS6RXZUX_ntSGRBIxoz/exec";
+const PROXY_URL = "https://corsproxy.io/?";
+const API_URL = PROXY_URL + encodeURIComponent(SCRIPT_URL);
 const ADMIN_PASSWORD = "admin123";
 let dbGejala = [], dbJurusan = [], dbRule = [],dbFakultas = [];
 let currentStep = 0;
@@ -297,24 +299,24 @@ function populateAdminSelects() {
 }
 async function sendPostRequest(payload) {
     try {
-        // Menggunakan URLSearchParams agar Google Apps Script menangkapnya sebagai POST biasa
-        const formData = new FormData();
-        formData.append('data', JSON.stringify(payload));
-
         const res = await fetch(API_URL, { 
-            method: 'POST',
-            // Kita kirim sebagai 'no-cors' agar browser tidak melakukan preflight
-            mode: 'no-cors',
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload) 
         });
         
-        // Peringatan: dalam mode 'no-cors', kita tidak bisa membaca response.json()
-        // Jadi kita anggap sukses jika tidak ada error
-        alert("✅ Data dikirim (Silakan refresh halaman untuk melihat hasil)");
-        return true;
+        // Sekarang kamu bisa membaca response JSON dengan aman!
+        const result = await res.json();
+        
+        if (result.status === 'success') {
+            alert("✅ Data berhasil ditambah!");
+            loadAdminData(); // Refresh tabel otomatis
+        } else {
+            alert("❌ Server error: " + result.message);
+        }
     } catch (err) {
-        alert("❌ Error: " + err);
-        return false;
+        console.error("Error:", err);
+        alert("Terjadi kesalahan jaringan.");
     }
 }
 async function addGejala() {
