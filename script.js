@@ -1,5 +1,5 @@
 // ==================== KONFIGURASI ====================
-const API_URL = "https://script.google.com/macros/s/AKfycbyFs3NR-3zCMUy1mvuqm_lFB3Or7osIahkFudKVcO7HkIu0XCS6RXZUX_ntSGRBIxoz/exec";
+const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQo4tnH2zfAKnYkfRL34iYZX470jql6o9UMcaZRxhHFHvhSYGrMcXhODYeBMTDYtaiBLJ-kV5TlMe6-5bT1pIphvlUVQOqzlGka5dLGIItBfLL2mV9odVHzY3-GtApDl63yuZk30T9srJ5cjISERTndLYSKbDdPEBdv_bEUV_c0qQaOfFICu0LTbtP4ac6XtfS2W9sM7A8-UDwa0c6d5cOk-ClsqOAad5y-MvXVE1E-nx4sYs_MdzmZrzdDG5hCznL9UCVwbz_JwBcvAVNr8fEtfYnAQg&lib=M-RGlPzmNOdGodpBebu7G-ENU_4rYfvDw";
 const PROXY_URL = "https://corsproxy.io/?";
 const API_URL = PROXY_URL + encodeURIComponent(SCRIPT_URL);
 const ADMIN_PASSWORD = "admin123";
@@ -305,18 +305,26 @@ async function sendPostRequest(payload) {
             body: JSON.stringify(payload) 
         });
         
-        // Sekarang kamu bisa membaca response JSON dengan aman!
         const result = await res.json();
         
         if (result.status === 'success') {
-            alert("✅ Data berhasil ditambah!");
-            loadAdminData(); // Refresh tabel otomatis
+            // Tampilkan notifikasi sukses
+            console.log("Data berhasil diproses!");
+            
+            // Logika Reset & Refresh (Otomatis setelah 2 detik)
+            setTimeout(async () => {
+                await loadAdminData(); // Memuat ulang data dari database
+                alert("Data berhasil diupdate!");
+            }, 2000);
+            
+            return true;
         } else {
-            alert("❌ Server error: " + result.message);
+            alert("❌ Gagal: " + result.message);
+            return false;
         }
     } catch (err) {
         console.error("Error:", err);
-        alert("Terjadi kesalahan jaringan.");
+        return false;
     }
 }
 async function addGejala() {
