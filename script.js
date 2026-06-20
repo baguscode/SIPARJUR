@@ -275,21 +275,29 @@ function renderAdminTables() {
     if (tg) tg.innerHTML = dbGejala.map(g => `<tr><td>${g.kd_gejala}</td><td>${g.indikator}</td><td><button onclick="deleteAdminItem('gejala','${g.kd_gejala}')">🗑 Hapus</button></td></tr>`).join('');
 
     const tj = document.getElementById('table-jurusan');
-    if (tj) tj.innerHTML = dbJurusan.map(j => `<tr><td>${j.kd_jurusan}</td><td>${j.nama_jurusan}</td><td>${j.kd_fakultas}</td><td><button onclick="deleteAdminItem('jurusan','${j.kd_jurusan}')">🗑 Hapus</button></td></tr>`).join('');
+    if (tj) {
+        tj.innerHTML = dbJurusan.map(j => `
+            <tr>
+                <td>${j.kd_jurusan}</td>
+                <td>${j.nama_jurusan}</td>
+                <td>${j.deskripsi || '-'}</td> <td><button class="btn-hapus" onclick="deleteAdminItem('jurusan','${j.kd_jurusan}')">🗑 Hapus</button></td>
+            </tr>
+        `).join('');
+    }
 
     const tr = document.getElementById('table-rule');
     if (tr) {
-        tr.innerHTML = dbRule.map(r => {
-            // Gunakan .find() yang aman
-            let jrs = dbJurusan.find(item => String(item.kd_jurusan).trim() === String(r.kd_jurusan).trim());
-            let namaJur = jrs ? jrs.nama_jurusan : "Jurusan Tidak Ditemukan";
-            
-            return `<tr>
-                <td>${r.kd_gejala}</td>
-                <td>${namaJur}</td>
-                <td><button onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_jurusan}')">🗑 Hapus</button></td>
-            </tr>`;
-        }).join('');
+       tr.innerHTML = dbRule.map(r => {
+    // Menggunakan .trim() dan String() untuk membandingkan secara akurat
+    let jrs = dbJurusan.find(item => String(item.kd_jurusan).trim() === String(r.kd_jurusan).trim());
+    let namaJur = jrs ? jrs.nama_jurusan : "Jurusan Tidak Ditemukan";
+    
+    return `<tr>
+        <td>${r.kd_gejala}</td>
+        <td>${namaJur}</td>
+        <td><button class="btn-hapus" onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_jurusan}')">🗑 Hapus</button></td>
+    </tr>`;
+}).join('');
     }
 }
 function populateAdminSelects() {
