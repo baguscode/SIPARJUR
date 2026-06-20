@@ -298,7 +298,6 @@ function renderAdminTables() {
     </tr>`;
 }).join('');
     }
-}
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
     const sj = document.getElementById('rule-jurusan');
