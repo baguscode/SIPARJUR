@@ -271,33 +271,54 @@ async function loadAdminData() {
     }
 }
 function renderAdminTables() {
-    // === RENDER DATA GEJALA ===
+    // 1. Definisikan semua variabel tabel di awal
     const tg = document.getElementById('table-gejala');
+    const tj = document.getElementById('table-jurusan');
+    const tr = document.getElementById('table-rule'); // <-- Ini yang sering terlewat
+
+    // 2. Render Gejala
     if (tg) {
         tg.innerHTML = dbGejala.map(g => `
             <tr>
                 <td style="font-weight: bold;">${g.kd_gejala}</td>
                 <td>${g.indikator}</td>
                 <td style="text-align: center;">
-                    <button class="btn-hapus" onclick="deleteAdminItem('gejala','${g.kd_gejala}')">
-                        🗑 Hapus
-                    </button>
+                    <button class="btn-hapus" onclick="deleteAdminItem('gejala','${g.kd_gejala}')">🗑 Hapus</button>
                 </td>
             </tr>
         `).join('');
     }
-    tr.innerHTML = dbRule.map(r => {
-    // Mencari nama fakultas berdasarkan kd_fakultas yang ada di rule
-    let fak = dbFakultas.find(item => String(item.kd_fakultas).trim() === String(r.kd_fakultas).trim());
-    let namaFak = fak ? fak.nama_fakultas : `<span style="color:red;">Fakultas Tidak Ditemukan (${r.kd_fakultas})</span>`;
-    
-    return `<tr>
-        <td>${r.kd_gejala}</td>
-        <td>${namaFak}</td>
-        <td><button class="btn-hapus" onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_fakultas}')">🗑 Hapus</button></td>
-    </tr>`;
-}).join('');
+
+    // 3. Render Jurusan
+    if (tj) {
+        tj.innerHTML = dbJurusan.map(j => `
+            <tr>
+                <td>${j.kd_jurusan}</td>
+                <td>${j.nama_jurusan}</td>
+                <td>${j.deskripsi || '-'}</td>
+                <td style="text-align: center;">
+                    <button class="btn-hapus" onclick="deleteAdminItem('jurusan','${j.kd_jurusan}')">🗑 Hapus</button>
+                </td>
+            </tr>
+        `).join('');
     }
+
+    // 4. Render Rule (MENGGUNAKAN kd_fakultas SESUAI DATABASE KAMU)
+    if (tr) {
+        tr.innerHTML = dbRule.map(r => {
+            let fak = dbFakultas.find(item => String(item.kd_fakultas).trim() === String(r.kd_fakultas).trim());
+            let namaFak = fak ? fak.nama_fakultas : `<span style="color:red;">Fakultas Tidak Ditemukan (${r.kd_fakultas})</span>`;
+            
+            return `<tr>
+                <td>${r.kd_gejala}</td>
+                <td>${namaFak}</td>
+                <td style="text-align: center;">
+                    <button class="btn-hapus" onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_fakultas}')">🗑 Hapus</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+}
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
     const sj = document.getElementById('rule-jurusan');
