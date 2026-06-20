@@ -173,8 +173,8 @@ function showResults() {
             let namaFak = fak ? fak.nama_fakultas : "Fakultas Tidak Ditemukan";
             
             // MENCARI JURUSAN DI FAKULTAS INI
-            let prodiList = dbJurusan.filter(j => String(j.kd_fakultas).trim() === String(item.kd_fakultas).trim())
-                                     .map(j => `<li>${escapeHtml(j.nama_jurusan)}</li>`).join('');
+        let prodiList = dbJurusan.filter(j => String(j.kd_fakultas).trim() === String(item.kd_fakultas).trim())
+                         .map(j => `<li class="print-prodi">${escapeHtml(j.nama_jurusan)}</li>`).join('');
 
             container.innerHTML += `
                 <div class="result-item">
