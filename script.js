@@ -1,5 +1,5 @@
 // ==================== KONFIGURASI ====================
-const SCRIPT_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSauQmvw3bWb-4YwRBCEBXysiaGXA_pV5VHIN5tRlUpUJxyDVGkMAZoL_M25MfAKY6F7DKErk06p-MTYB30GRqoT-LzwUMlCirP1EbQDVcma9ppw9Pk3E-LYrd3KeV2_ea3icx3i9fUC9z-JDkEXdw60sdLjJRWVzWruzZSB6Fz3RCg_sdQUCW3kTMsX8Zqwu2W0f_SZXZZsrIz97lRoj17ePWhzOFivkwaB6A61-xvTYiwz26gRBm_4RD0NwuSVAfs_rw0_QO55SV_Qg_wPEPdQHMH0A&lib=M-RGlPzmNOdGodpBebu7G-ENU_4rYfvDw";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOtN8WAmDCovDX3CyCDTOpBgBek6FwvlYgv2IGtwHw0nmqOeWdPYPNEouZ-khdlMVk/exec";
 const PROXY_URL = "https://corsproxy.io/?"; 
 
 // Gabungkan menjadi satu API_URL
