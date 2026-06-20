@@ -256,6 +256,7 @@ function renderAdminTables() {
             </tr>
         `).join('');
     }
+}
     if (tr) {
         tr.innerHTML = dbRule.map(r => {
             let fak = dbFakultas.find(item => String(item.kd_fakultas).trim().toLowerCase() === String(r.kd_fakultas).trim().toLowerCase());
