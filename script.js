@@ -8,7 +8,7 @@ const ADMIN_PASSWORD = "admin123";
 
 let dbGejala = [], dbJurusan = [], dbRule = [], dbFakultas = [];
 let currentStep = 0;
-let skorFakultas = {}; // Diperbaiki dari 'Fakultas' menjadi 'skorFakultas' agar konsisten
+let skorFakultas = {}; 
 // =====================================================
 // ==================== PASSWORD TOGGLE ====================
 function togglePassword() {
@@ -77,7 +77,7 @@ function scrollToSection(section) {
         element = document.getElementById('home-section');
         if (element) {
             element.classList.remove('slide-down-animation');
-            void element.offsetWidth; // Trik reflow untuk me-reset animasi
+            void element.offsetWidth;
             element.classList.add('slide-down-animation');
         }
     }
@@ -90,7 +90,6 @@ function scrollToSection(section) {
     if (section === 'consult') document.getElementById('nav-consult').classList.add('active-link');
     if (section === 'program-studi') document.getElementById('nav-program-studi').classList.add('active-link');
     if (section === 'about') document.getElementById('nav-about').classList.add('active-link');
-    // Otomatis menutup kembali tirai menu drop-down setelah user memilih salah satu menu di HP
     const navLinks = document.getElementById('navLinksContainer');
     if (navLinks) navLinks.classList.remove('mobile-active');
 }
@@ -256,7 +255,6 @@ function renderAdminTables() {
             </tr>
         `).join('');
     }
-}
     if (tr) {
         tr.innerHTML = dbRule.map(r => {
             let fak = dbFakultas.find(item => String(item.kd_fakultas).trim().toLowerCase() === String(r.kd_fakultas).trim().toLowerCase());
@@ -270,6 +268,7 @@ function renderAdminTables() {
             </tr>`;
         }).join('');
     }
+}
 function populateAdminSelects() {
     const sg = document.getElementById('rule-gejala');
     const sf = document.getElementById('rule-fakultas'); 
