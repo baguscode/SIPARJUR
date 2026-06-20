@@ -132,11 +132,17 @@ function renderCurrentQuestion() {
 }
 function answerQuestion(kdGejala, isSelected) {
     if (isSelected) {
+        // Cari semua aturan yang berkaitan dengan gejala ini
         let matchedRules = dbRule.filter(r => r.kd_gejala === kdGejala);
+        
         matchedRules.forEach(rule => {
-            skorJurusan[rule.kd_jurusan] = (skorJurusan[rule.kd_jurusan] || 0) + 1;
+            // Pastikan rule.kd_fakultas tersedia dan tambahkan skor ke objek skorFakultas
+            if (rule.kd_fakultas) {
+                skorFakultas[rule.kd_fakultas] = (skorFakultas[rule.kd_fakultas] || 0) + 1;
+            }
         });
     }
+    
     currentStep++;
     if (currentStep < dbGejala.length) {
         renderCurrentQuestion();
@@ -145,50 +151,48 @@ function answerQuestion(kdGejala, isSelected) {
     }
 }
 function showResults() {
-    const totalSkor = Object.values(skorJurusan).reduce((a, b) => a + b, 0);
+    // 1. Validasi
+    const totalSkor = Object.values(skorFakultas).reduce((a, b) => a + b, 0);
     if (totalSkor === 0) {
-        alert("⚠️ Mohon maaf, Anda belum memilih minat apapun. Silakan isi pertanyaan minat Anda dengan benar terlebih dahulu.");
-        resetQuiz(); 
-        return; 
+        alert("⚠️ Mohon pilih gejala terlebih dahulu.");
+        resetQuiz(); return;
     }
+
     document.getElementById('quiz-area-box').style.display = 'none';
     document.getElementById('loading-view').style.display = 'block';
+
     setTimeout(() => {
         document.getElementById('loading-view').style.display = 'none';
         document.getElementById('result-box').style.display = 'block';
-        let semuaJurusan = dbJurusan.map(j => ({ 
-            nama: j.nama_jurusan, 
-            deskripsi: j.deskripsi, 
-            kd_fakultas: j.kd_fakultas,
-            skor: skorJurusan[j.kd_jurusan] || 0 
-        })).sort((a, b) => b.skor - a.skor);
-        let hasil = []; 
-        let fakultasTerpakai = [];
-        for (let j of semuaJurusan) {
-            if (!fakultasTerpakai.includes(j.kd_fakultas)) {
-                hasil.push(j);
-                fakultasTerpakai.push(j.kd_fakultas);
-            }
-            if (hasil.length === 3) break;
-        }
+
+        // 2. Map skorFakultas ke array agar bisa diurutkan
+        let rankingFakultas = Object.keys(skorFakultas).map(kd => ({
+            kd_fakultas: kd,
+            skor: skorFakultas[kd]
+        })).sort((a, b) => b.skor - a.skor); // Urutkan dari skor tertinggi
+
+        // 3. Ambil 3 Teratas
+        let top3 = rankingFakultas.slice(0, 3);
+
         let container = document.getElementById('result-list-container');
         container.innerHTML = '';
-        hasil.forEach((h, idx) => {
-            let fakultas = dbFakultas.find(f => String(f.kd_fakultas).trim() === String(h.kd_fakultas).trim());
-            let namaFak = fakultas ? fakultas.nama_fakultas : "Fakultas Tidak Ditemukan";
+
+        top3.forEach((item, idx) => {
+            let fak = dbFakultas.find(f => String(f.kd_fakultas).trim() === String(item.kd_fakultas).trim());
+            let namaFak = fak ? fak.nama_fakultas : "Fakultas Tidak Ditemukan";
+
             container.innerHTML += `
                 <div class="result-item">
                     <div class="rank-number">#${idx + 1}</div>
-                    <div style="font-size: 1.1rem; color: var(--secondary); font-weight: 800; margin-bottom: 5px; text-transform: uppercase;">${namaFak}</div>
-                    <div class="res-title">🏆 ${escapeHtml(h.nama)}</div>
-                    <div class="res-desc">${escapeHtml(h.deskripsi)}</div>
+                    <div class="res-title">🎓 ${namaFak}</div>
+                    <p>Skor Kecocokan: ${item.skor}</p>
                 </div>`;
         });
     }, 1200);
 }
 function resetQuiz() {
     currentStep = 0;
-    skorJurusan = {};
+    skorFakultas = {};
     document.getElementById('result-box').style.display = 'none';
     document.getElementById('quiz-area-box').style.display = 'block';
     renderCurrentQuestion();
