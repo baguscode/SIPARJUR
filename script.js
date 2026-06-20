@@ -271,31 +271,30 @@ async function loadAdminData() {
     }
 }
 function renderAdminTables() {
+    // === RENDER DATA GEJALA ===
     const tg = document.getElementById('table-gejala');
-    if (tg) tg.innerHTML = dbGejala.map(g => `<tr><td>${g.kd_gejala}</td><td>${g.indikator}</td><td><button onclick="deleteAdminItem('gejala','${g.kd_gejala}')">🗑 Hapus</button></td></tr>`).join('');
-
-    const tj = document.getElementById('table-jurusan');
-    if (tj) {
-        tj.innerHTML = dbJurusan.map(j => `
+    if (tg) {
+        tg.innerHTML = dbGejala.map(g => `
             <tr>
-                <td>${j.kd_jurusan}</td>
-                <td>${j.nama_jurusan}</td>
-                <td>${j.deskripsi || '-'}</td> <td><button class="btn-hapus" onclick="deleteAdminItem('jurusan','${j.kd_jurusan}')">🗑 Hapus</button></td>
+                <td style="font-weight: bold;">${g.kd_gejala}</td>
+                <td>${g.indikator}</td>
+                <td style="text-align: center;">
+                    <button class="btn-hapus" onclick="deleteAdminItem('gejala','${g.kd_gejala}')">
+                        🗑 Hapus
+                    </button>
+                </td>
             </tr>
         `).join('');
     }
-
-    const tr = document.getElementById('table-rule');
-    if (tr) {
-       tr.innerHTML = dbRule.map(r => {
-    // Menggunakan .trim() dan String() untuk membandingkan secara akurat
-    let jrs = dbJurusan.find(item => String(item.kd_jurusan).trim() === String(r.kd_jurusan).trim());
-    let namaJur = jrs ? jrs.nama_jurusan : "Jurusan Tidak Ditemukan";
+    tr.innerHTML = dbRule.map(r => {
+    // Mencari nama fakultas berdasarkan kd_fakultas yang ada di rule
+    let fak = dbFakultas.find(item => String(item.kd_fakultas).trim() === String(r.kd_fakultas).trim());
+    let namaFak = fak ? fak.nama_fakultas : `<span style="color:red;">Fakultas Tidak Ditemukan (${r.kd_fakultas})</span>`;
     
     return `<tr>
         <td>${r.kd_gejala}</td>
-        <td>${namaJur}</td>
-        <td><button class="btn-hapus" onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_jurusan}')">🗑 Hapus</button></td>
+        <td>${namaFak}</td>
+        <td><button class="btn-hapus" onclick="deleteAdminItem('rule','${r.kd_gejala}|${r.kd_fakultas}')">🗑 Hapus</button></td>
     </tr>`;
 }).join('');
     }
@@ -384,7 +383,10 @@ async function deleteAdminItem(type, id) {
     let payload = {};
     if (type === 'gejala') payload = { action: 'deleteGejala', kd_gejala: id };
     else if (type === 'jurusan') payload = { action: 'deleteJurusan', kd_jurusan: id };
-    else if (type === 'rule') { let [g, j] = id.split('|'); payload = { action: 'deleteRule', kd_gejala: g, kd_jurusan: j }; }
+    else if (type === 'rule') { 
+        // id dikirim sebagai "kd_gejala|kd_fakultas"
+        let [g, f] = id.split('|'); 
+        payload = { action: 'deleteRule', kd_gejala: g, kd_fakultas: f }; }
     const btn = event.target;
     const txt = btn.innerHTML;
     btn.innerHTML = '⏳...'; btn.disabled = true;
