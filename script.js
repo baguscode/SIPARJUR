@@ -151,26 +151,39 @@ function showResults() {
         alert("⚠️ Mohon pilih gejala terlebih dahulu.");
         resetQuiz(); return;
     }
+
     document.getElementById('quiz-area-box').style.display = 'none';
     document.getElementById('loading-view').style.display = 'block';
+
     setTimeout(() => {
         document.getElementById('loading-view').style.display = 'none';
         document.getElementById('result-box').style.display = 'block';
+
         let rankingFakultas = Object.keys(skorFakultas).map(kd => ({
             kd_fakultas: kd,
             skor: skorFakultas[kd]
         })).sort((a, b) => b.skor - a.skor); 
+
         let top3 = rankingFakultas.slice(0, 3);
         let container = document.getElementById('result-list-container');
         container.innerHTML = '';
+
         top3.forEach((item, idx) => {
             let fak = dbFakultas.find(f => String(f.kd_fakultas).trim() === String(item.kd_fakultas).trim());
             let namaFak = fak ? fak.nama_fakultas : "Fakultas Tidak Ditemukan";
+            
+            // MENCARI JURUSAN DI FAKULTAS INI
+            let prodiList = dbJurusan.filter(j => String(j.kd_fakultas).trim() === String(item.kd_fakultas).trim())
+                                     .map(j => `<li>${escapeHtml(j.nama_jurusan)}</li>`).join('');
+
             container.innerHTML += `
                 <div class="result-item">
                     <div class="rank-number">#${idx + 1}</div>
-                    <div class="res-title">🎓 ${namaFak}</div>
-                    <p>Skor Kecocokan: ${item.skor}</p>
+                    <div class="res-title" style="font-weight:bold;">🎓 ${namaFak}</div>
+                    <div class="res-desc">
+                        <p style="margin-top:10px;">Program Studi Terkait:</p>
+                        <ul style="margin-left:20px;">${prodiList || '<li>Data prodi tidak tersedia</li>'}</ul>
+                    </div>
                 </div>`;
         });
     }, 1200);
