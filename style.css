@@ -867,3 +867,29 @@ footer {
 .btn-hapus:hover {
     background-color: #dc2626; /* Merah lebih tua saat di-hover */
 }
+@media print {
+    /* Sembunyikan elemen yang tidak perlu dicetak */
+    .btn-hapus, #quiz-area-box, #loading-view, .nav-links, .mobile-menu-btn, .footer {
+        display: none !important;
+    }
+
+    /* Paksa container hasil agar muat dalam 1 halaman */
+    #result-box {
+        display: block !important;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .result-item {
+        page-break-inside: avoid; /* Mencegah item terpotong di tengah */
+        margin-bottom: 10px;
+    }
+
+    /* Atur skala agar muat di kertas A4 */
+    body {
+        transform: scale(0.9); /* Sedikit diperkecil agar pas */
+        transform-origin: top left;
+        width: 100%;
+    }
+}
