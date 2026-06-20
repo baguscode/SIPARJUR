@@ -797,20 +797,6 @@ footer {
 }
 .reset-btn-side { background: #334155; color: white; }
 .print-btn-side { background: var(--secondary); color: white; }
-
-/* Agar saat dicetak, tampilan rapi */
-@media print {
-    header, .nav-links, .reset-btn-side, .print-btn-side, #mainFooter, .admin-modal {
-        display: none !important;
-    }
-    .result-card {
-        display: block !important;
-        border: none !important;
-        background: white !important;
-        color: black !important;
-    }
-    body { background: white !important; }
-}
 @media print {
     /* 1. Sembunyikan semua elemen di halaman */
     body * {
