@@ -853,3 +853,17 @@ footer {
     border-radius: 8px;
     background: #f8fafc;
 }
+/* Tambahkan ini ke file CSS kamu */
+.btn-hapus {
+    background-color: #ef4444; /* Merah */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.btn-hapus:hover {
+    background-color: #dc2626; /* Merah lebih tua saat di-hover */
+}
