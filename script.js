@@ -8,7 +8,7 @@ const ADMIN_PASSWORD = "admin123";
 
 let dbGejala = [], dbJurusan = [], dbRule = [], dbFakultas = [];
 let currentStep = 0;
-let skorJurusan = {};
+let Fakultas = {};
 // =====================================================
 // ==================== PASSWORD TOGGLE ====================
 function togglePassword() {
