@@ -798,35 +798,38 @@ footer {
 .reset-btn-side { background: #334155; color: white; }
 .print-btn-side { background: var(--secondary); color: white; }
 @media print {
-    /* 1. Sembunyikan semua elemen di halaman */
-    body * {
-        visibility: hidden;
-        margin: 0;
-        padding: 0;
+    /* Sembunyikan elemen navigasi dan footer */
+    header, nav, .nav-links, .button-group, #mainFooter, .admin-modal, .reset-btn-side, .print-btn-side {
+        display: none !important;
     }
 
-    /* 2. Tampilkan hanya box hasil */
-    #result-box, #result-box * {
-        visibility: visible;
+    /* Pastikan hanya bagian hasil yang tampil */
+    body > *:not(#mainContent) { display: none !important; }
+    #mainContent > *:not(#consult-section) { display: none !important; }
+    #consult-section { display: block !important; padding: 0 !important; }
+    #result-box { 
+        display: block !important; 
+        border: none !important; 
+        box-shadow: none !important;
+        width: 100% !important;
     }
 
-    /* 3. Posisikan ke atas kiri kertas */
-    #result-box {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
+    /* Judul Laporan */
+    #result-box::before {
+        content: "LAPORAN HASIL REKOMENDASI JURUSAN - SIPARJUR";
+        display: block;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 20px;
+        text-align: center;
+        text-transform: uppercase;
     }
 
-    /* 4. Hindari pemotongan antar item */
+    /* Menjaga agar item tidak terpotong di tengah halaman */
     .result-item {
         page-break-inside: avoid;
-        margin-bottom: 15px;
-    }
-
-    /* 5. Pastikan background warna muncul (jika ada) */
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+        border: 1px solid #ccc !important;
+        padding: 10px !important;
+        margin-bottom: 15px !important;
     }
 }
